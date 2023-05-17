@@ -8,7 +8,7 @@ const [
 	,
 	,
 	caseName = "minimal",
-	scenarioName = "development-default-build",
+	scenarioName = "development-build",
 	date = undefined,
 	normalDate = scenarioName.includes("future-defaults")
 		? "2021-09-20"

@@ -1,0 +1,3 @@
+::set-output name=case::rome
+::set-output name=scenario::development-build+future-defaults
+::set-output name=date::2023-01-01

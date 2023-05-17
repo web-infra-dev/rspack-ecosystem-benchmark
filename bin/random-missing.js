@@ -19,29 +19,29 @@ const dirExist = async (p) => {
 };
 
 (async () => {
-	const targetDir = resolve(rootDir, ".gh-pages");
-	if (!(await dirExist(targetDir))) {
-		await run("git", [
-			"clone",
-			"--branch",
-			"gh-pages",
-			"--single-branch",
-			"--depth",
-			"1",
-			token
-				? `https://${GITHUB_ACTOR}:${token}@github.com/webpack/benchmark.git`
-				: "https://github.com/webpack/benchmark",
-			".gh-pages",
-		]);
-	}
+	// const targetDir = resolve(rootDir, ".gh-pages");
+	// if (!(await dirExist(targetDir))) {
+	// 	await run("git", [
+	// 		"clone",
+	// 		"--branch",
+	// 		"gh-pages",
+	// 		"--single-branch",
+	// 		"--depth",
+	// 		"1",
+	// 		token
+	// 			? `https://${GITHUB_ACTOR}:${token}@github.com/webpack/benchmark.git`
+	// 			: "https://github.com/webpack/benchmark",
+	// 		".gh-pages",
+	// 	]);
+	// }
 	const cwd = process.cwd();
-	process.chdir(targetDir);
-	await run("git", ["reset", "--hard", "origin/gh-pages"]);
-	await run("git", ["pull", "--rebase"]);
-	process.chdir(cwd);
-	const indexFile = resolve(targetDir, "results", "index.txt");
+	// process.chdir(targetDir);
+	// await run("git", ["reset", "--hard", "origin/gh-pages"]);
+	// await run("git", ["pull", "--rebase"]);
+	// process.chdir(cwd);
+	const indexFile = resolve(cwd,  "index.txt");
 	const index = await readFile(indexFile, "utf-8");
-
+	//
 	const d = new Date();
 
 	const testCases = new Set();
