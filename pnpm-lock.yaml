@@ -1,0 +1,26 @@
+lockfileVersion: 5.4
+
+specifiers:
+  ncp: ^2.0.0
+  ssl-root-cas: ^1.3.1
+
+dependencies:
+  ncp: 2.0.0
+  ssl-root-cas: 1.3.1
+
+packages:
+
+  /@coolaj86/urequest/1.3.7:
+    resolution: {integrity: sha512-PPrVYra9aWvZjSCKl/x1pJ9ZpXda1652oJrPBYy5rQumJJMkmTBN3ux+sK2xAUwVvv2wnewDlaQaHLxLwSHnIA==}
+    dev: false
+
+  /ncp/2.0.0:
+    resolution: {integrity: sha512-zIdGUrPRFTUELUvr3Gmc7KZ2Sw/h1PiVM0Af/oHB6zgnV1ikqSfRk+TOufi79aHYCW3NiOXmr1BP5nWbzojLaA==}
+    hasBin: true
+    dev: false
+
+  /ssl-root-cas/1.3.1:
+    resolution: {integrity: sha512-KR8J210Wfvjh+iNE9jcQEgbG0VG2713PHreItx6aNCPnkFO8XChz1cJ4iuCGeBj0+8wukLmgHgJqX+O5kRjPkQ==}
+    dependencies:
+      '@coolaj86/urequest': 1.3.7
+    dev: false
