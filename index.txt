@@ -1,1 +1,1 @@
-2022-06-21/minimum_production-build+persistent-cache.json
+2022-06-21/minimal_production-build+persistent-cache.json
