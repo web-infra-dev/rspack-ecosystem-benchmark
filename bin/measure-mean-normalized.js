@@ -21,17 +21,17 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 
 (async () => {
 	const normalResult1 = await measure(caseName, scenarioName, {
-		run: 15,
+		run: 1,
 		verboseSetup: true,
 		date: normalDate,
 	});
 	const baseResult = await measure(caseName, scenarioName, {
-		runs: 30,
+		runs: 1,
 		verboseSetup: true,
 		date,
 	});
 	const normalResult2 = await measure(caseName, scenarioName, {
-		run: 15,
+		run: 1,
 		verboseSetup: true,
 		date: normalDate,
 	});
