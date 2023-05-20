@@ -35,8 +35,8 @@ const dirExist = async (p) => {
 			"--depth",
 			"1",
 			token
-				? `https://${GITHUB_ACTOR}:${token}@github.com/webpack/benchmark.git`
-				: "https://github.com/webpack/benchmark",
+				? `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`
+				: "https://github.com/web-infra-dev/rspack-ecosystem-benchmark.git",
 			".gh-pages",
 		]);
 	}
