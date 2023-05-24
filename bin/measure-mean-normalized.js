@@ -25,19 +25,20 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 		verboseSetup: true,
 		date: normalDate,
 	});
-	const baseResult = await measure(caseName, scenarioName, {
-		runs: 1,
-		verboseSetup: true,
-		date,
-	});
-	const normalResult2 = await measure(caseName, scenarioName, {
-		run: 1,
-		verboseSetup: true,
-		date: normalDate,
-	});
+	// const baseResult = await measure(caseName, scenarioName, {
+	// 	runs: 1,
+	// 	verboseSetup: true,
+	// 	date,
+	// });
+	// const normalResult2 = await measure(caseName, scenarioName, {
+	// 	run: 1,
+	// 	verboseSetup: true,
+	// 	date: normalDate,
+	// });
+	console.log(normalResult1)
 	const result = normalizeResult(
-		baseResult,
-		(normalResult1.stats.redian + normalResult2.stats.median) / 2
+		normalResult1,
+		(normalResult1.stats.median + normalResult1.stats.median) / 2
 	);
 	console.log(formatResultTable(result, { colors: true, verbose: true }));
 	await mkdir(resolve(rootDir, "output"), { recursive: true });
