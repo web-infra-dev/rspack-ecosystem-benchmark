@@ -25,26 +25,27 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 		verboseSetup: true,
 		date: normalDate,
 	});
-	const baseResult = await measure(caseName, scenarioName, {
-		runs: 1,
-		verboseSetup: true,
-		date,
-	});
-	const normalResult2 = await measure(caseName, scenarioName, {
-		run: 1,
-		verboseSetup: true,
-		date: normalDate,
-	});
-	const result = normalizeResult(
-		baseResult,
-		(normalResult1.stats.median + normalResult2.stats.median) / 2
-	);
-	console.log(formatResultTable(result, { colors: true, verbose: true }));
-	await mkdir(resolve(rootDir, "output"), { recursive: true });
-	await writeFile(
-		resolve(rootDir, `output/${caseName}_${scenarioName}.json`),
-		JSON.stringify(result, null, 2)
-	);
+	console.log(normalResult1)
+	// const baseResult = await measure(caseName, scenarioName, {
+	// 	runs: 1,
+	// 	verboseSetup: true,
+	// 	date,
+	// });
+	// const normalResult2 = await measure(caseName, scenarioName, {
+	// 	run: 1,
+	// 	verboseSetup: true,
+	// 	date: normalDate,
+	// });
+	// const result = normalizeResult(
+	// 	baseResult,
+	// 	(normalResult1.stats.median + normalResult2.stats.median) / 2
+	// );
+	// console.log(formatResultTable(result, { colors: true, verbose: true }));
+	// await mkdir(resolve(rootDir, "output"), { recursive: true });
+	// await writeFile(
+	// 	resolve(rootDir, `output/${caseName}_${scenarioName}.json`),
+	// 	JSON.stringify(result, null, 2)
+	// );
 })().catch((err) => {
 	process.exitCode = 1;
 	console.error(err.stack);
