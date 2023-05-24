@@ -1,0 +1,32 @@
+Arguments: 
+  /home/victor/.local/share/fnm/node-versions/v16.18.0/installation/bin/node /home/victor/.cache/node/corepack/yarn/1.22.19/bin/yarn.js install
+
+PATH: 
+  /home/victor/.opam/4.14.0/bin:/run/user/1000/fnm_multishells/23144_1684941218738/bin:/home/victor/temp/extension/adapter:/home/victor/.ghcup/bin:/home/victor/.config/lsp/lua-language-server/bin:/home/victor/Downloads/meld-3.22.0/bin:/home/victor/.deno/bin:/home/victor/snap/deno/105/.deno/bin:/home/victor/go/bin:/home/victor/Downloads/nvim-linux64/bin:/home/victor/.cargo/bin:/home/victor/.opam/4.14.0/bin:/run/user/1000/fnm_multishells/23137_1684941218703/bin:/home/victor/.local/share/nvim/mason/bin:/home/victor/.opam/4.14.0/bin:/run/user/1000/fnm_multishells/6235_1684934127082/bin:/home/victor/.opam/4.14.0/bin:/run/user/1000/fnm_multishells/6100_1684934124821/bin:/home/victor/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin:/home/victor/.local/share/JetBrains/Toolbox/scripts
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.18.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: ENOENT: no such file or directory, copyfile '/home/victor/.cache/yarn/v6/npm-colorette-2.0.19-cdf044f47ad41a0f4b56b3a0d5b4e6e1a2d5a798-integrity/node_modules/colorette/LICENSE.md' -> '/home/victor/Documents/rspack/rspack-ecosystem-benchmark/cases/minimal/node_modules/@rspack/cli/node_modules/colorette/LICENSE.md'
+
+npm manifest: 
+  {
+    "name": "minimal",
+    "dependencies": {
+      "@rspack/cli": "^0.1.12",
+      "webpack-cli": "^4.5.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

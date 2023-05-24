@@ -1,0 +1,67 @@
+{
+  "exec": {
+    "min": 328,
+    "max": 328,
+    "mean": 328,
+    "median": 328,
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 328,
+    "high": 328,
+    "count": 1,
+    "base": 324.5
+  },
+  "main.js size": {
+    "min": 850,
+    "max": 850,
+    "mean": 850,
+    "median": 850,
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 850,
+    "high": 850,
+    "count": 1,
+    "base": 324.5
+  },
+  "main.js gzip size": {
+    "min": 377,
+    "max": 377,
+    "mean": 377,
+    "median": 377,
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 377,
+    "high": 377,
+    "count": 1,
+    "base": 324.5
+  },
+  "main.js.map size": {
+    "min": 155,
+    "max": 155,
+    "mean": 155,
+    "median": 155,
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 155,
+    "high": 155,
+    "count": 1,
+    "base": 324.5
+  },
+  "main.js.map gzip size": {
+    "min": 148,
+    "max": 148,
+    "mean": 148,
+    "median": 148,
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 148,
+    "high": 148,
+    "count": 1,
+    "base": 324.5
+  }
+}
