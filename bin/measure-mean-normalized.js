@@ -37,7 +37,7 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 	});
 	const result = normalizeResult(
 		baseResult,
-		(normalResult1.stats.median + normalResult2.stats.median) / 2
+		(normalResult1.stats.redian + normalResult2.stats.median) / 2
 	);
 	console.log(formatResultTable(result, { colors: true, verbose: true }));
 	await mkdir(resolve(rootDir, "output"), { recursive: true });
