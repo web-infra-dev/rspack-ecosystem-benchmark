@@ -20,7 +20,6 @@
 	};
 
 	const index = await (await fetch("results/index.txt")).text();
-  debugger
 	const testCases = new Map();
 	const allScenariosSet = new Set();
 	const allDatesSet = new Set();
