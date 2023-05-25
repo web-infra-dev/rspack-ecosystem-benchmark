@@ -20,7 +20,7 @@
 	};
 
 	const index = await (await fetch("results/index.txt")).text();
-  console.log('index')
+  debugger
 	const testCases = new Map();
 	const allScenariosSet = new Set();
 	const allDatesSet = new Set();
@@ -38,10 +38,8 @@
 		allDatesSet.add(date);
 	}
 
-  console.log('indexLine')
 
 	const allDates = Array.from(allDatesSet).sort();
-	console.log(allDates);
 	const allScenarios = Array.from(allScenariosSet).sort();
 
 	const caseSelect = document.querySelector("#case-select");
@@ -62,7 +60,6 @@
 		if (maxValue > 10000) return `${value / 1000} kB`;
 		return `${value} B`;
 	};
-  console.log('formatSize')
 
 	const chart = new Chart("chart", {
 		type: "line",
@@ -159,11 +156,9 @@
 		update();
 	});
 
-  console.log('beforeFirstWHile')
 	while (caseSelect.hasChildNodes())
 		caseSelect.removeChild(caseSelect.firstChild);
 
-  console.log('after case-select.hasChildNodes')
 	for (const testCase of testCases.keys()) {
 		const option = document.createElement("option");
 		option.innerText = option.value = testCase;
@@ -179,7 +174,6 @@
 	while (scenarioSelect.hasChildNodes())
 		scenarioSelect.removeChild(scenarioSelect.firstChild);
   
-  console.log('after scenarioSelect.hasChildNodes')
 	for (const scenario of allScenarios) {
 		const option = document.createElement("option");
 		option.innerText = option.value = scenario;
@@ -189,7 +183,6 @@
 
 	const updateChart = (inputDatasets) => {
 		const datasets = [];
-    console.log(datasets)
 		const min = chart.options.scales.xAxes[0].ticks.min;
 		const oldDatasets = chart.data.datasets.reverse();
 		let i = 0;
@@ -479,7 +472,6 @@
 			if (metrics.size === 0) return;
 			while (metricSelect.hasChildNodes())
 				metricSelect.removeChild(metricSelect.firstChild);
-      console.log('metricSelect')
 			const sortedMetrics = Array.from(metrics, ([name, entry]) => [
 				name,
 				name.endsWith(" size")
@@ -518,19 +510,18 @@
 				group.appendChild(option);
 			}
 			metricSelect.value = metric;
-			const fallbackValue = includeDash ? "" : "stats";
-			// if (!metrics.has(metric) && metric !== fallbackValue) {
-			// 	metricSelect.value = fallbackValue;
-			// 	update();
-			// 	return;
-			// }
+			const fallbackValue = includeDash ? "" : "exec";
+			if (!metrics.has(metric) && metric !== fallbackValue) {
+				metricSelect.value = fallbackValue;
+				update();
+				return;
+			}
 		};
 		updateSelect(metricSelect, metrics, metric);
-		// updateSelect(compareMetricSelect, compareMetrics, compareMetric, true);
+		updateSelect(compareMetricSelect, compareMetrics, compareMetric, true);
 
-		// updateChart(datasetsForChart);
+		updateChart(datasetsForChart);
 	});
-  console.log('end')
 
 	caseSelect.addEventListener("change", update);
 	compareCaseSelect.addEventListener("change", update);
