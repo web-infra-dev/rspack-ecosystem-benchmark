@@ -1,3 +1,4 @@
+const startTime = new Date('2023-05-24');
 (async () => {
 	const provide = (map, key, computer) => {
 		const value = map.get(key);
@@ -78,7 +79,9 @@
 						display: "auto",
 						ticks: {
 							callback(value, index, values) {
-								return formatTime(value, values[0]);
+								const res = formatTime(value, values[0]);
+                console.log(res)
+                return res
 							},
 							beginAtZero: true,
 						},
@@ -120,7 +123,7 @@
 					{
 						type: "time",
 						ticks: {
-							min: new Date("2020-01-01"),
+							min: startTime,
 							max: new Date(),
 						},
 						time: {
