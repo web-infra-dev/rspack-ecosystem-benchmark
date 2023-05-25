@@ -20,7 +20,6 @@
 	};
 
 	const index = await (await fetch("results/index.txt")).text();
-
 	const testCases = new Map();
 	const allScenariosSet = new Set();
 	const allDatesSet = new Set();
@@ -38,8 +37,9 @@
 		allDatesSet.add(date);
 	}
 
+
 	const allDates = Array.from(allDatesSet).sort();
-	console.log(allDates);
+ console.log(allDates)
 	const allScenarios = Array.from(allScenariosSet).sort();
 
 	const caseSelect = document.querySelector("#case-select");
@@ -158,6 +158,7 @@
 
 	while (caseSelect.hasChildNodes())
 		caseSelect.removeChild(caseSelect.firstChild);
+
 	for (const testCase of testCases.keys()) {
 		const option = document.createElement("option");
 		option.innerText = option.value = testCase;
@@ -172,6 +173,7 @@
 
 	while (scenarioSelect.hasChildNodes())
 		scenarioSelect.removeChild(scenarioSelect.firstChild);
+  
 	for (const scenario of allScenarios) {
 		const option = document.createElement("option");
 		option.innerText = option.value = scenario;
@@ -508,7 +510,7 @@
 				group.appendChild(option);
 			}
 			metricSelect.value = metric;
-			const fallbackValue = includeDash ? "" : "stats";
+			const fallbackValue = includeDash ? "" : "exec";
 			if (!metrics.has(metric) && metric !== fallbackValue) {
 				metricSelect.value = fallbackValue;
 				update();
