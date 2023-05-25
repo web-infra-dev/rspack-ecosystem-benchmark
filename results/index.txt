@@ -1,4 +1,5 @@
 2023-05-25/minimal_production-build+persistent-cache.json
 2023-05-25/minimal_production-build+future-defaults.json
 2023-05-25/minimal_development-build+persistent-cache.json
+2023-05-25/minimal_development-build.json
 
