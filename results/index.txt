@@ -4,4 +4,5 @@
 2023-05-25/minimal_development-build.json
 2023-05-25/minimal_production-build+no-concatenation.json
 2023-05-25/minimal_production-build+no-minimize.json
+2023-05-25/minimal_development-build+future-defaults.json
 
