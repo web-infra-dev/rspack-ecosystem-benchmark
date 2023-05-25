@@ -39,6 +39,7 @@
 
 
 	const allDates = Array.from(allDatesSet).sort();
+ console.log(allDates)
 	const allScenarios = Array.from(allScenariosSet).sort();
 
 	const caseSelect = document.querySelector("#case-select");
