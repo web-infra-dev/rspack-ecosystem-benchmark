@@ -2,6 +2,7 @@ import { readFile, stat } from "fs/promises";
 import { resolve, relative } from "path";
 import { fileURLToPath } from "url";
 import { runCommand } from "../lib/utils.js";
+import { cases, scenarios as scenarioList } from "../lib/data.js";
 
 const [, , token, pow] = process.argv;
 const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
@@ -39,18 +40,16 @@ const dirExist = async (p) => {
 	// await run("git", ["reset", "--hard", "origin/gh-pages"]);
 	// await run("git", ["pull", "--rebase"]);
 	// process.chdir(cwd);
-	const indexFile = resolve(cwd,  "index.txt");
+	const indexFile = resolve(cwd, "index.txt");
 	const index = await readFile(indexFile, "utf-8");
-	//
 	const d = new Date();
 
-	const testCases = new Set();
-	const scenarios = new Set();
-	const dates = new Set([
-		`${d.getFullYear()}-${`0${d.getMonth() + 1}`.slice(
-			-2
-		)}-${`0${d.getDate()}`.slice(-2)}`,
-	]);
+	const testCases = new Set(cases);
+	const scenarios = new Set(scenarioList);
+	const dates = new Set([]);
+	const date = `${d.getFullYear()}-${`0${d.getMonth() + 1}`.slice(
+		-2,
+	)}-${`0${d.getDate()}`.slice(-2)}`;
 	const existing = new Set();
 	for (const indexLine of index.split("\n")) {
 		const match = /^([^/]+)\/([^_]+)_(.+).json/.exec(indexLine);
@@ -61,24 +60,22 @@ const dirExist = async (p) => {
 		existing.add(`${date}/${testCase}_${scenario}`);
 		testCases.add(testCase);
 		scenarios.add(scenario);
-		dates.add(date);
 	}
+	console.log("", existing);
 
 	const missing = [];
 	const randomOrder = () => (Math.random() < 0.5 ? -1 : 1);
-	for (const date of Array.from(dates).sort((a, b) => (a < b ? 1 : -1))) {
-		for (const testCase of Array.from(testCases).sort(randomOrder)) {
-			for (const scenario of Array.from(scenarios).sort(randomOrder)) {
-				if (scenario.includes("future-defaults") && date < "2021-09-17") {
-					continue;
-				}
-				if (!existing.has(`${date}/${testCase}_${scenario}`)) {
-					missing.push({
-						testCase,
-						scenario,
-						date,
-					});
-				}
+	for (const testCase of Array.from(testCases).sort(randomOrder)) {
+		for (const scenario of Array.from(scenarios).sort(randomOrder)) {
+			if (scenario.includes("future-defaults") && date < "2021-09-17") {
+				continue;
+			}
+			if (!existing.has(`${date}/${testCase}_${scenario}`)) {
+				missing.push({
+					testCase,
+					scenario,
+					date,
+				});
 			}
 		}
 	}

@@ -2,6 +2,7 @@
   "name": "rspack-ecosystem-benchmark",
   "type": "module",
   "dependencies": {
+    "@rspack/cli": "latest",
     "ncp": "^2.0.0",
     "ssl-root-cas": "^1.3.1"
   }
