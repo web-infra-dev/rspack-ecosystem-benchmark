@@ -37,8 +37,8 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 	});
 	const result = normalizeResult(
 		baseResult,
-		// TODO: we don't have stats data
-		0,
+		// TODO: we don't have stats data, 1 is the least placehold number we can't set
+		1,
 		// (normalResult1.stats.median + normalResult2.stats.median) / 2
 	);
 	console.log(formatResultTable(result, { colors: true, verbose: true }));
