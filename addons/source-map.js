@@ -1,6 +1,11 @@
 import { alterFile, revertFile } from "../lib/utils.js";
 
-export const args = ["--devtool", "source-map"];
+// export const args = ["--devtool", "source-map"];
+
+export const config = (content) => `${content}
+
+module.exports.devtool = "source-map";
+`;
 
 export const setup = async (options) => {
 	await alterFile("tsconfig.json", (content) => {
