@@ -1,14 +1,14 @@
 {
   "exec": {
-    "min": 673,
-    "max": 673,
-    "mean": 673,
-    "median": 673,
+    "min": 776,
+    "max": 776,
+    "mean": 776,
+    "median": 776,
     "variance": 0,
     "stdDev": 0,
     "confidence": 0,
-    "low": 673,
-    "high": 673,
+    "low": 776,
+    "high": 776,
     "count": 1,
     "base": 1
   },
