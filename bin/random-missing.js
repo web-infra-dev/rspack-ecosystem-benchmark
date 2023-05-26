@@ -88,6 +88,7 @@ const dirExist = async (p) => {
 	console.log(`${missing.length} missing entries`);
 	const selected =
 		missing[Math.floor(Math.pow(Math.random(), pow || 1) * missing.length)];
+	console.log(`${selected.testCase} ${selected.scenario} ${selected.date}`);
 	console.log(`::set-output name=case::${selected.testCase}`);
 	console.log(`::set-output name=scenario::${selected.scenario}`);
 	console.log(`::set-output name=date::${selected.date}`);
