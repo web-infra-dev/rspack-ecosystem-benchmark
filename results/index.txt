@@ -32,4 +32,5 @@
 2023-05-28/minimal_production-build+future-defaults.json
 2023-05-28/minimal_production-build+no-minimize.json
 2023-05-28/minimal_production-build+persistent-cache.json
+2023-05-28/minimal_development-build.json
 
