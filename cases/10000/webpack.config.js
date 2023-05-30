@@ -1,5 +1,4 @@
 const path = require("path");
-console.log(isProd);
 /** @type {import("@rspack/cli").Configuration} */
 module.exports = {
 	resolve: {
