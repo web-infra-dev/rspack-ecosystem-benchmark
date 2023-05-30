@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 const [
 	,
 	,
-	caseName = "minimal",
+	caseName = "10000",
 	scenarioName = "development-build",
 	date = undefined,
 	normalDate = scenarioName.includes("future-defaults")
