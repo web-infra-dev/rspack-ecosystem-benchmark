@@ -7,7 +7,7 @@ import { fileURLToPath } from "url";
 const [
 	,
 	,
-	caseName = "10000",
+	caseName = "minimal",
 	scenarioName = "development-build",
 	date = undefined,
 	normalDate = scenarioName.includes("future-defaults")
@@ -20,21 +20,21 @@ const [
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 
 (async () => {
-	const normalResult1 = await measure(caseName, scenarioName, {
-		run: 1,
-		verboseSetup: true,
-		date: normalDate,
-	});
+	// const normalResult1 = await measure(caseName, scenarioName, {
+	// 	run: 1,
+	// 	verboseSetup: true,
+	// 	date: normalDate,
+	// });
 	const baseResult = await measure(caseName, scenarioName, {
 		runs: 1,
 		verboseSetup: true,
 		date,
 	});
-	const normalResult2 = await measure(caseName, scenarioName, {
-		run: 1,
-		verboseSetup: true,
-		date: normalDate,
-	});
+	// const normalResult2 = await measure(caseName, scenarioName, {
+	// 	run: 1,
+	// 	verboseSetup: true,
+	// 	date: normalDate,
+	// });
 	const result = normalizeResult(
 		baseResult,
 		// TODO: we don't have stats data, 1 is the least placehold number we can't set
