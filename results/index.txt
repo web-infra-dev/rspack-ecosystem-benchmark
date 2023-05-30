@@ -43,4 +43,5 @@
 2023-05-29/minimal_development-build+future-defaults.json
 2023-05-29/minimal_production-build+future-defaults.json
 2023-05-29/minimal_production-build+no-concatenation.json
+2023-05-30/minimal_production-build+future-defaults.json
 
