@@ -75,4 +75,5 @@
 2023-05-31/10000_production-build+initial-persistent-cache.json
 2023-05-31/10000_development-build+future-defaults.json
 2023-05-31/10000_production-build+persistent-cache.json
+2023-05-31/minimal_development-build.json
 
