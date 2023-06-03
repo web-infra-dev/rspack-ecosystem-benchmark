@@ -119,4 +119,5 @@
 2023-06-03/minimal_development-build.json
 2023-06-03/minimal_development-build+initial-persistent-cache.json
 2023-06-03/minimal_development-build+future-defaults.json
+2023-06-03/10000_development-build+initial-persistent-cache.json
 
