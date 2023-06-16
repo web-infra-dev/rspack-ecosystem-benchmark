@@ -246,4 +246,5 @@
 2023-06-16/10000_production-build+initial-persistent-cache.json
 2023-06-16/minimal_development-build+future-defaults.json
 2023-06-16/10000_development-build+persistent-cache.json
+2023-06-16/minimal_production-build+no-concatenation.json
 
