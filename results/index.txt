@@ -466,4 +466,5 @@
 2023-06-29/10000_production-build+persistent-cache.json
 2023-06-29/10000_production-build+initial-persistent-cache.json
 2023-06-29/minimal_production-build+persistent-cache.json
+2023-06-29/minimal_production-build+initial-persistent-cache.json
 
