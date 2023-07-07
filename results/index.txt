@@ -595,4 +595,5 @@
 2023-07-07/10000_development-build+future-defaults.json
 2023-07-07/10000_production-build+future-defaults.json
 2023-07-07/10000_production-build+no-minimize.json
+2023-07-07/minimal_production-build+no-minimize.json
 
