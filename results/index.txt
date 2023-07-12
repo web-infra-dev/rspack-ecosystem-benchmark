@@ -671,4 +671,5 @@
 2023-07-11/minimal_production-build+no-concatenation.json
 2023-07-11/10000_production-build+no-minimize.json
 2023-07-12/minimal_production-build+initial-persistent-cache.json
+2023-07-12/minimal_production-build+no-concatenation.json
 
