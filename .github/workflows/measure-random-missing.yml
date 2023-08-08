@@ -2,59 +2,27 @@ name: Measure random missing data point
 
 on:
   schedule:
-    - cron: "*/20 * * * *"
+    - cron: "0 0 * * *"
   workflow_dispatch:
 jobs:
   bench:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, rspack-bench]
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Use Pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
       - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - name: Yarn Cache Dir
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - name: Yarn Cache
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-10000-${{ steps.missing.outputs.date }}
-          restore-keys: |
-            yarn-10000-
-            yarn-
-      - name: Yarn
-        uses: nick-invision/retry@v2.4.0
-        with:
-          max_attempts: 3
-          timeout_minutes: 5
-          command: yarn
-      - name: Measure
-        uses: nick-invision/retry@v2.4.0
-        with:
-          max_attempts: 3
-          timeout_minutes: 30
-          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults
-      - name: Measure
-        uses: nick-invision/retry@v2.4.0
-        with:
-          max_attempts: 3
-          timeout_minutes: 30
-          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults+with-timeout-loader
-      - name: Measure
-        uses: nick-invision/retry@v2.4.0
-        with:
-          max_attempts: 3
-          timeout_minutes: 30
-          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults+with-multi-times
-      - name: Measure
-        uses: nick-invision/retry@v2.4.0
-        with:
-          max_attempts: 3
-          timeout_minutes: 30
-          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults+with-timeout-loader+with-multi-times
+        uses: actions/setup-node@v3
+          with:
+            node-version: 16
+            cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run benchmark
+        run: node bin/measure-mean-normalized.js 10000 development-build+future-defaults
       - name: Setup git user
         run: |
           git config --global user.name "github-actions[bot]"
