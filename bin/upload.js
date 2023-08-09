@@ -1,99 +1,84 @@
-import { readFile, writeFile, stat } from "fs/promises";
-import { resolve, relative } from "path";
+import {
+	readFile,
+	writeFile,
+	stat,
+	readdir,
+	mkdir,
+	copyFile
+} from "fs/promises";
+import { resolve } from "path";
 import { fileURLToPath } from "url";
 import { runCommand } from "../lib/utils.js";
-import ncpCallback from "ncp";
-import { promisify } from "util";
-
-const ncp = promisify(ncpCallback);
 
 const [, , token] = process.argv;
-const name = String(new Date().valueOf())
-const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
-
-//if (!name) throw new Error("name argument missing");
+const now = new Date();
+const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
+const pagesDir = resolve(rootDir, ".gh-pages");
+const outputDir = resolve(rootDir, "output");
+const resultsDir = resolve(pagesDir, "results");
+const dataDir = resolve(resultsDir, date);
 
-const run = (command, args) => runCommand(command, args, true);
-
-const dirExist = async (p) => {
+async function dirExist(p) {
 	try {
 		if ((await stat(p)).isDirectory()) return true;
 	} catch {
 		return false;
 	}
-};
+}
 
 (async () => {
-	const targetDir = resolve(rootDir, ".gh-pages");
-	if (!(await dirExist(targetDir))) {
-		await run("git", [
+	if (!(await dirExist(pagesDir))) {
+		await runCommand("git", [
 			"clone",
 			"--branch",
 			"gh-pages",
 			"--single-branch",
 			"--depth",
 			"1",
-			token
-				? `https://${GITHUB_ACTOR}:${token}@github.com/jerrykingxyz/rspack-ecosystem-benchmark.git`
-				: "https://github.com/jerrykingxyz/rspack-ecosystem-benchmark.git",
-			".gh-pages",
+			repoUrl,
+			".gh-pages"
 		]);
 	}
-	process.chdir(targetDir);
-	for (let i = 0; i < 21; i++) {
-		try {
-			await run("git", ["reset", "--hard", "origin/gh-pages"]);
-			await run("git", ["pull", "--rebase"]);
+	process.chdir(pagesDir);
 
-			console.log("== copy output files ==");
-			const indexFile = resolve(targetDir, "results", "index.txt");
-			const files = new Set((await readFile(indexFile, "utf-8")).split("\n"));
-			files.delete("");
-			await ncp(
-				resolve(rootDir, "output"),
-				resolve(targetDir, "results", name),
-				{
-					filter: (filename) => {
-						if (filename.endsWith(".json")) {
-							files.add(
-								`${name}/${relative(
-									resolve(rootDir, "output"),
-									filename
-								).replace(/\\/g, "/")}`
-							);
-						}
-						return true;
-					},
-				}
-			);
+	await run("git", ["reset", "--hard", "origin/gh-pages"]);
+	await run("git", ["pull", "--rebase"]);
 
-			console.log("== update index.txt ==");
-			await writeFile(
-				indexFile,
-				Array.from(files, (f) => `${f}\n`).join("") + "\n"
-			);
+	console.log("== copy output files ==");
+	const indexFile = resolve(resultsDir, "index.txt");
+	const files = new Set((await readFile(indexFile, "utf-8")).split("\n"));
+	files.delete("");
 
-			console.log("== commit ==");
-			await run("git", ["add", `results/${name}/*.json`, "results/index.txt"]);
-			try {
-				await run("git", ["commit", "-m", `"add ${name} results"`]);
-			} catch {
-				break;
-			}
-
-			console.log("== push ==");
-			await run("git", ["push"]);
-			break;
-		} catch (e) {
-			await new Promise((resolve) =>
-				setTimeout(resolve, Math.random() * 30000)
-			);
-			if (i === 20) throw e;
-		}
+	if (!(await dirExist(dataDir))) {
+		await mkdir(dataDir);
 	}
-})().catch((err) => {
+	const outputFiles = await readdir(outputDir);
+	for (const item of outputFiles) {
+		if (item.endsWith(".json")) {
+			files.add(`${date}/${item}`);
+		}
+		await copyFile(resolve(outputDir, item), resolve(dataDir, item));
+	}
+
+	console.log("== update index.txt ==");
+	await writeFile(indexFile, Array.from(files, f => `${f}\n`).join("") + "\n");
+
+	console.log("== commit ==");
+	await runCommand("git", [
+		"add",
+		`results/${date}/*.json`,
+		"results/index.txt"
+	]);
+	try {
+		await runCommand("git", ["commit", "-m", `"add ${date} results"`]);
+	} catch {}
+
+	console.log("== push ==");
+	await runCommand("git", ["push"]);
+})().catch(err => {
 	process.exitCode = 1;
 	console.error(err.stack);
 });
