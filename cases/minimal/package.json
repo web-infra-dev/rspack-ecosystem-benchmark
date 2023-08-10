@@ -1,6 +1,3 @@
 {
-  "name": "minimal",
-  "dependencies": {
-    "@rspack/cli": "^0.1.12"
-  }
+  "name": "minimal"
 }

@@ -2,7 +2,7 @@ name: Measure random missing data point
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "*/20 * * * *"
   workflow_dispatch:
 jobs:
   bench:
@@ -14,17 +14,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - name: Yarn
-        uses: nick-invision/retry@v2.4.0
-        with:
-          max_attempts: 3
-          timeout_minutes: 5
-          command: yarn
-      - name: Find missing data point
-        id: missing
-        run: node bin/random-missing.js ${{ secrets.GITHUB_TOKEN }} 3
-      - name: Print Result
-        run: echo ${{ steps.missing.outputs.case }} ${{ steps.missing.outputs.scenario }} ${{ steps.missing.outputs.date }}
       - name: Yarn Cache Dir
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -32,19 +21,43 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: yarn-${{ steps.missing.outputs.case }}-${{ steps.missing.outputs.date }}
+          key: yarn-10000-${{ steps.missing.outputs.date }}
           restore-keys: |
-            yarn-${{ steps.missing.outputs.case }}-
+            yarn-10000-
             yarn-
+      - name: Yarn
+        uses: nick-invision/retry@v2.4.0
+        with:
+          max_attempts: 3
+          timeout_minutes: 5
+          command: yarn
       - name: Measure
         uses: nick-invision/retry@v2.4.0
         with:
           max_attempts: 3
           timeout_minutes: 30
-          command: node bin/measure-mean-normalized.js ${{ steps.missing.outputs.case }} ${{ steps.missing.outputs.scenario }} ${{ steps.missing.outputs.date }}
+          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults
+      - name: Measure
+        uses: nick-invision/retry@v2.4.0
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults+with-timeout-loader
+      - name: Measure
+        uses: nick-invision/retry@v2.4.0
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults+with-multi-times
+      - name: Measure
+        uses: nick-invision/retry@v2.4.0
+        with:
+          max_attempts: 3
+          timeout_minutes: 30
+          command: node bin/measure-mean-normalized.js 10000 development-build+future-defaults+with-timeout-loader+with-multi-times
       - name: Setup git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Upload result
-        run: node bin/upload.js ${{ steps.missing.outputs.date }} ${{ secrets.GITHUB_TOKEN }}
+        run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}

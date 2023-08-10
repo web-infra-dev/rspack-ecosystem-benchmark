@@ -7,10 +7,11 @@ import { promisify } from "util";
 
 const ncp = promisify(ncpCallback);
 
-const [, , name, token] = process.argv;
+const [, , token] = process.argv;
+const name = String(new Date().valueOf())
 const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
 
-if (!name) throw new Error("name argument missing");
+//if (!name) throw new Error("name argument missing");
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 
@@ -35,8 +36,8 @@ const dirExist = async (p) => {
 			"--depth",
 			"1",
 			token
-				? `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`
-				: "https://github.com/web-infra-dev/rspack-ecosystem-benchmark.git",
+				? `https://${GITHUB_ACTOR}:${token}@github.com/jerrykingxyz/rspack-ecosystem-benchmark.git`
+				: "https://github.com/jerrykingxyz/rspack-ecosystem-benchmark.git",
 			".gh-pages",
 		]);
 	}

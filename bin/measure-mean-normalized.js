@@ -1,34 +1,24 @@
-import measure from "../lib/measure.js";
-import { formatResultTable, normalizeResult } from "../lib/utils.js";
-import { mkdir, writeFile } from "fs/promises";
-import { resolve } from "path";
-import { fileURLToPath } from "url";
+import { runBenchmark } from "../lib/index.js";
+//import { formatResultTable, normalizeResult } from "../lib/utils.js";
+//import { mkdir, writeFile } from "fs/promises";
+// import { resolve } from "path";
+// import { fileURLToPath } from "url";
 
-const [
-	,
-	,
-	caseName = "minimal",
-	scenarioName = "development-build",
-	date = undefined,
-	normalDate = scenarioName.includes("future-defaults")
-		? "2021-09-20"
-		: scenarioName.includes("swc-env")
-		? "2021-05-10"
-		: "2021-02-15",
-] = process.argv;
+const [, , caseName = "minimal", scenarioName = "development-build", runs = 1] =
+	process.argv;
 
-const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
-
-(async () => {
+//const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
+runBenchmark("minimal_development-build");
+/*(async () => {
 	// const normalResult1 = await measure(caseName, scenarioName, {
 	// 	run: 1,
 	// 	verboseSetup: true,
 	// 	date: normalDate,
 	// });
 	const baseResult = await measure(caseName, scenarioName, {
-		runs: 1,
-		verboseSetup: true,
-		date,
+		runs,
+		  verboseSetup: true,
+      install: false
 	});
 	// const normalResult2 = await measure(caseName, scenarioName, {
 	// 	run: 1,
@@ -50,4 +40,4 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 })().catch((err) => {
 	process.exitCode = 1;
 	console.error(err.stack);
-});
+});*/

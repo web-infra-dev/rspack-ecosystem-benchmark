@@ -1,16 +1,3 @@
 {
-  "name": "10000",
-  "scripts": {
-    "rbuild": "NODE_ENV=production rspack build -c rspack.config.js",
-    "rdev": "NODE_ENV=development rspack build -c rspack.config.js"
-  },
-  "source": "src/index.js",
-  "dependencies": {
-    "@icon-park/react": "^1.4.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "devDependencies": {
-    "@rspack/cli": "^0.1.12"
-  }
+  "name": "10000"
 }

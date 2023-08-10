@@ -1,12 +1,8 @@
 node_modules
 dist
-cases/**/yarn.lock
 *.log
 .cache
-.yarn
-.yarnrc.yml
-.pnp.js
-/output
+output
 .gh-pages
 *.cpuprofile
 *.heapprofile
