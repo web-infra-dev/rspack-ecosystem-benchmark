@@ -1,4 +1,4 @@
-name: Measure random missing data point
+name: scheduled bench
 
 on:
   schedule:
@@ -10,24 +10,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Use Pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-          with:
-            node-version: 16
-            cache: 'pnpm'
-      - name: Install dependencies
-        run: pnpm install
+      - name: Init env
+        uses: ./.github/actions/env
       - name: Build rspack
         run: node bin/build-rspack.js
       - name: Run benchmark
         run: node bin/bench.js
-      - name: Setup git user
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-      - name: Upload result
-        run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}
+#      - name: Setup git user
+#        run: |
+#          git config --global user.name "github-actions[bot]"
+#          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+#      - name: Upload result
+#        run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}

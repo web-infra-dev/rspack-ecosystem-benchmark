@@ -1,0 +1,36 @@
+name: Env
+
+description: Init benchmark env
+
+runs:
+  using: composite
+  steps:
+    - name: Use pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 7
+    - name: Use node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'pnpm'
+    - name: Install dependencies
+      shell: bash
+      run: $PNPM_HOME/pnpm --version && $PNPM_HOME/pnpm install
+    - name: Use rust cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+          target/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    - name: Use repo cache
+      uses: actions/cache@v3
+      with:
+        path: |
+          .rspack
+          .gh-pages
+        key: ${{ runner.os }}-repo

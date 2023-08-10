@@ -1,3 +1,0 @@
-echo minimal production-build+source-map+persistent-cache 2023-05-25
-echo minimal development-rebuild+unsafe-cache 2023-05-25
-echo minimal development-build+thread-babel-env 2023-05-26
