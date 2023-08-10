@@ -8,9 +8,6 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 (async () => {
 	await mkdir(resolve(rootDir, "output"), { recursive: true });
 	const benchmarks = [
-		"minimal_development-mode",
-		"minimal_development-mode_hmr",
-		"minimal_production-mode",
 		"10000_development-mode",
 		"10000_development-mode_hmr",
 		"10000_production-mode"
