@@ -21,8 +21,10 @@ jobs:
             cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      - name: Build rspack
+        run: node bin/build-rspack.js
       - name: Run benchmark
-        run: node bin/measure-mean-normalized.js 10000 development-build+future-defaults
+        run: node bin/bench.js
       - name: Setup git user
         run: |
           git config --global user.name "github-actions[bot]"

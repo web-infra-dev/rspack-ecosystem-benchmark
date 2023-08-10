@@ -4,5 +4,6 @@ dist
 .cache
 output
 .gh-pages
+.rspack
 *.cpuprofile
 *.heapprofile

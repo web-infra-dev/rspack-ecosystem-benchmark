@@ -1,14 +1,7 @@
-import {
-	readFile,
-	writeFile,
-	stat,
-	readdir,
-	mkdir,
-	copyFile
-} from "fs/promises";
+import { readFile, writeFile, readdir, mkdir, copyFile } from "fs/promises";
 import { resolve } from "path";
 import { fileURLToPath } from "url";
-import { runCommand } from "../lib/utils.js";
+import { runCommand, dirExist } from "../lib/utils.js";
 
 const [, , token] = process.argv;
 const now = new Date();
@@ -20,14 +13,6 @@ const pagesDir = resolve(rootDir, ".gh-pages");
 const outputDir = resolve(rootDir, "output");
 const resultsDir = resolve(pagesDir, "results");
 const dataDir = resolve(resultsDir, date);
-
-async function dirExist(p) {
-	try {
-		if ((await stat(p)).isDirectory()) return true;
-	} catch {
-		return false;
-	}
-}
 
 (async () => {
 	if (!(await dirExist(pagesDir))) {
@@ -44,8 +29,8 @@ async function dirExist(p) {
 	}
 	process.chdir(pagesDir);
 
-	await run("git", ["reset", "--hard", "origin/gh-pages"]);
-	await run("git", ["pull", "--rebase"]);
+	await runCommand("git", ["reset", "--hard", "origin/gh-pages"]);
+	await runCommand("git", ["pull", "--rebase"]);
 
 	console.log("== copy output files ==");
 	const indexFile = resolve(resultsDir, "index.txt");
