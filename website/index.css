@@ -1,0 +1,131 @@
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+body {
+  max-width: 1200px;
+  margin: auto;
+  padding: 0 24px;
+}
+
+.action-container,
+.tag-container {
+	line-height: 32px;
+	margin-bottom: 6px;
+}
+
+.action-container select {
+	width: 200px;
+	height: 30px;
+	border: 1px solid #d9d9d9;
+	border-radius: 6px;
+	transition: 0.2s;
+	padding: 0 12px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+}
+.action-container select:hover {
+	border-color: #4096ff;
+}
+.action-container select:focus {
+	outline: none;
+}
+.action-container .add {
+	display: inline-block;
+	color: #fff;
+	background-color: #1677ff;
+	font-size: 14px;
+	padding: 0px 15px;
+	border-radius: 6px;
+	vertical-align: top;
+	cursor: pointer;
+	transition: 0.2s;
+}
+.action-container .add.disable {
+	pointer-events: none;
+	background-color: rgba(0, 0, 0, 0.04);
+	color: rgba(0, 0, 0, 0.25);
+}
+
+.tag {
+	display: inline-flex;
+	align-items: center;
+	background: rgba(0, 0, 0, 0.04);
+	color: #000;
+	padding: 0 8px;
+	line-height: 28px;
+	margin: 2px 6px 2px 0px;
+	border-radius: 4px;
+	font-size: 14px;
+	transition: 0.2s;
+}
+.tag .close {
+	position: relative;
+	width: 14px;
+	height: 14px;
+	cursor: pointer;
+	margin-left: 4px;
+}
+.tag .close::before,
+.tag .close::after {
+	content: "";
+	position: absolute;
+	background: currentColor;
+	height: 100%;
+	width: 1.5px;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+.tag .close::before {
+	transform: rotate(45deg);
+}
+.tag .close::after {
+	transform: rotate(-45deg);
+}
+.tag.active {
+	background: #1677ff;
+	color: #fff;
+}
+
+.chart-container {
+  min-height: 600px;
+}
+
+.slider-container {
+  padding: 0 32px;
+  margin-bottom: 32px;
+}
+.slider {
+	position: relative;
+	width: 100%;
+	height: 4px;
+	background-color: rgba(0, 0, 0, 0.04);
+	border-radius: 2px;
+}
+.slider .active-line {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	background: #1677ff;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.slider .mark {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	width: 10px;
+	height: 10px;
+	transform: translateX(-50%);
+	border: 2px solid #1677ff;
+	border-radius: 100%;
+	background: #fff;
+	transition: 0.2s;
+	cursor: pointer;
+}
+.slider .mark:hover {
+	border-width: 4px;
+}

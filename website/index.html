@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+	<head>
+		<title>rspack/benchmark</title>
+		<link href="./index.css" rel="stylesheet" />
+	</head>
+	<body>
+		<h1>rspack/benchmark</h1>
+		<div class="action-container">
+			Select benchmark name and metric:
+			<select class="benchmark-name">
+				<option>Loading..</option>
+			</select>
+			<select class="metric">
+				<option>Loading..</option>
+			</select>
+			<span class="add disable">Add</span>
+		</div>
+		<div class="tag-container">Display benchmark case: </div>
+
+		<div class="chart-container">
+			<canvas></canvas>
+		</div>
+    <div class="slider-container">
+      <div class="slider">
+			  <span class="active-line" style="left: 0%; width: 100%"></span>
+			  <span class="mark" style="left: 0%"></span>
+			  <span class="mark" style="left: 100%"></span>
+		  </div>
+    </div>
+		<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+		<script src="index.js"></script>
+	</body>
+</html>
