@@ -9,54 +9,49 @@ const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
 const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
-const pagesDir = resolve(rootDir, ".gh-pages");
+const dataDir = resolve(rootDir, ".data");
 const outputDir = resolve(rootDir, "output");
-const resultsDir = resolve(pagesDir, "results");
-const dataDir = resolve(resultsDir, date);
+const dateDir = resolve(dataDir, date);
 
 (async () => {
-	if (!(await dirExist(pagesDir))) {
+	if (!(await dirExist(dataDir))) {
 		await runCommand("git", [
 			"clone",
 			"--branch",
-			"gh-pages",
+			"data",
 			"--single-branch",
 			"--depth",
 			"1",
 			repoUrl,
-			".gh-pages"
+			".data"
 		]);
 	}
-	process.chdir(pagesDir);
+	process.chdir(dataDir);
 
-	await runCommand("git", ["reset", "--hard", "origin/gh-pages"]);
+	await runCommand("git", ["reset", "--hard", "origin/data"]);
 	await runCommand("git", ["pull", "--rebase"]);
 
 	console.log("== copy output files ==");
-	const indexFile = resolve(resultsDir, "index.txt");
+	const indexFile = resolve(dataDir, "index.txt");
 	const files = new Set((await readFile(indexFile, "utf-8")).split("\n"));
 	files.delete("");
 
-	if (!(await dirExist(dataDir))) {
-		await mkdir(dataDir);
+	if (!(await dirExist(dateDir))) {
+		await mkdir(dateDir);
 	}
 	const outputFiles = await readdir(outputDir);
 	for (const item of outputFiles) {
 		if (item.endsWith(".json")) {
 			files.add(`${date}/${item}`);
 		}
-		await copyFile(resolve(outputDir, item), resolve(dataDir, item));
+		await copyFile(resolve(outputDir, item), resolve(dateDir, item));
 	}
 
 	console.log("== update index.txt ==");
 	await writeFile(indexFile, Array.from(files, f => `${f}\n`).join("") + "\n");
 
 	console.log("== commit ==");
-	await runCommand("git", [
-		"add",
-		`results/${date}/*.json`,
-		"results/index.txt"
-	]);
+	await runCommand("git", ["add", `${date}/*.json`, "index.txt"]);
 	try {
 		await runCommand("git", ["commit", "-m", `"add ${date} results"`]);
 	} catch {}

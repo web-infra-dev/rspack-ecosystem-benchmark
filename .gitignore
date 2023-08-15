@@ -3,7 +3,7 @@ dist
 *.log
 .cache
 output
-.gh-pages
+.data
 .rspack
 *.cpuprofile
 *.heapprofile

@@ -16,9 +16,9 @@ jobs:
         run: node bin/build-rspack.js
       - name: Run benchmark
         run: node bin/bench.js
-#      - name: Setup git user
-#        run: |
-#          git config --global user.name "github-actions[bot]"
-#          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-#      - name: Upload result
-#        run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup git user
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Upload result
+        run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}
