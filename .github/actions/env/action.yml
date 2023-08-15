@@ -32,5 +32,5 @@ runs:
       with:
         path: |
           .rspack
-          .gh-pages
+          .data
         key: ${{ runner.os }}-repo
