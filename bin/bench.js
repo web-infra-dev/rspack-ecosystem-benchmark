@@ -9,7 +9,7 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 
 (async () => {
 	await mkdir(resolve(rootDir, "output"), { recursive: true });
-	const benchmarks = benchmarkCase
+	const benchmarks = benchmarkCase.length
 		? benchmarkCase
 		: [
 				"10000_development-mode",
