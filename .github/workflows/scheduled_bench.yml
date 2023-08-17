@@ -16,9 +16,22 @@ jobs:
         run: node bin/build-rspack.js
       - name: Run benchmark
         run: node bin/bench.js
+      - id: print-compare-results
+        name: Print compare results
+        run: |
+          result=$(node bin/compare-bench.js latest current)
+          echo "$result"
+          echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
       - name: Setup git user
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
       - name: Upload result
         run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}
+      - name: Check Threshold
+        run: |
+          result="${{ steps.print-compare-results.outputs.diff-result }}";
+          if [[ $result =~ "Threshold exceeded" ]]; then
+            echo "Some benchmark cases exceed the threshold, please visit the previous step for more information"
+            exit 1
+          fi
