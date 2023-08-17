@@ -1,12 +1,11 @@
 import { readFile, writeFile, readdir, mkdir, copyFile } from "fs/promises";
 import { resolve } from "path";
 import { fileURLToPath } from "url";
-import { runCommand, dirExist } from "../lib/utils.js";
+import { runCommand, dirExist, formatDate } from "../lib/utils.js";
 
 const [, , token] = process.argv;
 const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
-const now = new Date();
-const date = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+const date = formatDate(+new Date());
 const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
