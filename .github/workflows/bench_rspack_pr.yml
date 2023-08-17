@@ -80,14 +80,12 @@ jobs:
             const body = `
             📝 Benchmark detail: ${urlLink}
 
-            ``` text
             ${result}
-            ```
             `
 
             await github.rest.issues.updateComment({
               owner: context.repo.owner,
               repo: 'rspack',
-              comment_id: ${{ needs.init.outputs.comment-id }},
+              comment_id: `${{ needs.create-comment.outputs.comment-id }}`,
               body
             })
