@@ -28,6 +28,7 @@ const dateDir = resolve(dataDir, date);
 	}
 	process.chdir(dataDir);
 
+	await runCommand("git", ["remote", "set-url", "origin", repoUrl]);
 	await runCommand("git", ["reset", "--hard", "origin/data"]);
 	await runCommand("git", ["pull", "--rebase"]);
 
