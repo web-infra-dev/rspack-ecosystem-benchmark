@@ -1,4 +1,4 @@
-name: scheduled bench
+name: Scheduled Bench
 
 on:
   schedule:

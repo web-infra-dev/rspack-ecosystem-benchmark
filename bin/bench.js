@@ -22,7 +22,7 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 	for (const item of benchmarks) {
 		const result = await run(item);
 		console.log(`${item} result is:`);
-		console.log(formatResultTable(result, { colors: true, verbose: true }));
+		console.log(formatResultTable(result, { verbose: true }));
 		await writeFile(
 			resolve(rootDir, `output/${item}.json`),
 			JSON.stringify(result, null, 2)
