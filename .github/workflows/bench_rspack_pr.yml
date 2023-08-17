@@ -23,7 +23,7 @@ jobs:
       - id: create-comment
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.BENCHMARK_ACCESS_TOKEN }}
+          github-token: ${{ secrets.RSPACK_BOT_ACCESS_TOKEN }}
           result-encoding: string
           script: |
             const url = `${context.serverUrl}//${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
@@ -71,7 +71,7 @@ jobs:
     steps:
       - uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.BENCHMARK_ACCESS_TOKEN }}
+          github-token: ${{ secrets.RSPACK_BOT_ACCESS_TOKEN }}
           script: |
             const result = `${{ needs.run-bench.outputs.diff-result }}`.replace(/@@/g, "\n");
 
