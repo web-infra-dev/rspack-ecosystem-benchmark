@@ -3,14 +3,14 @@ import { fileURLToPath } from "url";
 import { mkdir, writeFile } from "fs/promises";
 import { run, formatResultTable } from "../lib/index.js";
 
-const [, , ...benchmarkCase] = process.argv;
+const [, , ...benchmarkNames] = process.argv;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 
 (async () => {
 	await mkdir(resolve(rootDir, "output"), { recursive: true });
-	const benchmarks = benchmarkCase.length
-		? benchmarkCase
+	const benchmarks = benchmarkNames.length
+		? benchmarkNames
 		: [
 				"10000_development-mode",
 				"10000_development-mode_hmr",
