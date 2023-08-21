@@ -84,6 +84,7 @@ async function getResults(date) {
 	const overThresholdTags = getOverThresholdTags(diff);
 	console.log(formatedTable);
 	if (overThresholdTags.length > 0) {
+		console.log("");
 		console.log("Threshold exceeded: ", JSON.stringify(overThresholdTags));
 	}
 })().catch(err => {
