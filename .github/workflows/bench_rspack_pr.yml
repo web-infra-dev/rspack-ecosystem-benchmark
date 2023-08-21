@@ -51,9 +51,6 @@ jobs:
           result=$(node bin/compare-bench.js latest current)
           echo "$result"
           echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
-      - name: Check Threshold
-        run: |
-          result="${{ steps.print-results.outputs.diff-result }}";
           if [[ $result =~ "Threshold exceeded" ]]; then
             echo "Some benchmark cases exceed the threshold, please visit the previous step for more information"
             exit 1
