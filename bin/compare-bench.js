@@ -4,7 +4,7 @@ import { readFile, readdir } from "fs/promises";
 import { compare, formatDiffTable } from "../lib/index.js";
 
 const [, , baseDate, currentDate] = process.argv;
-const compareMetric = ["stats"];
+const compareMetric = ["exec"];
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const outputDir = resolve(rootDir, "output");
 const fetchPrefix =
