@@ -33,6 +33,7 @@ jobs:
 
   run-bench:
     runs-on: [self-hosted, rspack-bench]
+    timeout-minutes: 30
     needs: create-comment
     outputs:
       diff-result: ${{ steps.print-results.outputs.diff-result }}
