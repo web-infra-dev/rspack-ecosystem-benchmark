@@ -13,6 +13,9 @@ const formatSize = (value, maxValue) => {
 	if (maxValue > 10000) return `${value / 1000} kB`;
 	return `${value} B`;
 };
+const formatRatio = (value, maxValue) => {
+	return `${value}%`;
+};
 const debounce = (fn, t) => {
 	let timer = null;
 	return function (...args) {
@@ -21,6 +24,15 @@ const debounce = (fn, t) => {
 		}
 		timer = setTimeout(() => fn(...args), t);
 	};
+};
+const getAxisType = (tag) => {
+	if (tag.endsWith(" size") || tag.endsWith(" memory")) {
+		return "size";
+	} else if (tag.endsWith(" cache")) {
+		return "ratio";
+	} else {
+		return "time";
+	}
 };
 
 class DataCenter {
@@ -240,6 +252,17 @@ class BenchmarkChart {
 								return formatSize(value, values[values.length - 1].value);
 							}
 						}
+					},
+					ratio: {
+						type: "linear",
+						display: false,
+						position: "right",
+						beginAtZero: true,
+						ticks: {
+							callback(value, _, values) {
+								return formatRatio(value, values[values.length - 1].value);
+							}
+						}
 					}
 				},
 				plugins: {
@@ -257,7 +280,9 @@ class BenchmarkChart {
 								const text =
 									context.dataset.yAxisID === "size"
 										? formatSize(value, value)
-										: formatTime(value, value);
+										: context.dataset.yAxisID === "ratio"
+											? formatRatio(value, value)
+											: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
 							}
 						}
@@ -274,15 +299,14 @@ class BenchmarkChart {
 	updateChartData(data) {
 		let showTimeAxis = false;
 		let showSizeAxis = false;
+		let showRatioAxis = false;
 		const datasets = [];
 		for (const tag of Object.keys(data)) {
 			const values = data[tag];
-			const isSizeAxis = tag.endsWith(" size") || tag.endsWith(" memory");
-			if (isSizeAxis) {
-				showSizeAxis = true;
-			} else {
-				showTimeAxis = true;
-			}
+			const axis = getAxisType(tag);
+			showTimeAxis = showTimeAxis || axis === "time";
+			showSizeAxis = showSizeAxis || axis === "size";
+			showRatioAxis = showRatioAxis || axis === "ratio";
 			datasets.push({
 				label: tag,
 				data: values.map(({ date, value }) => {
@@ -291,13 +315,14 @@ class BenchmarkChart {
 						y: value
 					};
 				}),
-				yAxisID: isSizeAxis ? "size" : "time",
+				yAxisID: axis,
 				fill: true
 			});
 		}
 		this.chart.data.datasets = datasets;
 		this.chart.options.scales.time.display = showTimeAxis;
 		this.chart.options.scales.size.display = showSizeAxis;
+		this.chart.options.scales.ratio.display = showRatioAxis;
 		this.chart.update();
 	}
 
