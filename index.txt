@@ -184,4 +184,10 @@
 2023-09-14/threejs_development-mode_10x.json
 2023-09-14/threejs_development-mode_10x_hmr.json
 2023-09-14/threejs_production-mode_10x.json
+2023-09-15/10000_development-mode.json
+2023-09-15/10000_development-mode_hmr.json
+2023-09-15/10000_production-mode.json
+2023-09-15/threejs_development-mode_10x.json
+2023-09-15/threejs_development-mode_10x_hmr.json
+2023-09-15/threejs_production-mode_10x.json
 
