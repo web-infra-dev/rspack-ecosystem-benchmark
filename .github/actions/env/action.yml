@@ -16,7 +16,9 @@ runs:
         cache: 'pnpm'
     - name: Install dependencies
       shell: bash
-      run: $PNPM_HOME/pnpm --version && $PNPM_HOME/pnpm install
+      run: |
+        export PATH=$PNPM_HOME:$PATH
+        pnpm --version && pnpm install
     - name: Use rust cache
       uses: actions/cache@v3
       with:
@@ -27,11 +29,3 @@ runs:
           ~/.cargo/git/db/
           target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-    - name: Use repo cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          .rspack/*
-          !.rspack/node_modules
-          .data
-        key: ${{ runner.os }}-repo
