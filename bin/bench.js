@@ -15,9 +15,11 @@ const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 				"10000_development-mode",
 				"10000_development-mode_hmr",
 				"10000_production-mode",
+				"10000_production-mode_builtin-swc-loader",
 				"threejs_development-mode_10x",
 				"threejs_development-mode_10x_hmr",
-				"threejs_production-mode_10x"
+				"threejs_production-mode_10x",
+				"threejs_production-mode_builtin-swc-loader"
 		  ];
 	for (const item of benchmarks) {
 		const result = await run(item);
