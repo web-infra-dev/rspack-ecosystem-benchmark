@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref_name != 'main' }}
+
+jobs:
+  ci:
+    runs-on: [self-hosted, rspack-bench]
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Init env
+        uses: ./.github/actions/env
+      - name: Build rspack
+        run: node bin/build-rspack.js
+      - name: Run benchmark
+        run: node bin/bench.js
+      - id: print-compare-results
+        name: Print compare results
+        run: |
+          result=$(node bin/compare-bench.js latest current)
+          echo "$result"
+          echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
+      - name: Check Threshold
+        run: |
+          result="${{ steps.print-compare-results.outputs.diff-result }}";
+          if [[ $result =~ "Threshold exceeded" ]]; then
+            echo "Some benchmark cases exceed the threshold, please visit the previous step for more information"
+            exit 1
+          fi
