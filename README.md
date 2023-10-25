@@ -163,4 +163,11 @@ interface Addon {
 2. move the project dependencies to global package.json
 3. add `rspack.config.js` to make the project runnable by rspack
 4. add `hmr.js` to make the project support hmr changes
-5. try run `node bin/bench.js <your case>_<your addons>` to test
+5. try run `RSPACK_CLI_BIN=<your-rspack-cli> node bin/bench.js <your case>_<your addons>` to test
+
+## How to create a addon
+
+1. create your addons in `lib/addons` with kebab case like "a-b-c.js"
+2. export default a class that extends `lib/addons/common` and implement the hooks you want to listen
+3. try run `RSPACK_CLI_BIN=<your-rspack-cli> node bin/bench.js <case>_<your addons>` to test
+4. if you want to run some benchmarkName by default, you can add it to `defaultBenchmarkNames` in `bin/bench.js`

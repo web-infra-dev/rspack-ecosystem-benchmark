@@ -6,21 +6,22 @@ import { run, formatResultTable } from "../lib/index.js";
 const [, , ...benchmarkNames] = process.argv;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
+const defaultBenchmarkNames = [
+	"10000_development-mode",
+	"10000_development-mode_hmr",
+	"10000_production-mode",
+	"10000_production-mode_builtin-swc-loader",
+	"threejs_development-mode_10x",
+	"threejs_development-mode_10x_hmr",
+	"threejs_production-mode_10x",
+	"threejs_production-mode_builtin-swc-loader_10x"
+];
 
 (async () => {
 	await mkdir(resolve(rootDir, "output"), { recursive: true });
 	const benchmarks = benchmarkNames.length
 		? benchmarkNames
-		: [
-				"10000_development-mode",
-				"10000_development-mode_hmr",
-				"10000_production-mode",
-				"10000_production-mode_builtin-swc-loader",
-				"threejs_development-mode_10x",
-				"threejs_development-mode_10x_hmr",
-				"threejs_production-mode_10x",
-				"threejs_production-mode_builtin-swc-loader_10x"
-		  ];
+		: defaultBenchmarkNames;
 	for (const item of benchmarks) {
 		const result = await run(item);
 		console.log(`${item} result is:`);
