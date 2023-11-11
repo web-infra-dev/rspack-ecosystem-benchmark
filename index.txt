@@ -470,4 +470,12 @@
 2023-11-10/threejs_development-mode_10x_hmr.json
 2023-11-10/threejs_production-mode_10x.json
 2023-11-10/threejs_production-mode_builtin-swc-loader_10x.json
+2023-11-11/10000_development-mode.json
+2023-11-11/10000_development-mode_hmr.json
+2023-11-11/10000_production-mode.json
+2023-11-11/10000_production-mode_builtin-swc-loader.json
+2023-11-11/threejs_development-mode_10x.json
+2023-11-11/threejs_development-mode_10x_hmr.json
+2023-11-11/threejs_production-mode_10x.json
+2023-11-11/threejs_production-mode_builtin-swc-loader_10x.json
 
