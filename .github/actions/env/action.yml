@@ -8,7 +8,7 @@ runs:
     - name: Use pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 7
+        version: 7.32.0
     - name: Use node.js
       uses: actions/setup-node@v3
       with:
