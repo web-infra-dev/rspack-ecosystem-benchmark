@@ -18,12 +18,12 @@ node bin/build-rspack.js origin pull/1000/head # use the pull request with index
 
 * `node bin/bench.js [benchmarkNames...]`
 
-Run benchmark with rspack and write the output to `output` folder. You can configure the environment variable of `RSPACK_CLI_BIN` to set the rspack command path, and it will use the rspack from the `.rspack` folder by default. eg.
+Run benchmark with rspack and write the output to `output` folder. You can configure the environment variable of `RSPACK_DIR` to set the rspack project path, and it will use the rspack from the `.rspack` folder by default. eg.
 
 ``` bash
 node bin/bench.js # run all benchmarks
 node bin/bench.js 10000_development-mode 10000_production-mode # run benchmarks named 10000_development-mode and 10000_production-mode
-RSPACK_CLI_BIN=<your-rspack-cli> node bin/bench.js 10000_development-mode_hmr # set the rspack command path, and run 10000_development-mode_hmr
+RSPACK_DIR=<your-rspack-path> node bin/bench.js 10000_development-mode_hmr # set the rspack command path, and run 10000_development-mode_hmr
 ```
 
 * `node bin/compare-bench.js <baseDate> <currentDate>`
@@ -163,11 +163,11 @@ interface Addon {
 2. move the project dependencies to global package.json
 3. add `rspack.config.js` to make the project runnable by rspack
 4. add `hmr.js` to make the project support hmr changes
-5. try run `RSPACK_CLI_BIN=<your-rspack-cli> node bin/bench.js <your case>_<your addons>` to test
+5. try run `RSPACK_DIR=<your-rspack-path> node bin/bench.js <your case>_<your addons>` to test
 
 ## How to create a addon
 
 1. create your addons in `lib/addons` with kebab case like "a-b-c.js"
 2. export default a class that extends `lib/addons/common` and implement the hooks you want to listen
-3. try run `RSPACK_CLI_BIN=<your-rspack-cli> node bin/bench.js <case>_<your addons>` to test
+3. try run `RSPACK_DIR=<your-rspack-path> node bin/bench.js <case>_<your addons>` to test
 4. if you want to run some benchmarkName by default, you can add it to `defaultBenchmarkNames` in `bin/bench.js`
