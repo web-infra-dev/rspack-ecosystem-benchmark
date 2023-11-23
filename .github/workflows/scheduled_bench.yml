@@ -31,7 +31,7 @@ jobs:
         run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}
       - name: Check Threshold
         run: |
-          result="${{ steps.print-compare-results.outputs.diff-result }}";
+          result='${{ steps.print-compare-results.outputs.diff-result }}';
           if [[ $result =~ "Threshold exceeded" ]]; then
             echo "Some benchmark cases exceed the threshold, please visit the previous step for more information"
             exit 1
