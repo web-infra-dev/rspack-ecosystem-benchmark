@@ -8,7 +8,8 @@ runs:
     - name: Use pnpm
       uses: pnpm/action-setup@v2
       with:
-        version: 7.32.0
+        version: 8.10.5
+        dest: ${{ runner.tool_cache }}/pnpm
     - name: Use node.js
       uses: actions/setup-node@v3
       with:
