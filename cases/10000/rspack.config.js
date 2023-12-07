@@ -13,8 +13,8 @@ module.exports = {
 		new rspack.HtmlRspackPlugin({
 			template: path.resolve(__dirname, "./index.html")
 		}),
-		new ReactRefreshPlugin()
-	],
+		!prod && new ReactRefreshPlugin()
+	].filter(Boolean),
 	module: {
 		rules: [
 			{
