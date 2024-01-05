@@ -824,4 +824,10 @@
 2024-01-04/threejs_development-mode_10x.json
 2024-01-04/threejs_development-mode_10x_hmr.json
 2024-01-04/threejs_production-mode_10x.json
+2024-01-05/10000_development-mode.json
+2024-01-05/10000_development-mode_hmr.json
+2024-01-05/10000_production-mode.json
+2024-01-05/threejs_development-mode_10x.json
+2024-01-05/threejs_development-mode_10x_hmr.json
+2024-01-05/threejs_production-mode_10x.json
 
