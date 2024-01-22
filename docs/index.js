@@ -208,7 +208,8 @@ class TagCtrl {
 }
 
 class BenchmarkChart {
-	constructor() {
+	constructor(dataCenter) {
+		this.dataCenter = dataCenter;
 		this.chart = new Chart(document.querySelector(".chart-container canvas"), {
 			type: "line",
 			data: {
@@ -280,6 +281,15 @@ class BenchmarkChart {
 											? formatRatio(value, value)
 											: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
+							},
+							footer() {
+								setTimeout(() => {
+									this.chart.options.plugins.tooltip.callbacks.footer = () => {
+										return "world";
+									};
+									this.chart.update();
+								}, 2000);
+								return "hello";
 							}
 						}
 					}
@@ -288,11 +298,15 @@ class BenchmarkChart {
 		});
 	}
 
+
+
 	/**
 	 * update chart with new data
-	 * @param {Record<Tag, Array<{ date: DateString, value: number }>>} data
+	 * @param {string[]} tags
 	 */
-	updateChartData(data) {
+	async updateChartData(tags) {
+		const data = await this.dataCenter.fetchChartData(tags);
+
 		let showTimeAxis = false;
 		let showSizeAxis = false;
 		let showRatioAxis = false;
@@ -323,8 +337,11 @@ class BenchmarkChart {
 	}
 
 	updateChartAxis(min, max) {
-		this.chart.options.scales.x.min = min;
-		this.chart.options.scales.x.max = max;
+		const [begin, end] = this.dataCenter.dateRange;
+		const pc = (end - begin) / 100;
+
+		this.chart.options.scales.x.min = begin + pc * min;
+		this.chart.options.scales.x.max =  begin + pc * max;
 		this.chart.update();
 	}
 }
@@ -393,12 +410,11 @@ function initializeSlider(onChange) {
 	const dataCenter = new DataCenter();
 	await dataCenter.initialize();
 
-	const chart = new BenchmarkChart();
+	const chart = new BenchmarkChart(dataCenter);
 
 	const tagCtrl = new TagCtrl();
 	tagCtrl.addChangeListener(async function (tags) {
-		const data = await dataCenter.fetchChartData(tags);
-		chart.updateChartData(data);
+		chart.updateChartData(tags);
 	});
 
 	initializeAddAction(
@@ -408,8 +424,6 @@ function initializeSlider(onChange) {
 		tagCtrl.add.bind(tagCtrl)
 	);
 	initializeSlider((min, max) => {
-		const [begin, end] = dataCenter.dateRange;
-		const pc = (end - begin) / 100;
-		chart.updateChartAxis(begin + pc * min, begin + pc * max);
+		chart.updateChartAxis(min, max);
 	});
 })();
