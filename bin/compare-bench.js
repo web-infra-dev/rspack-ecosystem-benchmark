@@ -45,7 +45,7 @@ async function getResults(date) {
 		);
 	}
 
-	const indexFile = await (await fetch(`${fetchPrefix}/index.txt`)).text();
+	const indexFile = await fetch(`${fetchPrefix}/index.txt`).then(res => res.text());
 	const dataPaths = indexFile.split("\n").filter(item => !!item);
 	if (date === "latest") {
 		date = dataPaths[dataPaths.length - 1].split("/")[0];
@@ -56,7 +56,7 @@ async function getResults(date) {
 			.map(async item => {
 				return {
 					name: item.split("/")[1].slice(0, -5),
-					result: await (await fetch(`${fetchPrefix}/${item}`)).json()
+					result: await fetch(`${fetchPrefix}/${item}`).then(res => res.json())
 				};
 			})
 	);

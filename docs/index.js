@@ -49,7 +49,7 @@ class DataCenter {
 	// fetch index and latest data
 	async initialize() {
 		const index = {};
-		const indexFile = await (await fetch(`${fetchPrefix}/index.txt`)).text();
+		const indexFile = await fetch(`${fetchPrefix}/index.txt`).then(res => res.text());
 		const lines = indexFile.split("\n").filter(item => !!item);
 		const BeginDate = lines[0].split("/")[0];
 		const endDate = lines[lines.length - 1].split("/")[0];
@@ -66,9 +66,7 @@ class DataCenter {
 		this.index = index;
 
 		// generate metrics struct
-		const latestData = await (
-			await fetch(`${fetchPrefix}/${lines.pop()}`)
-		).json();
+		const latestData = await fetch(`${fetchPrefix}/${lines.pop()}`).then(res => res.json());
 		this.metrics = Object.keys(latestData);
 
 		// set date range
@@ -83,9 +81,7 @@ class DataCenter {
 				if (!this.cache[benchmarkName]) {
 					this.cache[benchmarkName] = await Promise.all(
 						this.index[benchmarkName].map(async date => {
-							const file = await (
-								await fetch(`${fetchPrefix}/${date}/${benchmarkName}.json`)
-							).json();
+							const file = await fetch(`${fetchPrefix}/${date}/${benchmarkName}.json`).then(res => res.json());
 							return { date, file };
 						})
 					);
