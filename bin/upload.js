@@ -39,7 +39,7 @@ async function getShortCommitSHA() {
 
 async function appendRspackBuildInfo() {
 	const [commitSHA, shortCommitSHA] = await Promise.all([getCommitSHA(), getShortCommitSHA()]);
-	const buildInfoFile = join(outputDir, "build-info.json");
+	const buildInfoFile = join(dataDir, "build-info.json");
 	const buildInfo = existsSync(buildInfoFile) ? JSON.parse(await readFile(indexFile, "utf-8")) : {};
 	buildInfo[date] = {
 		commitSHA,
