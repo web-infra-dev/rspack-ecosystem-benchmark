@@ -45,13 +45,18 @@ class DataCenter {
 		// cache benchmark name to file data
 		// Record<BenchmarkName, Array<{ date: DateString, file: FileData }>>
 		this.cache = {};
+		this.buildInfo = {};
 	}
+
 	// fetch index and latest data
 	async initialize() {
 		const index = {};
-		const indexFile = await fetch(`${fetchPrefix}/index.txt`).then(res => res.text());
+		const [indexFile] = await Promise.all([
+			fetch(`${fetchPrefix}/index.txt`).then(res => res.text()),
+			this.fetchBuildInfo()
+		]);
 		const lines = indexFile.split("\n").filter(item => !!item);
-		const BeginDate = lines[0].split("/")[0];
+		const beginDate = lines[0].split("/")[0];
 		const endDate = lines[lines.length - 1].split("/")[0];
 
 		// generate index struct
@@ -70,7 +75,20 @@ class DataCenter {
 		this.metrics = Object.keys(latestData);
 
 		// set date range
-		this.dateRange = [+new Date(BeginDate), +new Date(endDate)];
+		this.dateRange = [+new Date(beginDate), +new Date(endDate)];
+	}
+
+	async fetchBuildInfo() {
+		try {
+			this.buildInfo = await fetch(`${fetchPrefix}/buildInfo.json`).then(res => {
+				if (!res.ok) {
+					throw new Error(`Request failed with status code ${res.status}`);
+				}
+				return res.json()
+			});
+		} catch (err) {
+			console.log("Error occurred while fetching build-info.json: ", err.message);
+		}
 	}
 
 	async fetchChartData(tags) {
@@ -210,6 +228,7 @@ class TagCtrl {
 class BenchmarkChart {
 	constructor(dataCenter) {
 		this.dataCenter = dataCenter;
+		const buildInfo = dataCenter.buildInfo;
 		this.chart = new Chart(document.querySelector(".chart-container canvas"), {
 			type: "line",
 			data: {
@@ -270,7 +289,11 @@ class BenchmarkChart {
 					tooltip: {
 						callbacks: {
 							title(context) {
-								return context[0].raw.x;
+								const date = context[0].raw.x;
+								if (buildInfo[date]) {
+									return [date, buildInfo[date].shortCommitSHA];
+								}
+								return date;
 							},
 							label(context) {
 								const value = context.raw.y;
@@ -281,15 +304,6 @@ class BenchmarkChart {
 											? formatRatio(value, value)
 											: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
-							},
-							footer() {
-								setTimeout(() => {
-									this.chart.options.plugins.tooltip.callbacks.footer = () => {
-										return "world";
-									};
-									this.chart.update();
-								}, 2000);
-								return "hello";
 							}
 						}
 					}
@@ -297,8 +311,6 @@ class BenchmarkChart {
 			}
 		});
 	}
-
-
 
 	/**
 	 * update chart with new data
