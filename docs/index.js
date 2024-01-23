@@ -8,11 +8,13 @@ const formatTime = (value, maxValue) => {
 	if (maxValue > 10000) return `${value / 1000} s`;
 	return `${value} ms`;
 };
+
 const formatSize = (value, maxValue) => {
-	if (maxValue > 10000000) return `${value / 1000000} MB`;
-	if (maxValue > 10000) return `${value / 1000} kB`;
+	if (maxValue > 1000000) return `${(value / 1000000).toFixed(2)} MB`;
+	if (maxValue > 1000) return `${(value / 1000).toFixed(2)} KB`;
 	return `${value} B`;
 };
+
 const formatRatio = (value, maxValue) => {
 	return `${value}%`;
 };
