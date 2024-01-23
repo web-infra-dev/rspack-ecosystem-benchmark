@@ -235,6 +235,17 @@ class BenchmarkChart {
 				datasets: []
 			},
 			options: {
+				onClick(event, activeElements) {
+					if (activeElements.length === 0) {
+						return;
+					}
+					const {datasetIndex, index} = activeElements[0];
+					const { x } = this.data.datasets[datasetIndex].data[index];
+					const commitSHA = buildInfo[x] ? buildInfo[x].commitSHA : null;
+					if (commitSHA) {
+						window.open(`https://github.com/web-infra-dev/rspack/commit/${commitSHA}`, '_blank');
+					}
+				},
 				scales: {
 					x: {
 						type: "time",
