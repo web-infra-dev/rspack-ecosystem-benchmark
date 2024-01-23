@@ -45,13 +45,18 @@ class DataCenter {
 		// cache benchmark name to file data
 		// Record<BenchmarkName, Array<{ date: DateString, file: FileData }>>
 		this.cache = {};
+		this.buildInfo = {};
 	}
+
 	// fetch index and latest data
 	async initialize() {
 		const index = {};
-		const indexFile = await (await fetch(`${fetchPrefix}/index.txt`)).text();
+		const [indexFile] = await Promise.all([
+			fetch(`${fetchPrefix}/index.txt`).then(res => res.text()),
+			this.fetchBuildInfo()
+		]);
 		const lines = indexFile.split("\n").filter(item => !!item);
-		const BeginDate = lines[0].split("/")[0];
+		const beginDate = lines[0].split("/")[0];
 		const endDate = lines[lines.length - 1].split("/")[0];
 
 		// generate index struct
@@ -66,13 +71,24 @@ class DataCenter {
 		this.index = index;
 
 		// generate metrics struct
-		const latestData = await (
-			await fetch(`${fetchPrefix}/${lines.pop()}`)
-		).json();
+		const latestData = await fetch(`${fetchPrefix}/${lines.pop()}`).then(res => res.json());
 		this.metrics = Object.keys(latestData);
 
 		// set date range
-		this.dateRange = [+new Date(BeginDate), +new Date(endDate)];
+		this.dateRange = [+new Date(beginDate), +new Date(endDate)];
+	}
+
+	async fetchBuildInfo() {
+		try {
+			this.buildInfo = await fetch(`${fetchPrefix}/build-info.json`).then(res => {
+				if (!res.ok) {
+					throw new Error(`Request failed with status code ${res.status}`);
+				}
+				return res.json()
+			});
+		} catch (err) {
+			console.log("Error occurred while fetching build-info.json: ", err.message);
+		}
 	}
 
 	async fetchChartData(tags) {
@@ -83,9 +99,7 @@ class DataCenter {
 				if (!this.cache[benchmarkName]) {
 					this.cache[benchmarkName] = await Promise.all(
 						this.index[benchmarkName].map(async date => {
-							const file = await (
-								await fetch(`${fetchPrefix}/${date}/${benchmarkName}.json`)
-							).json();
+							const file = await fetch(`${fetchPrefix}/${date}/${benchmarkName}.json`).then(res => res.json());
 							return { date, file };
 						})
 					);
@@ -212,13 +226,26 @@ class TagCtrl {
 }
 
 class BenchmarkChart {
-	constructor() {
+	constructor(dataCenter) {
+		this.dataCenter = dataCenter;
+		const buildInfo = dataCenter.buildInfo;
 		this.chart = new Chart(document.querySelector(".chart-container canvas"), {
 			type: "line",
 			data: {
 				datasets: []
 			},
 			options: {
+				onClick(event, activeElements) {
+					if (activeElements.length === 0) {
+						return;
+					}
+					const {datasetIndex, index} = activeElements[0];
+					const { x } = this.data.datasets[datasetIndex].data[index];
+					const commitSHA = buildInfo[x] ? buildInfo[x].commitSHA : null;
+					if (commitSHA) {
+						window.open(`https://github.com/web-infra-dev/rspack/commit/${commitSHA}`, '_blank');
+					}
+				},
 				scales: {
 					x: {
 						type: "time",
@@ -273,7 +300,11 @@ class BenchmarkChart {
 					tooltip: {
 						callbacks: {
 							title(context) {
-								return context[0].raw.x;
+								const date = context[0].raw.x;
+								if (buildInfo[date]) {
+									return [date, `commit sha: ${buildInfo[date].shortCommitSHA}`];
+								}
+								return date;
 							},
 							label(context) {
 								const value = context.raw.y;
@@ -294,9 +325,11 @@ class BenchmarkChart {
 
 	/**
 	 * update chart with new data
-	 * @param {Record<Tag, Array<{ date: DateString, value: number }>>} data
+	 * @param {string[]} tags
 	 */
-	updateChartData(data) {
+	async updateChartData(tags) {
+		const data = await this.dataCenter.fetchChartData(tags);
+
 		let showTimeAxis = false;
 		let showSizeAxis = false;
 		let showRatioAxis = false;
@@ -327,8 +360,11 @@ class BenchmarkChart {
 	}
 
 	updateChartAxis(min, max) {
-		this.chart.options.scales.x.min = min;
-		this.chart.options.scales.x.max = max;
+		const [begin, end] = this.dataCenter.dateRange;
+		const pc = (end - begin) / 100;
+
+		this.chart.options.scales.x.min = begin + pc * min;
+		this.chart.options.scales.x.max =  begin + pc * max;
 		this.chart.update();
 	}
 }
@@ -397,12 +433,11 @@ function initializeSlider(onChange) {
 	const dataCenter = new DataCenter();
 	await dataCenter.initialize();
 
-	const chart = new BenchmarkChart();
+	const chart = new BenchmarkChart(dataCenter);
 
 	const tagCtrl = new TagCtrl();
 	tagCtrl.addChangeListener(async function (tags) {
-		const data = await dataCenter.fetchChartData(tags);
-		chart.updateChartData(data);
+		chart.updateChartData(tags);
 	});
 
 	initializeAddAction(
@@ -412,8 +447,6 @@ function initializeSlider(onChange) {
 		tagCtrl.add.bind(tagCtrl)
 	);
 	initializeSlider((min, max) => {
-		const [begin, end] = dataCenter.dateRange;
-		const pc = (end - begin) / 100;
-		chart.updateChartAxis(begin + pc * min, begin + pc * max);
+		chart.updateChartAxis(min, max);
 	});
 })();

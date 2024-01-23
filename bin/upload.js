@@ -1,5 +1,6 @@
 import { readFile, writeFile, readdir, mkdir, copyFile } from "fs/promises";
-import { resolve } from "path";
+import { existsSync } from "fs";
+import { resolve, join } from "path";
 import { fileURLToPath } from "url";
 import { runCommand, dirExist, formatDate } from "../lib/utils.js";
 
@@ -11,7 +12,41 @@ const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspac
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const dataDir = resolve(rootDir, ".data");
 const outputDir = resolve(rootDir, "output");
+const rspackDir = resolve(rootDir, ".rspack");
 const dateDir = resolve(dataDir, date);
+
+async function getCommitSHA() {
+	let commitSHA;
+	await runCommand("git", ["rev-parse", "HEAD"], {
+		onData(stdout) {
+			commitSHA = stdout.toString().trim();
+		}
+	});
+	console.log("Current Commit SHA", commitSHA);
+	return commitSHA;
+}
+
+async function getShortCommitSHA() {
+	let shortCommitSHA;
+	await runCommand("git", ["rev-parse", "--short", "HEAD"], {
+		onData(stdout) {
+			shortCommitSHA = stdout.toString().trim();
+		}
+	});
+	console.log("Current Short Commit SHA:", shortCommitSHA);
+	return shortCommitSHA;
+}
+
+async function appendRspackBuildInfo() {
+	const [commitSHA, shortCommitSHA] = await Promise.all([getCommitSHA(), getShortCommitSHA()]);
+	const buildInfoFile = join(dataDir, "build-info.json");
+	const buildInfo = existsSync(buildInfoFile) ? JSON.parse(await readFile(indexFile, "utf-8")) : {};
+	buildInfo[date] = {
+		commitSHA,
+		shortCommitSHA,
+	};
+	await writeFile(buildInfoFile, JSON.stringify(buildInfo, null, 2));
+}
 
 (async () => {
 	if (!(await dirExist(dataDir))) {
@@ -26,8 +61,11 @@ const dateDir = resolve(dataDir, date);
 			".data"
 		]);
 	}
-	process.chdir(dataDir);
 
+	process.chdir(rspackDir);
+	appendRspackBuildInfo();
+
+	process.chdir(dataDir);
 	await runCommand("git", ["remote", "set-url", "origin", repoUrl]);
 	await runCommand("git", ["reset", "--hard", "origin/data"]);
 	await runCommand("git", ["pull", "--rebase"]);

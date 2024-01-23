@@ -7,3 +7,4 @@ output
 .rspack
 *.cpuprofile
 *.heapprofile
+.DS_Store
