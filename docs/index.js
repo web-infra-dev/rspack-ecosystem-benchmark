@@ -80,7 +80,7 @@ class DataCenter {
 
 	async fetchBuildInfo() {
 		try {
-			this.buildInfo = await fetch(`${fetchPrefix}/buildInfo.json`).then(res => {
+			this.buildInfo = await fetch(`${fetchPrefix}/build-info.json`).then(res => {
 				if (!res.ok) {
 					throw new Error(`Request failed with status code ${res.status}`);
 				}
@@ -302,7 +302,7 @@ class BenchmarkChart {
 							title(context) {
 								const date = context[0].raw.x;
 								if (buildInfo[date]) {
-									return [date, buildInfo[date].shortCommitSHA];
+									return [date, `commit sha: ${buildInfo[date].shortCommitSHA}`];
 								}
 								return date;
 							},
