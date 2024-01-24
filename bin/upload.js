@@ -90,7 +90,7 @@ async function appendRspackBuildInfo() {
 	await writeFile(indexFile, Array.from(files, f => `${f}\n`).join("") + "\n");
 
 	console.log("== commit ==");
-	await runCommand("git", ["add", `${date}/*.json`, "index.txt"]);
+	await runCommand("git", ["add", `${date}/*.json`, "index.txt", "build-info.json"]);
 	try {
 		await runCommand("git", ["commit", "-m", `"add ${date} results"`]);
 	} catch {}
