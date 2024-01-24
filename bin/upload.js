@@ -26,24 +26,12 @@ async function getCommitSHA() {
 	return commitSHA;
 }
 
-async function getShortCommitSHA() {
-	let shortCommitSHA;
-	await runCommand("git", ["rev-parse", "--short", "HEAD"], {
-		onData(stdout) {
-			shortCommitSHA = stdout.toString().trim();
-		}
-	});
-	console.log("Current Short Commit SHA:", shortCommitSHA);
-	return shortCommitSHA;
-}
-
 async function appendRspackBuildInfo() {
-	const [commitSHA, shortCommitSHA] = await Promise.all([getCommitSHA(), getShortCommitSHA()]);
+	const commitSHA = await getCommitSHA();
 	const buildInfoFile = join(dataDir, "build-info.json");
 	const buildInfo = existsSync(buildInfoFile) ? JSON.parse(await readFile(buildInfoFile, "utf-8")) : {};
 	buildInfo[date] = {
 		commitSHA,
-		shortCommitSHA,
 	};
 	await writeFile(buildInfoFile, JSON.stringify(buildInfo, null, 2));
 }

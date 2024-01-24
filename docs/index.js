@@ -303,8 +303,8 @@ class BenchmarkChart {
 						callbacks: {
 							title(context) {
 								const date = context[0].raw.x;
-								if (buildInfo[date]) {
-									return [date, `commit sha: ${buildInfo[date].shortCommitSHA}`];
+								if (buildInfo[date] && buildInfo[date].commitSHA) {
+									return [date, `commit sha: ${buildInfo[date].commitSHA.slice(0, 7)}`];
 								}
 								return date;
 							},
