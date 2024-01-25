@@ -50,9 +50,6 @@ async function appendRspackBuildInfo() {
 		]);
 	}
 
-	process.chdir(rspackDir);
-	appendRspackBuildInfo();
-
 	process.chdir(dataDir);
 	await runCommand("git", ["remote", "set-url", "origin", repoUrl]);
 	await runCommand("git", ["reset", "--hard", "origin/data"]);
@@ -76,6 +73,11 @@ async function appendRspackBuildInfo() {
 
 	console.log("== update index.txt ==");
 	await writeFile(indexFile, Array.from(files, f => `${f}\n`).join("") + "\n");
+
+	console.log("== update build-info.json ==");
+	process.chdir(rspackDir);
+	await appendRspackBuildInfo();
+	process.chdir(dataDir);
 
 	console.log("== commit ==");
 	await runCommand("git", ["add", `${date}/*.json`, "index.txt", "build-info.json"]);
