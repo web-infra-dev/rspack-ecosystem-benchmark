@@ -31,7 +31,7 @@ const POSTCSS_LOADER = {
 const prod = process.env.NODE_ENV === "production";
 /** @type {import("@rspack/cli").Configuration} */
 module.exports = {
-	target: ['web', 'browserslist'],
+	target: 'web',
 	experiments: { asyncWebAssembly: true },
 	output: {
 		path: path.join(__dirname, 'dist'),
