@@ -1,9 +1,16 @@
-import { resolve } from "path";
+import { resolve, basename } from "path";
 import { fileURLToPath } from "url";
 import { readFile, readdir } from "fs/promises";
+import dayjs from "dayjs";
 import { compare, formatDiffTable } from "../lib/index.js";
+import { fetchBuildInfo } from "../lib/services.js";
 
-const [, , baseDate, currentDate] = process.argv;
+const [
+	,
+	,
+	baseDate = dayjs().subtract(1, 'day').format("YYYY-MM-DD"),
+	currentDate = dayjs().format("YYYY-MM-DD")
+] = process.argv;
 const compareMetric = ["exec"];
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const outputDir = resolve(rootDir, "output");
@@ -37,8 +44,7 @@ async function getResults(date) {
 		return await Promise.all(
 			outputFiles.map(async item => {
 				return {
-					// remove .json
-					name: item.slice(0, -5),
+					name: basename(item, '.json'),
 					result: JSON.parse(await readFile(resolve(outputDir, item)))
 				};
 			})
@@ -55,7 +61,7 @@ async function getResults(date) {
 			.filter(item => item.startsWith(date))
 			.map(async item => {
 				return {
-					name: item.split("/")[1].slice(0, -5),
+					name: basename(item.split("/")[1], '.json'),
 					result: await fetch(`${fetchPrefix}/${item}`).then(res => res.json())
 				};
 			})
@@ -63,8 +69,11 @@ async function getResults(date) {
 }
 
 (async () => {
-	const baseResults = await getResults(baseDate);
-	const currentResults = await getResults(currentDate);
+	const [baseResults, currentResults, buildInfo] = await Promise.all([
+		getResults(baseDate),
+		getResults(currentDate),
+		fetchBuildInfo()
+	]);
 	const baseData = {};
 	const currentData = {};
 	for (const metric of compareMetric) {
@@ -80,7 +89,11 @@ async function getResults(date) {
 	}
 
 	const diff = compare(baseData, currentData);
-	const formatedTable = formatDiffTable(diff, { verbose: 1 });
+	const formatedTable = formatDiffTable({
+		diff,
+		baseDate,
+		baseCommitSHA: buildInfo[baseDate]?.commitSHA,
+	});
 	const overThresholdTags = getOverThresholdTags(diff);
 	console.log(formatedTable);
 	if (overThresholdTags.length > 0) {
