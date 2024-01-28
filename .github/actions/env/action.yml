@@ -20,8 +20,7 @@ runs:
       with:
         path: ${{ steps.pnpm-cache-dir-path.outputs.dir }}
         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-
+        restore-keys: ${{ runner.os }}-pnpm-
     - name: Install dependencies with pnpm
       shell: bash
       run: pnpm install
@@ -33,5 +32,6 @@ runs:
           ~/.cargo/registry/index/
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
-          target/
+          .rspack/target/
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: ${{ runner.os }}-cargo-
