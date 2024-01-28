@@ -1,21 +1,25 @@
 import { resolve, basename } from "path";
 import { fileURLToPath } from "url";
 import { readFile, readdir } from "fs/promises";
-import dayjs from "dayjs";
 import { compare, formatDiffTable } from "../lib/index.js";
-import { fetchBuildInfo } from "../lib/services.js";
+import { fetchBuildInfo, fetchIndex } from "../lib/services.js";
 
-const [
+let [
 	,
 	,
-	baseDate = dayjs().subtract(1, 'day').format("YYYY-MM-DD"),
-	currentDate = dayjs().format("YYYY-MM-DD")
+	baseDate = "latest",
+	currentDate = "current"
 ] = process.argv;
+
 const compareMetric = ["exec"];
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const outputDir = resolve(rootDir, "output");
-const fetchPrefix =
-	"https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
+const fetchPrefix = "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
+
+const index = await fetchIndex();
+if (baseDate === "latest") {
+	baseDate = index[index.length - 1].date;
+}
 
 function getOverThresholdTags(diff) {
 	return Object.entries(diff)
@@ -51,20 +55,14 @@ async function getResults(date) {
 		);
 	}
 
-	const indexFile = await fetch(`${fetchPrefix}/index.txt`).then(res => res.text());
-	const dataPaths = indexFile.split("\n").filter(item => !!item);
-	if (date === "latest") {
-		date = dataPaths[dataPaths.length - 1].split("/")[0];
-	}
-	return await Promise.all(
-		dataPaths
-			.filter(item => item.startsWith(date))
-			.map(async item => {
-				return {
-					name: basename(item.split("/")[1], '.json'),
-					result: await fetch(`${fetchPrefix}/${item}`).then(res => res.json())
-				};
-			})
+	return Promise.all(
+		index
+			.find(i => i.date === date)
+			.files
+			.map(async file => ({
+				name: basename(file, '.json'),
+				result: await fetch(`${fetchPrefix}/${date}/${file}`).then(res => res.json())
+			}))
 	);
 }
 
