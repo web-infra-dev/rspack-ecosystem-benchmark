@@ -2,7 +2,7 @@ import { resolve, basename } from "path";
 import { fileURLToPath } from "url";
 import { readFile, readdir } from "fs/promises";
 import { compare, formatDiffTable } from "../lib/index.js";
-import { fetchBuildInfo, fetchIndex } from "../lib/services.js";
+import { fetchBuildInfo, fetchIndex, fetchBenchmarkResult } from "../lib/services.js";
 
 let [
 	,
@@ -14,7 +14,6 @@ let [
 const compareMetric = ["exec"];
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const outputDir = resolve(rootDir, "output");
-const fetchPrefix = "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
 
 const index = await fetchIndex();
 if (baseDate === "latest") {
@@ -61,7 +60,7 @@ async function getResults(date) {
 			.files
 			.map(async file => ({
 				name: basename(file, '.json'),
-				result: await fetch(`${fetchPrefix}/${date}/${file}`).then(res => res.json())
+				result: await fetchBenchmarkResult(date, file)
 			}))
 	);
 }
