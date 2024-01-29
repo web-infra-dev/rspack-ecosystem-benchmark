@@ -1,14 +1,24 @@
-import { resolve } from "path";
+import { resolve, basename } from "path";
 import { fileURLToPath } from "url";
 import { readFile, readdir } from "fs/promises";
 import { compare, formatDiffTable } from "../lib/index.js";
+import { fetchBuildInfo, fetchIndex, fetchBenchmarkResult } from "../lib/services.js";
 
-const [, , baseDate, currentDate] = process.argv;
+let [
+	,
+	,
+	baseDate = "latest",
+	currentDate = "current"
+] = process.argv;
+
 const compareMetric = ["exec"];
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const outputDir = resolve(rootDir, "output");
-const fetchPrefix =
-	"https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
+
+const index = await fetchIndex();
+if (baseDate === "latest") {
+	baseDate = index[index.length - 1].date;
+}
 
 function getOverThresholdTags(diff) {
 	return Object.entries(diff)
@@ -37,34 +47,30 @@ async function getResults(date) {
 		return await Promise.all(
 			outputFiles.map(async item => {
 				return {
-					// remove .json
-					name: item.slice(0, -5),
+					name: basename(item, '.json'),
 					result: JSON.parse(await readFile(resolve(outputDir, item)))
 				};
 			})
 		);
 	}
 
-	const indexFile = await fetch(`${fetchPrefix}/index.txt`).then(res => res.text());
-	const dataPaths = indexFile.split("\n").filter(item => !!item);
-	if (date === "latest") {
-		date = dataPaths[dataPaths.length - 1].split("/")[0];
-	}
-	return await Promise.all(
-		dataPaths
-			.filter(item => item.startsWith(date))
-			.map(async item => {
-				return {
-					name: item.split("/")[1].slice(0, -5),
-					result: await fetch(`${fetchPrefix}/${item}`).then(res => res.json())
-				};
-			})
+	return Promise.all(
+		index
+			.find(i => i.date === date)
+			.files
+			.map(async file => ({
+				name: basename(file, '.json'),
+				result: await fetchBenchmarkResult(date, file)
+			}))
 	);
 }
 
 (async () => {
-	const baseResults = await getResults(baseDate);
-	const currentResults = await getResults(currentDate);
+	const [baseResults, currentResults, buildInfo] = await Promise.all([
+		getResults(baseDate),
+		getResults(currentDate),
+		fetchBuildInfo()
+	]);
 	const baseData = {};
 	const currentData = {};
 	for (const metric of compareMetric) {
@@ -80,7 +86,11 @@ async function getResults(date) {
 	}
 
 	const diff = compare(baseData, currentData);
-	const formatedTable = formatDiffTable(diff, { verbose: 1 });
+	const formatedTable = formatDiffTable({
+		diff,
+		baseDate,
+		baseCommitSHA: buildInfo[baseDate]?.commitSHA,
+	});
 	const overThresholdTags = getOverThresholdTags(diff);
 	console.log(formatedTable);
 	if (overThresholdTags.length > 0) {

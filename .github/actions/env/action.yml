@@ -1,32 +1,17 @@
 name: Env
 
-description: Init benchmark env
+description: Initialize benchmark environment with Node.js and Rust
 
 runs:
   using: composite
   steps:
-    - name: Use pnpm
-      uses: pnpm/action-setup@v2
-      with:
-        version: 8.14.3
-        dest: ${{ runner.tool_cache }}/pnpm
-    - name: Use node.js
+    - name: Setup node
       uses: actions/setup-node@v3
       with:
         node-version: 18
-        cache: 'pnpm'
-    - name: Install dependencies
+    - name: Activate corepack
       shell: bash
-      run: |
-        export PATH=$PNPM_HOME:$PATH
-        pnpm --version && pnpm install
-    - name: Use rust cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          ~/.cargo/bin/
-          ~/.cargo/registry/index/
-          ~/.cargo/registry/cache/
-          ~/.cargo/git/db/
-          target/
-        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      run: corepack enable
+    - name: Install dependencies with pnpm
+      shell: bash
+      run: pnpm install
