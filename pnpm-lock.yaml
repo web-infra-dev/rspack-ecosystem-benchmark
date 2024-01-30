@@ -43,6 +43,9 @@ importers:
       '@swc/helpers':
         specifier: ^0.5.3
         version: 0.5.3
+      '@turf/flatten':
+        specifier: ^6.5.0
+        version: 6.5.0
       '@turf/turf':
         specifier: ^6.5.0
         version: 6.5.0
