@@ -1,0 +1,51 @@
+{
+  "name": "arco-pro",
+  "private": true,
+  "scripts": {
+    "dev": "rspack dev",
+    "build": "rspack build"
+  },
+  "dependencies": {
+    "@antv/data-set": "^0.11.8",
+    "@arco-design/color": "^0.4.0",
+    "@arco-design/web-react": "^2.41.2",
+    "@arco-themes/react-arco-pro": "^0.0.7",
+    "@loadable/component": "^5.13.2",
+    "@swc/helpers": "^0.5.3",
+    "@turf/flatten": "^6.5.0",
+    "@turf/turf": "^6.5.0",
+    "arco-design-pro": "^2.4.0",
+    "axios": "^0.24.0",
+    "bizcharts": "^4.1.11",
+    "classnames": "^2.3.1",
+    "copy-to-clipboard": "^3.3.1",
+    "core-js": "^3.35.1",
+    "dayjs": "^1.11.1",
+    "lodash": "^4.17.21",
+    "mockjs": "^1.1.0",
+    "nprogress": "^0.2.0",
+    "query-string": "^6.13.8",
+    "react": "^18",
+    "react-color": "^2.18.1",
+    "react-dom": "^18",
+    "react-redux": "^7.2.6",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.1.2"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^8.1.0",
+    "@types/node": "^14",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "file-loader": "^6.2.0",
+    "husky": "4.3.8",
+    "less-loader": "^12.1.0",
+    "lint-staged": "^11.2.6",
+    "postcss-loader": "^7.3.4",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "typescript": "^5",
+    "url-loader": "^4.1.1"
+  }
+}
