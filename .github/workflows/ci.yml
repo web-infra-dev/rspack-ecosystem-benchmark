@@ -26,7 +26,7 @@ jobs:
 
   ci:
     needs: prepare-binding
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, rspack-bench]
     timeout-minutes: 30
     strategy:
       matrix:
@@ -43,12 +43,14 @@ jobs:
           - threejs_development-mode_10x
           - threejs_development-mode_10x_hmr
           - threejs_production-mode_10x
+      fail-fast: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - uses: ./.github/actions/build-rspack
+      - run: pnpm install
       - name: Run benchmark
-        run: node bin/bench.js
+        run: node bin/bench.js ${{ matrix.suite }}
       - id: print-compare-results
         name: Print compare results
         run: |
