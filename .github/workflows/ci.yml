@@ -28,12 +28,27 @@ jobs:
     needs: prepare-binding
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      matrix:
+        suite:
+          - 10000_development-mode
+          - 10000_development-mode_hmr
+          - 10000_production-mode
+          - arco-pro_development-mode
+          - arco-pro_development-mode_intercept-plugin
+          - arco-pro_development-mode_hmr
+          - arco-pro_development-mode_hmr_intercept-plugin
+          - arco-pro_production-mode
+          - arco-pro_production-mode_intercept-plugin
+          - threejs_development-mode_10x
+          - threejs_development-mode_10x_hmr
+          - threejs_production-mode_10x
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - uses: ./.github/actions/build-rspack
       - name: Run benchmark
-        run: node bin/bench.js 10000_development-mode 10000_development-mode_hmr 10000_production-mode
+        run: node bin/bench.js
       - id: print-compare-results
         name: Print compare results
         run: |
