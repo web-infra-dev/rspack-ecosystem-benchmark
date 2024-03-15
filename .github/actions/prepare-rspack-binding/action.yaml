@@ -1,0 +1,65 @@
+name: 'Prepare Rspack Binding'
+description: 'Checkout, build, and upload rspack native bindings'
+
+inputs:
+  repository:
+    description: 'The rspack repository to use'
+    required: true
+    default: 'web-infra-dev/rspack'
+  path:
+    description: 'Destination path to clone'
+    required: true
+    default: '.rspack'
+  ref:
+    description: 'The branch, tag or SHA to checkout'
+    required: true
+    default: 'main'
+  node-version:
+    description: 'The version of Node.js to set up'
+    required: true
+    default: '18'
+
+outputs:
+  artifact-name:
+    description: 'The name of the uploaded artifact'
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout Rspack repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+        path: ${{ inputs.path }}
+        ref: ${{ inputs.ref }}
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node-version }}
+    - shell: bash
+      run: |
+        cd ${{ inputs.path }}
+        corepack enable
+    - shell: bash
+      run: |
+        cd ${{ inputs.path }}
+        pnpm --version
+    - id: rust-cache
+      uses: MasterworksIO/action-local-cache@2
+      with:
+        path: '${{ inputs.path }}/target'
+        key: 'rspack'
+        strategy: 'copy'
+    - name: Show Rust Cache
+      if: steps.rust-cache.outputs.cache-hit == 'true'
+      shell: bash
+      run: ls -lah ${{ inputs.path }}/target
+    - name: Build Rspack
+      shell: bash
+      run: |
+        cd ${{ inputs.path }}
+        pnpm i --frozen-lockfile
+        pnpm run build:binding:release
+    - uses: actions/upload-artifact@v4
+      with:
+        name: binding-linux-x64-gnu
+        path: ${{ inputs.path }}/crates/node_binding/*.node

@@ -17,18 +17,23 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 jobs:
-  ci:
+  prepare-binding:
+    name: Prepare Rspack Binding
     runs-on: [self-hosted, rspack-bench]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare-rspack-binding
+
+  ci:
+    needs: prepare-binding
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Init env
-        uses: ./.github/actions/env
-      - name: Build rspack
-        run: node bin/build-rspack.js
+        uses: actions/checkout@v4
+      - uses: ./.github/actions/build-rspack
       - name: Run benchmark
-        run: node bin/bench.js
+        run: node bin/bench.js 10000_development-mode 10000_development-mode_hmr 10000_production-mode
       - id: print-compare-results
         name: Print compare results
         run: |

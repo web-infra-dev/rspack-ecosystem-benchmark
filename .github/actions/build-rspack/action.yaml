@@ -1,0 +1,54 @@
+name: 'Build Rspack'
+description: 'Checkout, download rspack binding, and build rspack js'
+
+inputs:
+  repository:
+    description: 'The rspack repository to use'
+    required: true
+    default: 'web-infra-dev/rspack'
+  path:
+    description: 'Destination path to the rspack repository'
+    required: true
+    default: '.rspack'
+  ref:
+    description: 'The branch, tag or SHA to checkout'
+    required: true
+    default: 'main'
+  node-version:
+    description: 'The version of Node.js to set up'
+    required: true
+    default: '18'
+
+outputs:
+  artifact-name:
+    description: 'The name of the uploaded artifact'
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - shell: bash
+      run: corepack enable
+    - shell: bash
+      run: pnpm --version
+    - name: Checkout Rspack repo
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+        path: ${{ inputs.path }}
+        ref: ${{ inputs.ref }}
+    - uses: actions/download-artifact@v4
+      with:
+        name: binding-linux-x64-gnu
+        path: ${{ inputs.path }}/npm/linux-x64-gnu
+    - name: Show restored binding
+      shell: bash
+      run: ls -lah ${{ inputs.path }}/npm/linux-x64-gnu/*.node
+    - name: Build Rspack JS
+      shell: bash
+      run: |
+        cd ${{ inputs.path }}
+        pnpm i
+        pnpm run build:js
