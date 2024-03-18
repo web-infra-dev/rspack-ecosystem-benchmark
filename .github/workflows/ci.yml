@@ -28,7 +28,7 @@ jobs:
       - name: Build rspack
         run: node bin/build-rspack.js
       - name: Run benchmark
-        run: node bin/bench.js
+        run: node bin/bench.js arco-pro_development-mode arco-pro_development-mode_hmr arco-pro_production-mode
       - id: print-compare-results
         name: Print compare results
         run: |
