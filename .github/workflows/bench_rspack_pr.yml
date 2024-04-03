@@ -32,7 +32,7 @@ jobs:
             return comment.id
 
   run-bench:
-    runs-on: [self-hosted, rspack-bench]
+    runs-on: [self-hosted, benchmark]
     timeout-minutes: 30
     needs: create-comment
     outputs:

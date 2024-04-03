@@ -8,10 +8,21 @@ runs:
     - name: Setup node
       uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version: 20
     - name: Activate corepack
       shell: bash
-      run: corepack enable
+      run: |
+        # corepack > 0.24.1 will use native fetch
+        # and native fetch not support HTTP_PROXY
+        # https://github.com/nodejs/undici/issues/1650
+        npm install -g corepack@0.24.1
+        corepack enable
     - name: Install dependencies with pnpm
       shell: bash
       run: pnpm install
+    - name: Set Rspack Dir
+      shell: bash
+      run: |
+        if [[ ! -z "$PNPM_CACHE" ]]; then
+          echo "RSPACK_DIR=$PNPM_CACHE/rspack" >> $GITHUB_ENV
+        fi
