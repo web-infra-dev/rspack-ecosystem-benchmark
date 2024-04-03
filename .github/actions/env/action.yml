@@ -20,3 +20,9 @@ runs:
     - name: Install dependencies with pnpm
       shell: bash
       run: pnpm install
+    - name: Set Rspack Dir
+      shell: bash
+      run: |
+        if [[ ! -z "$PNPM_CACHE" ]]; then
+          echo "RSPACK_DIR=$PNPM_CACHE/rspack" >> $GITHUB_ENV
+        fi

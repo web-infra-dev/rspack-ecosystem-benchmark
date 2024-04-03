@@ -8,7 +8,7 @@ You can use the scripts in the `bin` directory to prepare and run benchmark.
 
 * `node bin/build-rspack.js [remote] [branch]`
 
-Clone and build [rspack](https://github.com/web-infra-dev/rspack) in `.rspack` folder. You can set target branch with the parameter. eg.
+Clone and build [rspack](https://github.com/web-infra-dev/rspack) in the folder which defined by the environment variable of `RSPACK_DIR` or `<project_root>/.rspack`. You can set target branch with the parameter. eg.
 
 ``` bash
 node bin/build-rspack.js # use the main branch to build
