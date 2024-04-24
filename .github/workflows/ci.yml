@@ -28,8 +28,6 @@ jobs:
         run: node bin/build-rspack.js
       - name: Run benchmark
         run: node bin/bench.js
-      - name: Test
-        run: whoami
       - id: print-compare-results
         name: Print compare results
         run: |
