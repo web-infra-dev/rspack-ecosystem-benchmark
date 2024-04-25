@@ -28,7 +28,7 @@ RSPACK_DIR=<your-rspack-path> node bin/bench.js 10000_development-mode_hmr # set
 
 * `node bin/compare-bench.js <baseDate> <currentDate>`
 
-Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter have three types, `current` will use the data from `output` folder. `latest` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
+Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter has three types, `current` will use the data from `output` folder. `latest` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
 
 ``` bash
 node bin/compare-bench.js current latest # use output data as base, and latest data as current
