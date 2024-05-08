@@ -161,6 +161,7 @@ module.exports = {
 				exclude: [/[\\/]node_modules[\\/]/],
 				options: {
 					jsc: {
+						sourceMaps: true,
 						parser: {
 							syntax: "typescript",
 							tsx: true
