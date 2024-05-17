@@ -38,6 +38,8 @@ runs:
     - shell: bash
       run: |
         cd ${{ inputs.path }}
+        npm install -g corepack@0.24.1
+        echo "Corepack version: $(corepack --version)"
         corepack enable
     - shell: bash
       run: |
