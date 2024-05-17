@@ -10,8 +10,7 @@ on:
 
 jobs:
   run-bench:
-    runs-on: [self-hosted, rspack-bench]
-    timeout-minutes: 30
+    runs-on: [self-hosted, benchmark]
     outputs:
       diff-result: ${{ steps.print-results.outputs.diff-result }}
     steps:

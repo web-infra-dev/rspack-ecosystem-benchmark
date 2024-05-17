@@ -26,7 +26,7 @@ jobs:
 
   ci:
     needs: prepare-binding
-    runs-on: [self-hosted, rspack-bench]
+    runs-on: [self-hosted, benchmark]
     timeout-minutes: 30
     strategy:
       matrix:
