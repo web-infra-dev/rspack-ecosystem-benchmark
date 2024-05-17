@@ -50,7 +50,6 @@ runs:
       with:
         path: '${{ inputs.path }}/target'
         key: 'rspack'
-        strategy: 'copy'
     - name: Show Rust Cache
       if: steps.rust-cache.outputs.cache-hit == 'true'
       shell: bash
