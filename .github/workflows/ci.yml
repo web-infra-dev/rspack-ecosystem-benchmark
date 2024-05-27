@@ -28,16 +28,14 @@ jobs:
         with:
           path: ${{ env.RSPACK_DIR }}
 
-  ci:
+  bench:
     needs: prepare-binding
     runs-on: [self-hosted, benchmark]
     timeout-minutes: 30
     strategy:
       matrix:
-        suite:
-          - 10000_development-mode 10000_development-mode_hmr 10000_production-mode arco-pro_production-mode
-          - arco-pro_development-mode arco-pro_development-mode_intercept-plugin arco-pro_development-mode_hmr arco-pro_development-mode_hmr_intercept-plugin 
-          - threejs_development-mode_10x threejs_development-mode_10x_hmr threejs_production-mode_10x arco-pro_production-mode_intercept-plugin
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
       fail-fast: false
     steps:
       - name: Checkout
@@ -48,7 +46,12 @@ jobs:
         with:
           path: ${{ env.RSPACK_DIR }}
       - name: Run benchmark
-        run: node bin/bench.js ${{ matrix.suite }}
+        run: >-
+          node bin/cli.js
+          --checkout false
+          --build false
+          --bench true
+          --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - id: print-compare-results
         name: Print compare results
         run: |
