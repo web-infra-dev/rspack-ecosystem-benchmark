@@ -1,7 +1,9 @@
 import { resolve } from "path";
 import { fileURLToPath } from "url";
 import { mkdir, writeFile } from "fs/promises";
+import actionsCore from "@actions/core";
 import { run, formatResultTable } from "../lib/index.js";
+import { isGitHubActions } from '../lib/utils.js';
 
 const [, , ...benchmarkNames] = process.argv;
 
@@ -27,9 +29,20 @@ const defaultBenchmarkNames = [
 		? benchmarkNames
 		: defaultBenchmarkNames;
 	for (const item of benchmarks) {
+		const start = Date.now();
 		const result = await run(item);
-		console.log(`${item} result is:`);
+		if (isGitHubActions) {
+			actionsCore.startGroup(`${item} result is`);
+		} else {
+			console.log(`${item} result is`);
+		}
 		console.log(formatResultTable(result, { verbose: true }));
+		if (isGitHubActions) {
+			actionsCore.endGroup()
+			const cost = Math.ceil((Date.now() - start) / 1000)
+			console.log(`Cost for \`${item}\`: ${cost} s`)
+		}
+
 		await writeFile(
 			resolve(rootDir, `output/${item}.json`),
 			JSON.stringify(result, null, 2)

@@ -62,13 +62,13 @@ const {
 } = cli.flags;
 
 if (checkout) {
+    const fetchUrl = `https://github.com/${repository}`;
     if (!(await dirExist(path))) {
-		await $`git clone ${repository} ${path}`;
+		await $`git clone ${fetchUrl} ${path}`;
 	}
     cd(path);
     await $`git reset --hard`;
     const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`).toString().trim();
-    const fetchUrl = `https://github.com/${repository}`;
 	await $`git fetch ${fetchUrl} ${ref} --prune`;
     await $`git checkout -b ${Date.now()} FETCH_HEAD`;
 	if (currentBranch) {
