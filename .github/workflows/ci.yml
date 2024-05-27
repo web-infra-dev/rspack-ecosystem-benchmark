@@ -17,17 +17,16 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 jobs:
-  get-runner-labels:
-    name: Get Runner Labels
-    uses: ./.github/workflows/get-runner-labels.yml
-
   prepare-binding:
     name: Prepare Rspack Binding
-    needs: get-runner-labels
-    runs-on: ${{ fromJSON(needs.get-runner-labels.outputs.LINUX_RUNNER_LABELS) }}
+    runs-on: [self-hosted, benchmark]
     steps:
       - uses: actions/checkout@v4
+      - name: Init env
+        uses: ./.github/actions/env
       - uses: ./.github/actions/prepare-rspack-binding
+        with:
+          path: ${{ env.RSPACK_DIR }}
 
   ci:
     needs: prepare-binding
@@ -43,8 +42,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Init env
+        uses: ./.github/actions/env
       - uses: ./.github/actions/build-rspack
-      - run: pnpm install
+        with:
+          path: ${{ env.RSPACK_DIR }}
       - name: Run benchmark
         run: node bin/bench.js ${{ matrix.suite }}
       - id: print-compare-results

@@ -24,5 +24,6 @@ runs:
       shell: bash
       run: |
         if [[ ! -z "$PNPM_CACHE" ]]; then
+          echo "RSPACK_DIR=$PNPM_CACHE/rspack"
           echo "RSPACK_DIR=$PNPM_CACHE/rspack" >> $GITHUB_ENV
         fi

@@ -26,40 +26,18 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: Checkout Rspack repo
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ inputs.repository }}
-        path: ${{ inputs.path }}
-        ref: ${{ inputs.ref }}
-    - uses: actions/setup-node@v3
-      with:
-        node-version: ${{ inputs.node-version }}
-    - shell: bash
-      run: |
-        cd ${{ inputs.path }}
-        npm install -g corepack@0.24.1
-        echo "Corepack version: $(corepack --version)"
-        corepack enable
-    - shell: bash
-      run: |
-        cd ${{ inputs.path }}
-        pnpm --version
-    - id: rust-cache
-      uses: MasterworksIO/action-local-cache@2
-      with:
-        path: '${{ inputs.path }}/target'
-        key: 'rspack'
-    - name: Show Rust Cache
-      if: steps.rust-cache.outputs.cache-hit == 'true'
-      shell: bash
-      run: ls -lah ${{ inputs.path }}/target
     - name: Build Rspack
       shell: bash
-      run: |
-        cd ${{ inputs.path }}
-        pnpm i --frozen-lockfile
-        pnpm run build:binding:release
+      run: >-
+        node bin/cli.js
+        --checkout true
+        --repository ${{ inputs.repository }}
+        --path ${{ inputs.path }}
+        --ref ${{ inputs.ref }}
+        --build true
+        --binding true
+        --js false
+        --bench false
     - uses: actions/upload-artifact@v4
       with:
         name: binding-linux-x64-gnu
