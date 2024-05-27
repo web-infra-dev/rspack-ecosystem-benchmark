@@ -19,7 +19,7 @@ runs:
         corepack enable
     - name: Install dependencies with pnpm
       shell: bash
-      run: pnpm install
+      run: pnpm install --prefer-frozen-lockfile --prefer-offline
     - name: Set Rspack Dir
       shell: bash
       run: |

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { mkdir, writeFile } from "node:fs/promises";
-import { join, resolve } from 'node:path';
+import { join } from 'node:path';
 import meow from 'meow';
 import { $, cd } from 'zx';
 import actionsCore from "@actions/core";
@@ -84,6 +84,7 @@ if (checkout) {
     const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`).toString().trim();
 	await $`git fetch ${fetchUrl} ${ref} --prune`;
     await $`git checkout -b ${Date.now()} FETCH_HEAD`;
+    await $`git log -1`;
 	if (currentBranch) {
 		await $`git branch -D ${currentBranch}`;
 	}

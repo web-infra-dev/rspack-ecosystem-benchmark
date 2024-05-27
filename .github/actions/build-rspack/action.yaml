@@ -37,7 +37,7 @@ runs:
     - shell: bash
       run: pnpm --version
     - shell: bash
-      run: pnpm install
+      run: pnpm install --prefer-frozen-lockfile --prefer-offline
     - name: Build Rspack JS
       shell: bash
       run: >-
@@ -53,7 +53,7 @@ runs:
     - uses: actions/download-artifact@v4
       with:
         name: binding-linux-x64-gnu
-        path: ${{ inputs.path }}/npm/linux-x64-gnu
+        path: ${{ inputs.path }}/crates/node_binding
     - name: Show restored binding
       shell: bash
-      run: ls -lah ${{ inputs.path }}/npm/linux-x64-gnu/*.node
+      run: ls -lah ${{ inputs.path }}/crates/node_binding/*.node
