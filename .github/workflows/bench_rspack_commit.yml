@@ -37,10 +37,10 @@ jobs:
         with:
           path: ${{ env.RSPACK_DIR }}
       - name: Run benchmark
-        run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ strategy.job-total }}
+        run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ smatrix.shardTotal }}
       - uses: actions/upload-artifact@v4
         with:
-          name: benchmark-artifacts-${{ matrix.shardIndex }}-${{ strategy.job-total }}
+          name: benchmark-artifacts-${{ matrix.shardIndex }}-${{ matrix.shardTotal }}
           path: output
 
   comment-compare-results:
@@ -56,8 +56,6 @@ jobs:
           pattern: benchmark-artifacts-*
           path: output
           merge-multiple: true
-      - shell: bash
-        run: ls -lah output
       - id: print-results
         name: Print results
         run: |
