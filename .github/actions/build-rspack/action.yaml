@@ -38,15 +38,10 @@ runs:
     - name: Build Rspack JS
       shell: bash
       run: >-
-        node bin/cli.js
-        --checkout true
+        node bin/cli.js build
         --repository ${{ inputs.repository }}
-        --path ${{ inputs.path }}
         --ref ${{ inputs.ref }}
-        --build true
-        --binding false
         --js true
-        --bench false
     - uses: actions/download-artifact@v4
       with:
         name: binding-linux-x64-gnu

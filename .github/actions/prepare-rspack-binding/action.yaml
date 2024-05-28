@@ -29,15 +29,10 @@ runs:
     - name: Build Rspack
       shell: bash
       run: >-
-        node bin/cli.js
-        --checkout true
+        node bin/cli.js build
         --repository ${{ inputs.repository }}
-        --path ${{ inputs.path }}
         --ref ${{ inputs.ref }}
-        --build true
         --binding true
-        --js false
-        --bench false
     - uses: actions/upload-artifact@v4
       with:
         name: binding-linux-x64-gnu

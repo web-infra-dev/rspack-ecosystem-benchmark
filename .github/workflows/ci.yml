@@ -47,11 +47,7 @@ jobs:
           path: ${{ env.RSPACK_DIR }}
       - name: Run benchmark
         run: >-
-          node bin/cli.js
-          --checkout false
-          --build false
-          --bench true
-          --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+          node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - id: print-compare-results
         name: Print compare results
         run: |
