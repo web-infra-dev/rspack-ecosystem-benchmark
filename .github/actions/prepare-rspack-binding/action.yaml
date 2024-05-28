@@ -1,27 +1,27 @@
-name: 'Prepare Rspack Binding'
-description: 'Checkout, build, and upload rspack native bindings'
+name: "Prepare Rspack Binding"
+description: "Checkout, build, and upload rspack native bindings"
 
 inputs:
   repository:
-    description: 'The rspack repository to use'
+    description: "The rspack repository to use"
     required: true
-    default: 'web-infra-dev/rspack'
+    default: "web-infra-dev/rspack"
   path:
-    description: 'Destination path to clone'
+    description: "Destination path to clone"
     required: true
-    default: '.rspack'
+    default: ".rspack"
   ref:
-    description: 'The branch, tag or SHA to checkout'
+    description: "The branch, tag or SHA to checkout"
     required: true
-    default: 'main'
+    default: "main"
   node-version:
-    description: 'The version of Node.js to set up'
+    description: "The version of Node.js to set up"
     required: true
-    default: '18'
+    default: "18"
 
 outputs:
   artifact-name:
-    description: 'The name of the uploaded artifact'
+    description: "The name of the uploaded artifact"
 
 runs:
   using: composite
