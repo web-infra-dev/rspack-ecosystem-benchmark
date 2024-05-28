@@ -6,36 +6,36 @@ This repository is used to monitor rspack performance.
 
 You can use the scripts in the `bin` directory to prepare and run benchmark.
 
-* `node bin/build-rspack.js [remote] [branch]`
+- `node bin/build-rspack.js [remote] [branch]`
 
 Clone and build [rspack](https://github.com/web-infra-dev/rspack) in the folder which defined by the environment variable of `RSPACK_DIR` or `<project_root>/.rspack`. You can set target branch with the parameter. eg.
 
-``` bash
+```bash
 node bin/build-rspack.js # use the main branch to build
 node bin/build-rspack.js origin main # use the main branch to build
 node bin/build-rspack.js origin pull/1000/head # use the pull request with index 1000 to build
 ```
 
-* `node bin/bench.js [benchmarkNames...]`
+- `node bin/bench.js [benchmarkNames...]`
 
 Run benchmark with rspack and write the output to `output` folder. You can configure the environment variable of `RSPACK_DIR` to set the rspack project path, and it will use the rspack from the `.rspack` folder by default. eg.
 
-``` bash
+```bash
 node bin/bench.js # run all benchmarks
 node bin/bench.js 10000_development-mode 10000_production-mode # run benchmarks named 10000_development-mode and 10000_production-mode
 RSPACK_DIR=<your-rspack-path> node bin/bench.js 10000_development-mode_hmr # set the rspack command path, and run 10000_development-mode_hmr
 ```
 
-* `node bin/compare-bench.js <baseDate> <currentDate>`
+- `node bin/compare-bench.js <baseDate> <currentDate>`
 
 Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter has three types, `current` will use the data from `output` folder. `latest` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
 
-``` bash
+```bash
 node bin/compare-bench.js current latest # use output data as base, and latest data as current
 node bin/compare-bench.js latest 2023-08-17 # use latest data as base, and the data of 2023-08-17 as current
 ```
 
-* `node bin/upload.js`
+- `node bin/upload.js`
 
 Clone the data branch to `.data` folder, copy `output` folder into it and push it to the remote.
 
@@ -43,23 +43,23 @@ Clone the data branch to `.data` folder, copy `output` folder into it and push i
 
 #### Benchmark Name
 
-Benchmark name is a string containing the case name and the addon names. A benchmark name is separated by "_", the first part is the case name, amd the other parts are the addon names.
+Benchmark name is a string containing the case name and the addon names. A benchmark name is separated by "\_", the first part is the case name, amd the other parts are the addon names.
 
 #### Case
 
 The benchmark case is the rspack project in `cases` folder. It must contain `rspack.config.js` and `hmr.js`, the first one is the default config for rspack, the next one is used to tell benchmark how to change file when hmr.
 
-* `10000` is a project with 10000 modules
-* `threejs` is a copy of three js
+- `10000` is a project with 10000 modules
+- `threejs` is a copy of three js
 
 #### Addon
 
 The addon is used to change rspack configuration and benchmark parameters. All addons are registered in `lib/addons`.
 
-* `development-mode` is used to set the development mode
-* `production-mode` is used to set the production mode
-* `10x` is used to make the project module 10 times larger
-* `hmr` is used to change the phase of collected metrics to hmr instead of build
+- `development-mode` is used to set the development mode
+- `production-mode` is used to set the production mode
+- `10x` is used to make the project module 10 times larger
+- `hmr` is used to change the phase of collected metrics to hmr instead of build
 
 #### Metric
 
@@ -73,7 +73,7 @@ The tag is `benchmarkName` + `metric`, it is used to display information on webs
 
 Rspack benchmark consists of the following steps.
 
-``` mermaid
+```mermaid
 flowchart LR
     A("Setup") --> B("Generate")
     B --> C("Warmup")
@@ -82,16 +82,16 @@ flowchart LR
     E --> F("Teardown")
 ```
 
-* `Setup` is used to prepare the benchmark case environment and global context.
-* `Generate` will generate the benchmark case.
-* `Warmup` will attempt to run the benchmark case.
-* `Run` will run the benchmark case multiple times and collect metric data.
-* `Statistic` will calculate the final result through multiple benchmarks.
-* `Teardown` is used to clean up.
+- `Setup` is used to prepare the benchmark case environment and global context.
+- `Generate` will generate the benchmark case.
+- `Warmup` will attempt to run the benchmark case.
+- `Run` will run the benchmark case multiple times and collect metric data.
+- `Statistic` will calculate the final result through multiple benchmarks.
+- `Teardown` is used to clean up.
 
 The main process is controlled by `scenario`, and its structure is:
 
-``` typescript
+```typescript
 interface Context {
     caseDir: string
     originalFiles: Record<string, string>
@@ -141,19 +141,19 @@ interface Scenario {
 
 The addons can change context in most steps, and its structure is:
 
-``` typescript
+```typescript
 interface Addon {
-    async beforeSetup(): void
-    async afterSetup(ctx: Context): void
-    
-    async beforeGenerate(ctx: Context): void
-    async afterGenerate(ctx: Context): void
-    
-    async beforeStatistic(ctx: Context): void
-    async afterStatistic(ctx: Context): void
-    
-    async beforeTeardown(ctx: Context): void
-    async afterTeardown(ctx: Context): void
+	beforeSetup(): void;
+	afterSetup(ctx: Context): void;
+
+	beforeGenerate(ctx: Context): void;
+	afterGenerate(ctx: Context): void;
+
+	beforeStatistic(ctx: Context): void;
+	afterStatistic(ctx: Context): void;
+
+	beforeTeardown(ctx: Context): void;
+	afterTeardown(ctx: Context): void;
 }
 ```
 

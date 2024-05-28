@@ -4,9 +4,9 @@ body {
 	padding: 0;
 }
 body {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 24px;
+	max-width: 1200px;
+	margin: auto;
+	padding: 0 24px;
 }
 
 .action-container,
@@ -90,12 +90,12 @@ body {
 }
 
 .chart-container {
-  min-height: 600px;
+	min-height: 600px;
 }
 
 .slider-container {
-  padding: 0 32px;
-  margin-bottom: 32px;
+	padding: 0 32px;
+	margin-bottom: 32px;
 }
 .slider {
 	position: relative;
@@ -109,8 +109,8 @@ body {
 	top: 0;
 	bottom: 0;
 	background: #1677ff;
-  transition: 0.2s;
-  cursor: pointer;
+	transition: 0.2s;
+	cursor: pointer;
 }
 .slider .mark {
 	position: absolute;

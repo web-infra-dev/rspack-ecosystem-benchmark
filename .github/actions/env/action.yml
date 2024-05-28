@@ -6,7 +6,7 @@ runs:
   using: composite
   steps:
     - name: Setup node
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 20
     - name: Activate corepack
@@ -19,7 +19,7 @@ runs:
         corepack enable
     - name: Install dependencies with pnpm
       shell: bash
-      run: pnpm install
+      run: pnpm install --prefer-frozen-lockfile --prefer-offline
     - name: Set Rspack Dir
       shell: bash
       run: |
