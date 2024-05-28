@@ -31,9 +31,26 @@ jobs:
             })
             return comment.id
 
-  run-bench:
+  prepare-binding:
+    name: Prepare Rspack Binding
     runs-on: [self-hosted, benchmark]
-    needs: create-comment
+    steps:
+      - uses: actions/checkout@v4
+      - name: Init env
+        uses: ./.github/actions/env
+      - uses: ./.github/actions/prepare-rspack-binding
+        with:
+          path: ${{ env.RSPACK_DIR }}
+
+  bench:
+    runs-on: [self-hosted, benchmark]
+    needs: [create-comment, prepare-binding]
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        shardIndex: [1, 2, 3]
+        shardTotal: [3]
+      fail-fast: false
     outputs:
       diff-result: ${{ steps.print-results.outputs.diff-result }}
     steps:
@@ -41,10 +58,17 @@ jobs:
         uses: actions/checkout@v2
       - name: Init env
         uses: ./.github/actions/env
-      - name: Build rspack
-        run: node bin/build-rspack.js origin pull/${{ inputs.prNumber }}/head
+      - uses: ./.github/actions/build-rspack
+        with:
+          path: ${{ env.RSPACK_DIR }}
+          ref: pull/${{ inputs.prNumber }}/head
       - name: Run benchmark
-        run: node bin/bench.js
+        run: >-
+          node bin/cli.js
+          --checkout false
+          --build false
+          --bench true
+          --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - id: print-results
         name: Print results
         run: |
