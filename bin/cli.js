@@ -114,8 +114,7 @@ if (!command || command === 'bench') {
     const shardSize = Math.ceil(jobs.length / totalShards);
     const shardJobs = jobs.slice(shardSize * (currentIndex - 1), shardSize * currentIndex);
 
-    const outputDirectory = join(process.cwd(), 'output');
-    await mkdir(outputDirectory, { recursive: true });
+    await mkdir(benchmarkDirectory, { recursive: true });
 
     if (shardJobs.length) {
         console.log([`Running jobs for shard ${currentIndex}/${totalShards}:`, ...shardJobs].join('\n  * '));
@@ -138,7 +137,7 @@ if (!command || command === 'bench') {
             }
     
             await writeFile(
-                join(outputDirectory, `${job}.json`),
+                join(benchmarkDirectory, `${job}.json`),
                 JSON.stringify(result, null, 2)
             );
         }
