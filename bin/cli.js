@@ -131,11 +131,12 @@ if (!command || command === "bench") {
 
 		for (const job of shardJobs) {
 			const start = Date.now();
-			const result = await run(job);
+			const result = await run(job.name, job.runs);
+			const message = `${job.name} was run ${job.runs} times, with the following results:`;
 			if (isGitHubActions) {
-				actionsCore.startGroup(`${job} result is`);
+				actionsCore.startGroup(message);
 			} else {
-				console.log(`${job} result is`);
+				console.log(message);
 			}
 
 			console.log(formatResultTable(result, { verbose: true }));
@@ -143,11 +144,11 @@ if (!command || command === "bench") {
 			if (isGitHubActions) {
 				actionsCore.endGroup();
 				const cost = Math.ceil((Date.now() - start) / 1000);
-				console.log(`Cost for \`${job}\`: ${cost} s`);
+				console.log(`Cost for \`${job.name}\`: ${cost} s`);
 			}
 
 			await writeFile(
-				join(benchmarkDirectory, `${job}.json`),
+				join(benchmarkDirectory, `${job.name}.json`),
 				JSON.stringify(result, null, 2)
 			);
 		}
