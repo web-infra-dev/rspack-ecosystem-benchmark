@@ -84,7 +84,6 @@ if (checkout) {
     const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`).toString().trim();
 	await $`git fetch ${fetchUrl} ${ref} --prune`;
     await $`git checkout -b ${Date.now()} FETCH_HEAD`;
-    await $`git log -1`;
 	if (currentBranch) {
 		await $`git branch -D ${currentBranch}`;
 	}
@@ -94,6 +93,7 @@ if (checkout) {
 
 if (build) {
     cd(path);
+    await $`git log -1`;
 
     await $`pnpm --version`;
 	await $`pnpm install --prefer-frozen-lockfile --prefer-offline`;
