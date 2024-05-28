@@ -68,12 +68,13 @@ const {
 
 const cwd = process.cwd();
 
-const configPath = join(process.cwd(), "bench.config.js");
-const config = (await import(configPath)).default;
+const benchConfigPath = join(process.cwd(), "bench.config.js");
+const benchConfig = (await import(benchConfigPath)).default;
 
-const jobs = config.jobs ?? [];
-const rspackDirectory = config.rspackDirectory ?? join(cwd, ".rspack");
-const benchmarkDirectory = config.benchmarkDirectory ?? join(cwd, "output");
+const jobs = benchConfig.jobs ?? [];
+const rspackDirectory = benchConfig.rspackDirectory ?? join(cwd, ".rspack");
+const benchmarkDirectory =
+	benchConfig.benchmarkDirectory ?? join(cwd, "output");
 
 if (!command || command === "build") {
 	const fetchUrl = `https://github.com/${repository}`;
@@ -125,7 +126,7 @@ if (!command || command === "bench") {
 		console.log(
 			[
 				`Running jobs for shard ${currentIndex}/${totalShards}:`,
-				...shardJobs
+				...shardJobs.map(job => job.name)
 			].join("\n  * ")
 		);
 
@@ -158,5 +159,5 @@ if (!command || command === "bench") {
 }
 
 if (!command || command === "compare") {
-	compare(base, current, benchmarkDirectory);
+	compare(base, current, benchmarkDirectory, jobs);
 }

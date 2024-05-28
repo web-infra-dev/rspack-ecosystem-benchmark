@@ -8,51 +8,63 @@ export default {
 	jobs: [
 		{
 			name: "10000_development-mode",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "10000_development-mode_hmr",
-			runs: hmrRuns
+			runs: hmrRuns,
+			compareMetrics: ["stats"]
 		},
 		{
 			name: "10000_production-mode",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "arco-pro_development-mode",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "arco-pro_development-mode_intercept-plugin",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "arco-pro_development-mode_hmr",
-			runs: hmrRuns
+			runs: hmrRuns,
+			compareMetrics: ["stats"]
 		},
 		{
 			name: "arco-pro_development-mode_hmr_intercept-plugin",
-			runs: hmrRuns
+			runs: hmrRuns,
+			compareMetrics: ["stats"]
 		},
 		{
 			name: "arco-pro_production-mode",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "arco-pro_production-mode_intercept-plugin",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "threejs_development-mode_10x",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		},
 		{
 			name: "threejs_development-mode_10x_hmr",
-			runs: hmrRuns
+			runs: hmrRuns,
+			compareMetrics: ["stats"]
 		},
 		{
 			name: "threejs_production-mode_10x",
-			runs: 10
+			runs: 10,
+			compareMetrics: ["exec"]
 		}
 	],
 	rspackDirectory: process.env.RSPACK_DIR
