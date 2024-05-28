@@ -33,7 +33,9 @@ runs:
         --repository ${{ inputs.repository }}
         --ref ${{ inputs.ref }}
         --binding true
+        --js false
     - uses: actions/upload-artifact@v4
       with:
         name: binding-linux-x64-gnu
         path: ${{ inputs.path }}/crates/node_binding/*.node
+        compression-level: 9

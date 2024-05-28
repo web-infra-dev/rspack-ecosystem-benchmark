@@ -13,5 +13,5 @@ export default {
 		'threejs_development-mode_10x_hmr',
 		'threejs_production-mode_10x'
     ],
-	rspackWorkspace: process.env.RSPACK_DIR
+	rspackDirectory: process.env.RSPACK_DIR
 };

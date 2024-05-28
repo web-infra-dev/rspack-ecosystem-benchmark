@@ -54,8 +54,7 @@ jobs:
     outputs:
       diff-result: ${{ steps.print-results.outputs.diff-result }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Init env
         uses: ./.github/actions/env
       - uses: ./.github/actions/build-rspack

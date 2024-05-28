@@ -41,6 +41,7 @@ runs:
         node bin/cli.js build
         --repository ${{ inputs.repository }}
         --ref ${{ inputs.ref }}
+        --binding false
         --js true
     - uses: actions/download-artifact@v4
       with:

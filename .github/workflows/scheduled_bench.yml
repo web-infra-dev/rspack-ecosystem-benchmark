@@ -8,8 +8,7 @@ jobs:
   bench:
     runs-on: [self-hosted, benchmark]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Init env
         uses: ./.github/actions/env
       - name: Build rspack
