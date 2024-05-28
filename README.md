@@ -8,7 +8,7 @@ You can use the scripts in the `bin` directory to prepare and run benchmark.
 
 * `node bin/build-rspack.js [remote] [branch]`
 
-Clone and build [rspack](https://github.com/web-infra-dev/rspack) in `.rspack` folder. You can set target branch with the parameter. eg.
+Clone and build [rspack](https://github.com/web-infra-dev/rspack) in the folder which defined by the environment variable of `RSPACK_DIR` or `<project_root>/.rspack`. You can set target branch with the parameter. eg.
 
 ``` bash
 node bin/build-rspack.js # use the main branch to build
@@ -28,7 +28,7 @@ RSPACK_DIR=<your-rspack-path> node bin/bench.js 10000_development-mode_hmr # set
 
 * `node bin/compare-bench.js <baseDate> <currentDate>`
 
-Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter have three types, `current` will use the data from `output` folder. `latest` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
+Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter has three types, `current` will use the data from `output` folder. `latest` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
 
 ``` bash
 node bin/compare-bench.js current latest # use output data as base, and latest data as current
