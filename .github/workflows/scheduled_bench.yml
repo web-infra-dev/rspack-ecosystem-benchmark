@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 jobs:
   bench:
-    runs-on: [self-hosted, rspack-bench]
-    timeout-minutes: 30
+    runs-on: [self-hosted, benchmark]
     steps:
       - name: Checkout
         uses: actions/checkout@v2

@@ -12,7 +12,7 @@ const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspac
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const dataDir = resolve(rootDir, ".data");
 const outputDir = resolve(rootDir, "output");
-const rspackDir = resolve(rootDir, ".rspack");
+const rspackDir = process.env.RSPACK_DIR || resolve(rootDir, ".rspack");
 const dateDir = resolve(dataDir, date);
 
 async function getCommitSHA() {
@@ -29,9 +29,11 @@ async function getCommitSHA() {
 async function appendRspackBuildInfo() {
 	const commitSHA = await getCommitSHA();
 	const buildInfoFile = join(dataDir, "build-info.json");
-	const buildInfo = existsSync(buildInfoFile) ? JSON.parse(await readFile(buildInfoFile, "utf-8")) : {};
+	const buildInfo = existsSync(buildInfoFile)
+		? JSON.parse(await readFile(buildInfoFile, "utf-8"))
+		: {};
 	buildInfo[date] = {
-		commitSHA,
+		commitSHA
 	};
 	await writeFile(buildInfoFile, JSON.stringify(buildInfo, null, 2));
 }
@@ -80,7 +82,12 @@ async function appendRspackBuildInfo() {
 	process.chdir(dataDir);
 
 	console.log("== commit ==");
-	await runCommand("git", ["add", `${date}/*.json`, "index.txt", "build-info.json"]);
+	await runCommand("git", [
+		"add",
+		`${date}/*.json`,
+		"index.txt",
+		"build-info.json"
+	]);
 	try {
 		await runCommand("git", ["commit", "-m", `"add ${date} results"`]);
 	} catch {}

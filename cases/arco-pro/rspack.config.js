@@ -160,6 +160,7 @@ module.exports = {
 				loader: "builtin:swc-loader",
 				exclude: [/[\\/]node_modules[\\/]/],
 				options: {
+					sourceMaps: true,
 					jsc: {
 						parser: {
 							syntax: "typescript",
