@@ -12,13 +12,13 @@ jobs:
       - name: Init env
         uses: ./.github/actions/env
       - name: Build rspack
-        run: node bin/build-rspack.js
+        run: node bin/cli.js build
       - name: Run benchmark
-        run: node bin/bench.js
+        run: node bin/cli.js bench
       - id: print-compare-results
         name: Print compare results
         run: |
-          result=$(node bin/compare-bench.js latest current)
+          result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"
           echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
       - name: Setup git user

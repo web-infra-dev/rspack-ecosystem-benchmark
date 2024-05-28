@@ -1,7 +1,7 @@
 name: Bench Rspack PR
 
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       prNumber:
         description: "PR number (e.g. 9887)"
