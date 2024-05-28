@@ -1,4 +1,4 @@
-const isScheduled = false;
+const isScheduled = !!process.env.SCHEDULED_JOB;
 
 // HMR will run 10 times in build plugin, so we should not start multiple instances of Rspack.
 // However, we still need to run multiple instances of Rspack when executing scheduled tasks for longer runtimes.
