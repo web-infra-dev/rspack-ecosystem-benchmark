@@ -329,8 +329,8 @@ class BenchmarkChart {
 									context.dataset.yAxisID === "size"
 										? formatSize(value, value)
 										: context.dataset.yAxisID === "ratio"
-										? formatRatio(value, value)
-										: formatTime(value, value);
+											? formatRatio(value, value)
+											: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
 							}
 						}
