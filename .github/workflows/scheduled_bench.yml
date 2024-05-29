@@ -11,9 +11,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Init env
         uses: ./.github/actions/env
-      - name: Set Scheduled env
-        shell: bash
-        run: echo "SCHEDULED_JOB=true" >> $GITHUB_ENV
       - name: Build rspack
         run: node bin/cli.js build
       - name: Run benchmark
