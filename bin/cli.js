@@ -110,6 +110,11 @@ if (!command || command === "build") {
 }
 
 if (!command || command === "bench") {
+	if (isGitHubActions) {
+		await $`lscpu -e=CPU,MHZ`;
+		await $`echo "CPU Usage: "$[100-$(vmstat 1 2|tail -1|awk '{print $15}')]"%"`;
+	}
+
 	const shardPair = shard.split("/").map(t => parseInt(t, 10));
 	const [currentIndex, totalShards] = shardPair;
 
