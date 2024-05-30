@@ -12,7 +12,7 @@ jobs:
       - name: Init env
         uses: ./.github/actions/env
       - name: Build rspack
-        run: node bin/cli.js build
+        run: node bin/cli.js build --ref db5d248cfea196551b69a60e7c4f1b6825f8196e
       - name: Run benchmark
         run: node bin/cli.js bench
       - id: print-compare-results
