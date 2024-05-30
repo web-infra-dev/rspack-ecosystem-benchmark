@@ -73,7 +73,7 @@ jobs:
               result = diffResult.replace(/@@/g, "\n");
             }
 
-            if (result.includes("Threshold exceeded") {
+            if (result.includes("Threshold exceeded")) {
               console.log("Some benchmark cases exceed the threshold, please visit the previous step for more information");
               process.exit(1);
             }
