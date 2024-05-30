@@ -27,7 +27,7 @@ const debounce = (fn, t) => {
 		timer = setTimeout(() => fn(...args), t);
 	};
 };
-const getAxisType = tag => {
+const getAxisType = (tag) => {
 	if (tag.endsWith(" size") || tag.endsWith(" memory")) {
 		return "size";
 	} else if (tag.endsWith(" cache")) {
@@ -73,9 +73,7 @@ class DataCenter {
 		this.index = index;
 
 		// generate metrics struct
-		const latestData = await fetch(`${fetchPrefix}/${lines.pop()}`).then(res =>
-			res.json()
-		);
+		const latestData = await fetch(`${fetchPrefix}/${lines.pop()}`).then(res => res.json());
 		this.metrics = Object.keys(latestData);
 
 		// set date range
@@ -84,19 +82,14 @@ class DataCenter {
 
 	async fetchBuildInfo() {
 		try {
-			this.buildInfo = await fetch(`${fetchPrefix}/build-info.json`).then(
-				res => {
-					if (!res.ok) {
-						throw new Error(`Request failed with status code ${res.status}`);
-					}
-					return res.json();
+			this.buildInfo = await fetch(`${fetchPrefix}/build-info.json`).then(res => {
+				if (!res.ok) {
+					throw new Error(`Request failed with status code ${res.status}`);
 				}
-			);
+				return res.json()
+			});
 		} catch (err) {
-			console.log(
-				"Error occurred while fetching build-info.json: ",
-				err.message
-			);
+			console.log("Error occurred while fetching build-info.json: ", err.message);
 		}
 	}
 
@@ -108,9 +101,7 @@ class DataCenter {
 				if (!this.cache[benchmarkName]) {
 					this.cache[benchmarkName] = await Promise.all(
 						this.index[benchmarkName].map(async date => {
-							const file = await fetch(
-								`${fetchPrefix}/${date}/${benchmarkName}.json`
-							).then(res => res.json());
+							const file = await fetch(`${fetchPrefix}/${date}/${benchmarkName}.json`).then(res => res.json());
 							return { date, file };
 						})
 					);
@@ -250,14 +241,11 @@ class BenchmarkChart {
 					if (activeElements.length === 0) {
 						return;
 					}
-					const { datasetIndex, index } = activeElements[0];
+					const {datasetIndex, index} = activeElements[0];
 					const { x } = this.data.datasets[datasetIndex].data[index];
 					const commitSHA = buildInfo[x] ? buildInfo[x].commitSHA : null;
 					if (commitSHA) {
-						window.open(
-							`https://github.com/web-infra-dev/rspack/commit/${commitSHA}`,
-							"_blank"
-						);
+						window.open(`https://github.com/web-infra-dev/rspack/commit/${commitSHA}`, '_blank');
 					}
 				},
 				scales: {
@@ -316,10 +304,7 @@ class BenchmarkChart {
 							title(context) {
 								const date = context[0].raw.x;
 								if (buildInfo[date] && buildInfo[date].commitSHA) {
-									return [
-										date,
-										`commit sha: ${buildInfo[date].commitSHA.slice(0, 7)}`
-									];
+									return [date, `commit sha: ${buildInfo[date].commitSHA.slice(0, 7)}`];
 								}
 								return date;
 							},
@@ -329,8 +314,8 @@ class BenchmarkChart {
 									context.dataset.yAxisID === "size"
 										? formatSize(value, value)
 										: context.dataset.yAxisID === "ratio"
-										? formatRatio(value, value)
-										: formatTime(value, value);
+											? formatRatio(value, value)
+											: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
 							}
 						}
@@ -381,7 +366,7 @@ class BenchmarkChart {
 		const pc = (end - begin) / 100;
 
 		this.chart.options.scales.x.min = begin + pc * min;
-		this.chart.options.scales.x.max = begin + pc * max;
+		this.chart.options.scales.x.max =  begin + pc * max;
 		this.chart.update();
 	}
 }
