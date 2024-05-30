@@ -68,12 +68,13 @@ const {
 
 const cwd = process.cwd();
 
-const configPath = join(process.cwd(), "bench.config.js");
-const config = (await import(configPath)).default;
+const benchConfigPath = join(process.cwd(), "bench.config.js");
+const benchConfig = (await import(benchConfigPath)).default;
 
-const jobs = config.jobs ?? [];
-const rspackDirectory = config.rspackDirectory ?? join(cwd, ".rspack");
-const benchmarkDirectory = config.benchmarkDirectory ?? join(cwd, "output");
+const jobs = benchConfig.jobs ?? [];
+const rspackDirectory = benchConfig.rspackDirectory ?? join(cwd, ".rspack");
+const benchmarkDirectory =
+	benchConfig.benchmarkDirectory ?? join(cwd, "output");
 
 if (!command || command === "build") {
 	const fetchUrl = `https://github.com/${repository}`;
@@ -125,17 +126,18 @@ if (!command || command === "bench") {
 		console.log(
 			[
 				`Running jobs for shard ${currentIndex}/${totalShards}:`,
-				...shardJobs
+				...shardJobs.map(job => job.name)
 			].join("\n  * ")
 		);
 
 		for (const job of shardJobs) {
 			const start = Date.now();
-			const result = await run(job);
+			const result = await run(job.name, job.runs);
+			const message = `${job.name} was run ${job.runs} times, with the following results:`;
 			if (isGitHubActions) {
-				actionsCore.startGroup(`${job} result is`);
+				actionsCore.startGroup(message);
 			} else {
-				console.log(`${job} result is`);
+				console.log(message);
 			}
 
 			console.log(formatResultTable(result, { verbose: true }));
@@ -143,11 +145,11 @@ if (!command || command === "bench") {
 			if (isGitHubActions) {
 				actionsCore.endGroup();
 				const cost = Math.ceil((Date.now() - start) / 1000);
-				console.log(`Cost for \`${job}\`: ${cost} s`);
+				console.log(`Cost for \`${job.name}\`: ${cost} s`);
 			}
 
 			await writeFile(
-				join(benchmarkDirectory, `${job}.json`),
+				join(benchmarkDirectory, `${job.name}.json`),
 				JSON.stringify(result, null, 2)
 			);
 		}
@@ -157,5 +159,5 @@ if (!command || command === "bench") {
 }
 
 if (!command || command === "compare") {
-	compare(base, current, benchmarkDirectory);
+	compare(base, current, benchmarkDirectory, jobs);
 }
