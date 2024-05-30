@@ -62,10 +62,6 @@ jobs:
           result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"
           echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
-          if [[ $result =~ "Threshold exceeded" ]]; then
-            echo "Some benchmark cases exceed the threshold, please visit the previous step for more information"
-            exit 1
-          fi
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.RSPACK_BOT_ACCESS_TOKEN }}
@@ -75,6 +71,11 @@ jobs:
             let result = "task ${{ needs.bench.result }}"
             if (diffResult) {
               result = diffResult.replace(/@@/g, "\n");
+            }
+
+            if (result.includes("Threshold exceeded") {
+              console.log("Some benchmark cases exceed the threshold, please visit the previous step for more information");
+              process.exit(1);
             }
 
             const url = `${context.serverUrl}//${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
