@@ -8,7 +8,7 @@ on:
       - "**/*.md"
   pull_request:
     types: [opened, synchronize]
-    branches: [main]
+    branches: [ main ]
     paths-ignore:
       - "**/*.md"
 
@@ -17,40 +17,21 @@ concurrency:
   cancel-in-progress: ${{ github.ref_name != 'main' }}
 
 jobs:
-  prepare-binding:
-    name: Prepare Rspack Binding
+  ci:
     runs-on: [self-hosted, benchmark]
-    steps:
-      - uses: actions/checkout@v4
-      - name: Init env
-        uses: ./.github/actions/env
-      - uses: ./.github/actions/prepare-rspack-binding
-        with:
-          path: ${{ env.RSPACK_DIR }}
-
-  bench:
-    needs: prepare-binding
-    runs-on: [self-hosted, benchmark]
-    timeout-minutes: 30
-    strategy:
-      matrix:
-        shardIndex: [1, 2, 3]
-        shardTotal: [3]
-      fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
       - name: Init env
         uses: ./.github/actions/env
-      - uses: ./.github/actions/build-rspack
-        with:
-          path: ${{ env.RSPACK_DIR }}
+      - name: Build rspack
+        run: node bin/build-rspack.js
       - name: Run benchmark
-        run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        run: node bin/bench.js
       - id: print-compare-results
         name: Print compare results
         run: |
-          result=$(node bin/cli.js compare --base latest --current current)
+          result=$(node bin/compare-bench.js latest current)
           echo "$result"
           echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
       - name: Check Threshold
