@@ -19,6 +19,7 @@ jobs:
       - uses: ./.github/actions/prepare-rspack-binding
         with:
           path: ${{ env.RSPACK_DIR }}
+          ref: ${{ inputs.commit_sha }}
 
   bench:
     runs-on: [self-hosted, benchmark]
@@ -36,6 +37,7 @@ jobs:
       - uses: ./.github/actions/build-rspack
         with:
           path: ${{ env.RSPACK_DIR }}
+          ref: ${{ inputs.commit_sha }}
       - name: Run benchmark
         run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - uses: actions/upload-artifact@v4

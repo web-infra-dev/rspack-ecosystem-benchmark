@@ -41,6 +41,7 @@ jobs:
       - uses: ./.github/actions/prepare-rspack-binding
         with:
           path: ${{ env.RSPACK_DIR }}
+          ref: pull/${{ inputs.prNumber }}/head
 
   bench:
     runs-on: [self-hosted, benchmark]
