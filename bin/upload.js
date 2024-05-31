@@ -2,7 +2,8 @@ import { readFile, writeFile, readdir, mkdir, copyFile } from "fs/promises";
 import { existsSync } from "fs";
 import { resolve, join } from "path";
 import { fileURLToPath } from "url";
-import { runCommand, dirExist, formatDate } from "../lib/utils.js";
+import { $, cd } from "zx";
+import { dirExist, formatDate } from "../lib/utils.js";
 
 const [, , token] = process.argv;
 const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
@@ -16,12 +17,7 @@ const rspackDir = process.env.RSPACK_DIR || resolve(rootDir, ".rspack");
 const dateDir = resolve(dataDir, date);
 
 async function getCommitSHA() {
-	let commitSHA;
-	await runCommand("git", ["rev-parse", "HEAD"], {
-		onData(stdout) {
-			commitSHA = stdout.toString().trim();
-		}
-	});
+	const commitSHA = (await $`git rev-parse HEAD`).toString().trim();
 	console.log("Current Commit SHA", commitSHA);
 	return commitSHA;
 }
@@ -40,22 +36,13 @@ async function appendRspackBuildInfo() {
 
 (async () => {
 	if (!(await dirExist(dataDir))) {
-		await runCommand("git", [
-			"clone",
-			"--branch",
-			"data",
-			"--single-branch",
-			"--depth",
-			"1",
-			repoUrl,
-			".data"
-		]);
+		await $`git clone --branch data --single-branch --depth 1 ${repoUrl} .data`;
 	}
 
-	process.chdir(dataDir);
-	await runCommand("git", ["remote", "set-url", "origin", repoUrl]);
-	await runCommand("git", ["reset", "--hard", "origin/data"]);
-	await runCommand("git", ["pull", "--rebase"]);
+	cd(dataDir);
+	await $`git remote set-url origin ${repoUrl}`;
+	await $`git reset --hard origin/data`;
+	await $`git pull --rebase`;
 
 	console.log("== copy output files ==");
 	const indexFile = resolve(dataDir, "index.txt");
@@ -77,23 +64,18 @@ async function appendRspackBuildInfo() {
 	await writeFile(indexFile, Array.from(files, f => `${f}\n`).join("") + "\n");
 
 	console.log("== update build-info.json ==");
-	process.chdir(rspackDir);
+	cd(rspackDir);
 	await appendRspackBuildInfo();
-	process.chdir(dataDir);
+	cd(dataDir);
 
 	console.log("== commit ==");
-	await runCommand("git", [
-		"add",
-		`${date}/*.json`,
-		"index.txt",
-		"build-info.json"
-	]);
+	await $`git add ${date}/*.json index.txt build-info.json`;
 	try {
-		await runCommand("git", ["commit", "-m", `"add ${date} results"`]);
+		await $`git commit -m "add ${date} results"`;
 	} catch {}
 
 	console.log("== push ==");
-	await runCommand("git", ["push"]);
+	await $`git push`;
 })().catch(err => {
 	process.exitCode = 1;
 	console.error(err.stack);

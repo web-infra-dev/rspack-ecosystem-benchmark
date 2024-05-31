@@ -116,13 +116,13 @@ if (!command || command === "bench") {
 		await $`cat /etc/os-release`;
 		await $`uname -r`;
 		await $`uptime`;
-		
+
 		await $`echo "===== Resource Usage ====="`;
 		await $`top -b -n1 | head -n10`;
 		await $`vmstat`;
 		await $`df -h`;
 		await $`free -h`;
-		
+
 		await $`echo "===== Hardware Information ====="`;
 		await $`lscpu`;
 		await $`lsblk`;
