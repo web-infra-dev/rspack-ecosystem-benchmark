@@ -26,15 +26,6 @@ outputs:
 runs:
   using: composite
   steps:
-    - shell: bash
-      run: |
-        npm install -g corepack@0.24.1
-        echo "Corepack version: $(corepack --version)"
-        corepack enable
-    - shell: bash
-      run: pnpm --version
-    - shell: bash
-      run: pnpm install --prefer-frozen-lockfile --prefer-offline
     - name: Build Rspack JS
       shell: bash
       run: >-
