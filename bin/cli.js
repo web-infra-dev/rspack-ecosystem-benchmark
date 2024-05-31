@@ -111,8 +111,24 @@ if (!command || command === "build") {
 
 if (!command || command === "bench") {
 	if (isGitHubActions) {
-		await $`lscpu -e=CPU,MHZ`;
-		await $`echo "CPU Usage: "$[100-$(vmstat 1 2|tail -1|awk '{print $15}')]"%"`;
+		await $`echo "===== System Information ====="`;
+		await $`uname -a`;
+		await $`cat /etc/os-release`;
+		await $`uname -r`;
+		await $`uptime`;
+		
+		await $`echo "===== Resource Usage ====="`;
+		await $`top -b -n1 | head -n10`;
+		await $`vmstat`;
+		await $`df -h`;
+		await $`free -h`;
+		
+		await $`echo "===== Hardware Information ====="`;
+		await $`lscpu`;
+		await $`lsblk`;
+
+		await $`echo "===== Environment Variables ====="`;
+		await $`printenv`;
 	}
 
 	const shardPair = shard.split("/").map(t => parseInt(t, 10));
