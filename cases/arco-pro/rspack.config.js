@@ -48,6 +48,11 @@ module.exports = {
 		tsConfigPath: path.join(__dirname, 'tsconfig.json')
 	},
 	module: {
+		parser: {
+			'css/module': {
+				namedExports: false,
+			}
+		},
 		rules: [
 			{
 				test: /\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif)$/i,
