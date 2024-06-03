@@ -34,8 +34,8 @@ jobs:
     timeout-minutes: 30
     strategy:
       matrix:
-        shardIndex: [1, 2, 3]
-        shardTotal: [3]
+        shardIndex: [1]
+        shardTotal: [1]
       fail-fast: false
     steps:
       - name: Checkout
