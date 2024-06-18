@@ -34,7 +34,10 @@ const cli = meow({
 			type: "boolean",
 			default: true
 		},
-
+		job: {
+			type: "string",
+			isMultiple: true
+		},
 		shard: {
 			type: "string",
 			default: "1/1"
@@ -57,6 +60,7 @@ const {
 	repository,
 	ref,
 
+	job: _job,
 	binding,
 	js,
 
@@ -71,7 +75,7 @@ const cwd = process.cwd();
 const configPath = join(process.cwd(), "bench.config.js");
 const config = (await import(configPath)).default;
 
-const jobs = config.jobs ?? [];
+const jobs = (_job.length === 0 ? undefined : _job) ?? config.jobs ?? [];
 const rspackDirectory = config.rspackDirectory ?? join(cwd, ".rspack");
 const benchmarkDirectory = config.benchmarkDirectory ?? join(cwd, "output");
 

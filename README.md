@@ -1,43 +1,59 @@
 # Rspack Benchmark
 
-This repository is used to monitor rspack performance.
+This repository is used to monitor Rspack performance.
 
 ## Usage
 
-You can use the scripts in the `bin` directory to prepare and run benchmark.
+You can use the scripts in the `bin` directory to prepare and run benchmark. All interactions are of the form
 
-- `node bin/build-rspack.js [remote] [branch]`
-
-Clone and build [rspack](https://github.com/web-infra-dev/rspack) in the folder which defined by the environment variable of `RSPACK_DIR` or `<project_root>/.rspack`. You can set target branch with the parameter. eg.
-
-```bash
-node bin/build-rspack.js # use the main branch to build
-node bin/build-rspack.js origin main # use the main branch to build
-node bin/build-rspack.js origin pull/1000/head # use the pull request with index 1000 to build
+```
+node bin/cli.js [command] [args]
 ```
 
-- `node bin/bench.js [benchmarkNames...]`
+If no command is specified, then `build`, `bench` and `compare` commands will all be ran by default.
 
-Run benchmark with rspack and write the output to `output` folder. You can configure the environment variable of `RSPACK_DIR` to set the rspack project path, and it will use the rspack from the `.rspack` folder by default. eg.
+### Commands
 
-```bash
-node bin/bench.js # run all benchmarks
-node bin/bench.js 10000_development-mode 10000_production-mode # run benchmarks named 10000_development-mode and 10000_production-mode
-RSPACK_DIR=<your-rspack-path> node bin/bench.js 10000_development-mode_hmr # set the rspack command path, and run 10000_development-mode_hmr
+#### build
+
+```
+node bin/cli.js build [--ref <ref>]
 ```
 
-- `node bin/compare-bench.js <baseDate> <currentDate>`
-
-Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter has three types, `current` will use the data from `output` folder. `latest` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
+Clone and build [Rspack](https://github.com/web-infra-dev/rspack) in the folder which defined by the environment variable of `RSPACK_DIR` or `<project_root>/.rspack`. You can set Git ref with the parameter, e.g.:
 
 ```bash
-node bin/compare-bench.js current latest # use output data as base, and latest data as current
-node bin/compare-bench.js latest 2023-08-17 # use latest data as base, and the data of 2023-08-17 as current
+node bin/cli.js build # use the main branch to build
+node bin/cli.js build --ref main # use the main branch to build
+node bin/cli.js build --ref pull/1000/head # use the pull request with index 1000 to build
 ```
 
-- `node bin/upload.js`
+#### bench
 
-Clone the data branch to `.data` folder, copy `output` folder into it and push it to the remote.
+```
+node bin/cli.js bench [--job <benchmark-names> ...]
+```
+
+Run benchmark with Rspack and write the output to `output` folder. You can configure the environment variable of `RSPACK_DIR` to set the Rspack project path, and it will use the Rspack from the `.rspack` folder by default. eg.
+
+```bash
+node bin/cli.js bench # run all benchmarks
+node bin/cli.js bench --job 10000_development-mode --job 10000_production-mode # run benchmarks named 10000_development-mode and 10000_production-mode
+RSPACK_DIR=<your-rspack-path> node bin/cli.js bench --job 10000_development-mode_hmr # set the rspack command path, and run 10000_development-mode_hmr
+```
+
+#### compare
+
+```
+node bin/cli.js compare [--base <baseDate>] [--current <currentDate>]
+```
+
+Compare and print the difference between `<baseDate>` and `<currentDate>`. The parameter has three types, `"current"` will use the data from `output` folder. `"latest"` will use the latest data from `data` branch. A date string like `YYYY-MM-DD` will use the data of that day from `data` branch. eg.
+
+```bash
+node bin/cli.js compare --base current --current latest # use output data as base, and latest data as current
+node bin/cli.js compare --base latest --current 2023-08-17 # use latest data as base, and the data of 2023-08-17 as current
+```
 
 ## Glossary
 
@@ -47,14 +63,14 @@ Benchmark name is a string containing the case name and the addon names. A bench
 
 #### Case
 
-The benchmark case is the rspack project in `cases` folder. It must contain `rspack.config.js` and `hmr.js`, the first one is the default config for rspack, the next one is used to tell benchmark how to change file when hmr.
+The benchmark case is the Rspack project in `cases` folder. It must contain `rspack.config.js` and `hmr.js`, the first one is the default config for Rspack, the next one is used to tell benchmark how to change file when hmr.
 
 - `10000` is a project with 10000 modules
 - `threejs` is a copy of three js
 
 #### Addon
 
-The addon is used to change rspack configuration and benchmark parameters. All addons are registered in `lib/addons`.
+The addon is used to change Rspack configuration and benchmark parameters. All addons are registered in `lib/addons`.
 
 - `development-mode` is used to set the development mode
 - `production-mode` is used to set the production mode
@@ -161,13 +177,13 @@ interface Addon {
 
 1. move your project into the `cases` folder
 2. move the project dependencies to global package.json
-3. add `rspack.config.js` to make the project runnable by rspack
+3. add `rspack.config.js` to make the project runnable by Rspack
 4. add `hmr.js` to make the project support hmr changes
-5. try run `RSPACK_DIR=<your-rspack-path> node bin/bench.js <your case>_<your addons>` to test
+5. try run `RSPACK_DIR=<your-rspack-path> node bin/cli.js bench <your case>_<your addons>` to test
 
 ## How to create a addon
 
 1. create your addons in `lib/addons` with kebab case like "a-b-c.js"
 2. export default a class that extends `lib/addons/common` and implement the hooks you want to listen
-3. try run `RSPACK_DIR=<your-rspack-path> node bin/bench.js <case>_<your addons>` to test
-4. if you want to run some benchmarkName by default, you can add it to `defaultBenchmarkNames` in `bin/bench.js`
+3. try run `RSPACK_DIR=<your-rspack-path> node bin/cli.js bench <case>_<your addons>` to test
+4. if you want to run some benchmark name by default, you can add it to `jobs` field in `./bench.config.js`.
