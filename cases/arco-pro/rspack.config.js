@@ -45,7 +45,7 @@ module.exports = {
 	},
 	resolve: {
 		extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.json'],
-		tsConfigPath: path.join(__dirname, 'tsconfig.json')
+		tsConfig: path.join(__dirname, 'tsconfig.json')
 	},
 	module: {
 		parser: {
