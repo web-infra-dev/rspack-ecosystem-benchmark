@@ -18,10 +18,10 @@ inputs:
     description: "The version of Node.js to set up"
     required: true
     default: "18"
-
-outputs:
   artifact-name:
     description: "The name of the uploaded artifact"
+    required: true
+    default: "binding-linux-x64-gnu"
 
 runs:
   using: composite
@@ -45,7 +45,7 @@ runs:
         --js true
     - uses: actions/download-artifact@v4
       with:
-        name: binding-linux-x64-gnu
+        name: ${{ inputs.artifact-name }}
         path: ${{ inputs.path }}/crates/node_binding
     - name: Show restored binding
       shell: bash

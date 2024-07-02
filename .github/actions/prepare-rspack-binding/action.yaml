@@ -39,3 +39,5 @@ runs:
         name: binding-linux-x64-gnu
         path: ${{ inputs.path }}/crates/node_binding/*.node
         compression-level: 9
+    - shell: bash
+      run: echo "artifact-name=binding-linux-x64-gnu" >> $GITHUB_OUTPUT
