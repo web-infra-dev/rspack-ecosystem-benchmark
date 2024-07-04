@@ -45,7 +45,6 @@ jobs:
       - uses: ./.github/actions/build-rspack
         with:
           path: ${{ env.RSPACK_DIR }}
-          artifact-name: ${{ needs.prepare-binding.outputs.artifact-name }}
       - name: Run benchmark
         run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - id: print-compare-results
