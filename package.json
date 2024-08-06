@@ -13,6 +13,7 @@
   },
   "packageManager": "pnpm@8.14.3",
   "devDependencies": {
+    "generate-package-json-webpack-plugin": "^2.6.0",
     "prettier": "^2.6.2"
   }
 }

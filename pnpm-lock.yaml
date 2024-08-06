@@ -33,6 +33,9 @@ importers:
         specifier: ^8.1.1
         version: 8.1.1
     devDependencies:
+      generate-package-json-webpack-plugin:
+        specifier: ^2.6.0
+        version: 2.6.0
       prettier:
         specifier: ^2.6.2
         version: 2.8.8
@@ -4283,6 +4286,10 @@ packages:
   /functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
     dev: false
+
+  /generate-package-json-webpack-plugin@2.6.0:
+    resolution: {integrity: sha512-JJS6CTkCIJeiqJay/mqrO005vbyLeozcyQvJf5AbToN7zsBewlu1Zk4dLiTV1+S/jJUUFjjn/ng9rjdbsJYyXw==}
+    dev: true
 
   /gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
