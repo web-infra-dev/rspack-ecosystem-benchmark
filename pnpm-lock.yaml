@@ -14,6 +14,9 @@ importers:
       '@icon-park/react':
         specifier: ^1.4.2
         version: 1.4.2(react-dom@18.2.0)(react@18.2.0)
+      '@rspack/plugin-react-refresh':
+        specifier: ^0.7.5
+        version: 0.7.5(react-refresh@0.14.0)
       meow:
         specifier: ^13.2.0
         version: 13.2.0
@@ -1785,6 +1788,17 @@ packages:
       hoist-non-react-statics: 3.3.2
       react: 18.2.0
       react-is: 16.13.1
+    dev: false
+
+  /@rspack/plugin-react-refresh@0.7.5(react-refresh@0.14.0):
+    resolution: {integrity: sha512-ROI9lrmfIH+Z9lbBaP3YMhbD2R3rlm9SSzi/9WzzkQU6KK911S1D+sL2ByeJ7ipZafbHvMPWTmC2aQEvjhwQig==}
+    peerDependencies:
+      react-refresh: '>=0.10.0 <1.0.0'
+    peerDependenciesMeta:
+      react-refresh:
+        optional: true
+    dependencies:
+      react-refresh: 0.14.0
     dev: false
 
   /@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.23.9):
