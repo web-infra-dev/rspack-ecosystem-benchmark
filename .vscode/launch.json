@@ -1,0 +1,75 @@
+{
+    "configurations": [
+        {
+            "name": "debug-js",
+            "port": 9229,
+            "request": "attach",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "sourceMaps": true,
+            "continueOnAttach": true,
+            "type": "node",
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "rust"
+            ],
+            "name": "debug-rust-jest",
+            "program": "node",
+            "args": [
+                "--inspect-brk",
+                "../../node_modules/.bin/jest",
+                "--workerThreads"
+            ],
+            "cwd": "${workspaceFolder}/packages/rspack"
+        },
+        {
+            "type": "lldb",
+            "request": "attach",
+            "sourceLanguages": [
+                "rust"
+            ],
+            "pid": "${command:pickMyProcess}",
+            "name": "debug-rust-attach"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "sourceLanguages": [
+                "rust"
+            ],
+            "name": "debug-rust-basic",
+            "program": "node",
+            "args": [
+                "--inspect-brk",
+                "${workspaceFolder}/cases/arco-pro/node_modules/@rspack/cli/bin/rspack",
+                "-c",
+                "rspack.config.js"
+            ],
+            "cwd": "${workspaceFolder}/cases/arco-pro",
+            "presentation": {
+                "hidden": true
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "debug-basic",
+            "configurations": [
+                "debug-js",
+                "debug-rust-basic"
+            ],
+            "stopAll": true,
+            "presentation": {
+                "group": "examples",
+                "order": 1
+            }
+        }
+    ]
+}
