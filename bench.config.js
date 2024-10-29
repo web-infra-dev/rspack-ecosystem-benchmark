@@ -3,6 +3,7 @@ export default {
 		"10000_development-mode",
 		"10000_development-mode_hmr",
 		"10000_production-mode",
+		"10000_development-mode_increase-size",
 		"arco-pro_development-mode",
 		"arco-pro_development-mode_hmr",
 		"arco-pro_production-mode",
