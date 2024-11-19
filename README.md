@@ -187,3 +187,7 @@ interface Addon {
 2. export default a class that extends `lib/addons/common` and implement the hooks you want to listen
 3. try run `RSPACK_DIR=<your-rspack-path> node bin/cli.js bench <case>_<your addons>` to test
 4. if you want to run some benchmark name by default, you can add it to `jobs` field in `./bench.config.js`.
+
+## License
+
+MIT licensed.
