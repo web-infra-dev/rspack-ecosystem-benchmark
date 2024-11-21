@@ -58,6 +58,14 @@ jobs:
           pattern: benchmark-artifacts-*
           path: output
           merge-multiple: true
+      - id: check-latest-commit
+        name: Check latest commit
+        uses: ./.github/actions/check-latest-commit
+        with:
+          path: ${{ env.RSPACK_DIR }}
+      - name: Upload result
+        if: ${{ steps.check-latest-commit.outputs.result == 'true' }}
+        run: node bin/upload.js ${{ secrets.GITHUB_TOKEN }}
       - id: print-results
         name: Print results
         run: |
