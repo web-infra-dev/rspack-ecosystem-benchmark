@@ -27,7 +27,6 @@ jobs:
       - uses: ./.github/actions/prepare-rspack-binding
         with:
           path: ${{ env.RSPACK_DIR }}
-          ref: pull/8470/head
 
   bench:
     needs: prepare-binding
@@ -46,7 +45,6 @@ jobs:
       - uses: ./.github/actions/build-rspack
         with:
           path: ${{ env.RSPACK_DIR }}
-          ref: pull/8470/head
       - name: Run benchmark
         run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
       - id: print-compare-results
