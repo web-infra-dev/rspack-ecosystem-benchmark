@@ -1,39 +1,39 @@
 {
   "stats": {
-    "min": 35904,
-    "max": 37017,
-    "mean": 36665.5,
-    "median": 36837,
-    "variance": 157857,
-    "stdDev": 397.3122197969753,
-    "confidence": 664.4282199097943,
-    "low": 36333.2858900451,
-    "high": 36997.7141099549,
-    "count": 8
+    "min": 35890,
+    "max": 36135,
+    "mean": 35998.22222222222,
+    "median": 35980,
+    "variance": 5243.7283950617275,
+    "stdDev": 72.4135926125871,
+    "confidence": 111.32382970975596,
+    "low": 35942.56030736734,
+    "high": 36053.8841370771,
+    "count": 9
   },
   "heap memory": {
-    "min": 12502912,
-    "max": 12628880,
-    "mean": 12575274,
-    "median": 12570988,
-    "variance": 1729561388,
-    "stdDev": 41587.99571991899,
-    "confidence": 69547.91871219501,
-    "low": 12540500.040643902,
-    "high": 12610047.959356098,
-    "count": 8
+    "min": 12502336,
+    "max": 12655872,
+    "mean": 12573543.111111112,
+    "median": 12572728,
+    "variance": 2226791899.654321,
+    "stdDev": 47188.895935954264,
+    "confidence": 72545.06268554181,
+    "low": 12537270.579768341,
+    "high": 12609815.642453883,
+    "count": 9
   },
   "rss memory": {
-    "min": 10263363584,
-    "max": 10475446272,
-    "mean": 10316334592,
-    "median": 10287595520,
-    "variance": 4205779485458432,
-    "stdDev": 64851981.35337449,
-    "confidence": 108452457.23945999,
-    "low": 10262108363.38027,
-    "high": 10370560820.61973,
-    "count": 8
+    "min": 10201415680,
+    "max": 10319183872,
+    "mean": 10276760689.777779,
+    "median": 10285068288,
+    "variance": 954435968100832.5,
+    "stdDev": 30893947.111057732,
+    "confidence": 47494294.69206619,
+    "low": 10253013542.431746,
+    "high": 10300507837.123812,
+    "count": 9
   },
   "external memory": {
     "min": 911451470,
@@ -45,7 +45,7 @@
     "confidence": 0,
     "low": 911451470,
     "high": 911451470,
-    "count": 8
+    "count": 9
   },
   "array buffers memory": {
     "min": 16619,
@@ -57,55 +57,55 @@
     "confidence": 0,
     "low": 16619,
     "high": 16619,
-    "count": 8
+    "count": 9
   },
   "Compilation.finish modules": {
     "min": 26,
-    "max": 51,
-    "mean": 29.75,
+    "max": 27,
+    "mean": 26.555555555555557,
     "median": 27,
-    "variance": 64.6875,
-    "stdDev": 8.042853971072706,
-    "confidence": 13.450125318886435,
-    "low": 23.024937340556782,
-    "high": 36.47506265944322,
-    "count": 8
+    "variance": 0.2469135802469136,
+    "stdDev": 0.4969039949999533,
+    "confidence": 0.7639070749799259,
+    "low": 26.173602018065594,
+    "high": 26.93750909304552,
+    "count": 9
   },
   "Compilation.optimize dependencies": {
     "min": 92,
-    "max": 209,
-    "mean": 115.25,
-    "median": 160.5,
-    "variance": 1295.1875,
-    "stdDev": 35.9887135085432,
-    "confidence": 60.184196865487465,
-    "low": 85.15790156725627,
-    "high": 145.34209843274374,
-    "count": 8
+    "max": 110,
+    "mean": 101.55555555555556,
+    "median": 110,
+    "variance": 25.580246913580243,
+    "stdDev": 5.057691856329352,
+    "confidence": 7.775358280463649,
+    "low": 97.66787641532373,
+    "high": 105.44323469578738,
+    "count": 9
   },
   "Compilation.create chunks": {
-    "min": 60,
-    "max": 133,
-    "mean": 72.125,
-    "median": 62,
-    "variance": 544.609375,
-    "stdDev": 23.336867291905314,
-    "confidence": 39.026419074034806,
-    "low": 52.6117904629826,
-    "high": 91.6382095370174,
-    "count": 8
+    "min": 59,
+    "max": 70,
+    "mean": 62,
+    "median": 61,
+    "variance": 13.11111111111111,
+    "stdDev": 3.6209268304000717,
+    "confidence": 5.566571513935038,
+    "low": 59.21671424303248,
+    "high": 64.78328575696752,
+    "count": 9
   },
   "Compilation.optimize": {
-    "min": 827,
-    "max": 1293,
-    "mean": 925.875,
+    "min": 822,
+    "max": 839,
+    "mean": 827.8888888888889,
     "median": 829,
-    "variance": 21822.859375,
-    "stdDev": 147.72562193133592,
-    "confidence": 247.04267103856193,
-    "low": 802.353664480719,
-    "high": 1049.396335519281,
-    "count": 8
+    "variance": 26.32098765432099,
+    "stdDev": 5.1303983913845315,
+    "confidence": 7.887132460355133,
+    "low": 823.9453226587113,
+    "high": 831.8324551190665,
+    "count": 9
   },
   "Compilation.module ids": {
     "min": 4,
@@ -117,7 +117,7 @@
     "confidence": 0,
     "low": 4,
     "high": 4,
-    "count": 8
+    "count": 9
   },
   "Compilation.chunk ids": {
     "min": 3,
@@ -129,43 +129,43 @@
     "confidence": 0,
     "low": 3,
     "high": 3,
-    "count": 8
+    "count": 9
   },
   "Compilation.optimize code generation": {
-    "min": 23,
-    "max": 29,
-    "mean": 25.25,
-    "median": 25,
-    "variance": 2.6875,
-    "stdDev": 1.6393596310755,
-    "confidence": 2.7415134677309183,
-    "low": 23.87924326613454,
-    "high": 26.62075673386546,
-    "count": 8
+    "min": 25,
+    "max": 27,
+    "mean": 26.11111111111111,
+    "median": 27,
+    "variance": 0.9876543209876542,
+    "stdDev": 0.9938079899999065,
+    "confidence": 1.527814149959859,
+    "low": 25.34720403613118,
+    "high": 26.87501818609104,
+    "count": 9
   },
   "Compilation.code generation": {
-    "min": 317,
-    "max": 337,
-    "mean": 325.625,
-    "median": 324.5,
-    "variance": 57.734375,
-    "stdDev": 7.598313957714566,
-    "confidence": 12.706717703824552,
-    "low": 319.2716411480877,
-    "high": 331.9783588519123,
-    "count": 8
+    "min": 318,
+    "max": 341,
+    "mean": 327.8888888888889,
+    "median": 329,
+    "variance": 48.5432098765432,
+    "stdDev": 6.9672957362626144,
+    "confidence": 10.711055978547734,
+    "low": 322.53336089961505,
+    "high": 333.2444168781628,
+    "count": 9
   },
   "Compilation.runtime requirements.modules": {
     "min": 0,
-    "max": 8,
-    "mean": 3.25,
+    "max": 5,
+    "mean": 2.7777777777777777,
     "median": 3,
-    "variance": 4.1875,
-    "stdDev": 2.0463381929681126,
-    "confidence": 3.4221067843873603,
-    "low": 1.5389466078063196,
-    "high": 4.96105339219368,
-    "count": 8
+    "variance": 2.8395061728395063,
+    "stdDev": 1.6850834320114558,
+    "confidence": 2.5905349294789453,
+    "low": 1.4825103130383053,
+    "high": 4.07304524251725,
+    "count": 9
   },
   "Compilation.runtime requirements.chunks": {
     "min": 0,
@@ -177,7 +177,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.runtime requirements.entries": {
     "min": 0,
@@ -189,19 +189,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.runtime requirements": {
     "min": 2,
-    "max": 9,
-    "mean": 4.625,
+    "max": 7,
+    "mean": 4.333333333333333,
     "median": 4,
-    "variance": 3.484375,
-    "stdDev": 1.8666480653835098,
-    "confidence": 3.1216096296121822,
-    "low": 3.064195185193909,
-    "high": 6.185804814806091,
-    "count": 8
+    "variance": 2.888888888888889,
+    "stdDev": 1.699673171197595,
+    "confidence": 2.6129642218544356,
+    "low": 3.026851222406115,
+    "high": 5.639815444260551,
+    "count": 9
   },
   "Compilation.hashing: hash chunks": {
     "min": 0,
@@ -213,7 +213,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.hashing: hash runtime chunks": {
     "min": 0,
@@ -225,7 +225,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.hashing: process full hash chunks": {
     "min": 0,
@@ -237,7 +237,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.hashing": {
     "min": 0,
@@ -249,7 +249,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.create module assets": {
     "min": 0,
@@ -261,31 +261,31 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.create chunk assets": {
     "min": 0,
     "max": 3,
-    "mean": 0.5,
+    "mean": 0.3333333333333333,
     "median": 0,
-    "variance": 1,
-    "stdDev": 1,
-    "confidence": 1.3361537687530924,
+    "variance": 0.8888888888888888,
+    "stdDev": 0.9428090415820634,
+    "confidence": 1.0580392166294128,
     "low": 0,
-    "high": 1.3361537687530924,
-    "count": 8
+    "high": 1.0580392166294128,
+    "count": 9
   },
   "Compilation.process assets": {
-    "min": 7556,
-    "max": 8584,
-    "mean": 7852.875,
-    "median": 7678.5,
-    "variance": 138711.609375,
-    "stdDev": 372.44007487782517,
-    "confidence": 622.8343444875554,
-    "low": 7541.457827756222,
-    "high": 8164.292172243778,
-    "count": 8
+    "min": 7653,
+    "max": 7803,
+    "mean": 7702,
+    "median": 7701,
+    "variance": 1782.888888888889,
+    "stdDev": 42.22426895623995,
+    "confidence": 64.91277614206047,
+    "low": 7669.54361192897,
+    "high": 7734.45638807103,
+    "count": 9
   },
   "Compilation.after process assets": {
     "min": 0,
@@ -297,7 +297,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compilation.after seal": {
     "min": 0,
@@ -309,7 +309,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compiler.make hook": {
     "min": 0,
@@ -321,19 +321,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compiler.make": {
-    "min": 26033,
-    "max": 27026,
-    "mean": 26452.25,
-    "median": 26265,
-    "variance": 182443.1875,
-    "stdDev": 427.13368808840164,
-    "confidence": 714.2988861130507,
-    "low": 26095.100556943475,
-    "high": 26809.399443056525,
-    "count": 8
+    "min": 26015,
+    "max": 26197,
+    "mean": 26067.11111111111,
+    "median": 26035,
+    "variance": 3195.8765432098767,
+    "stdDev": 56.53208419304808,
+    "confidence": 86.90865743278118,
+    "low": 26023.65678239472,
+    "high": 26110.5654398275,
+    "count": 9
   },
   "Compiler.finish make hook": {
     "min": 0,
@@ -345,91 +345,91 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "Compiler.finish compilation": {
     "min": 33,
-    "max": 63,
-    "mean": 37.75,
+    "max": 35,
+    "mean": 34,
     "median": 34,
-    "variance": 91.6875,
-    "stdDev": 9.575359001102779,
-    "confidence": 16.012945031871865,
-    "low": 29.743527484064067,
-    "high": 45.75647251593593,
-    "count": 8
+    "variance": 0.2222222222222222,
+    "stdDev": 0.4714045207910317,
+    "confidence": 0.7247058832960818,
+    "low": 33.63764705835196,
+    "high": 34.36235294164804,
+    "count": 9
   },
   "Compiler.seal compilation": {
-    "min": 9133,
-    "max": 10075,
-    "mean": 9474.375,
-    "median": 9239,
-    "variance": 129823.734375,
-    "stdDev": 360.31060819104397,
-    "confidence": 602.5501459213192,
-    "low": 9173.09992703934,
-    "high": 9775.65007296066,
-    "count": 8
+    "min": 9136,
+    "max": 9307,
+    "mean": 9204.666666666666,
+    "median": 9205,
+    "variance": 1931.7777777777778,
+    "stdDev": 43.951994013671076,
+    "confidence": 67.56886546368332,
+    "low": 9170.882233934824,
+    "high": 9238.451099398508,
+    "count": 9
   },
   "Compiler.emitAssets": {
-    "min": 676,
-    "max": 720,
-    "mean": 687,
-    "median": 681.5,
-    "variance": 200.5,
-    "stdDev": 14.159802258506296,
-    "confidence": 23.679544046497085,
-    "low": 675.1602279767515,
-    "high": 698.8397720232485,
-    "count": 8
+    "min": 665,
+    "max": 692,
+    "mean": 677.8888888888889,
+    "median": 680,
+    "variance": 56.98765432098766,
+    "stdDev": 7.5490167784280136,
+    "confidence": 11.605355127370103,
+    "low": 672.0862113252039,
+    "high": 683.691566452574,
+    "count": 9
   },
   "EnsureChunkConditionsPlugin.ensure chunk conditions": {
     "min": 1,
-    "max": 2,
-    "mean": 1.125,
+    "max": 1,
+    "mean": 1,
     "median": 1,
-    "variance": 0.109375,
-    "stdDev": 0.33071891388307384,
-    "confidence": 0.5530637324825234,
-    "low": 0.8484681337587383,
-    "high": 1.4015318662412617,
-    "count": 8
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 1,
+    "high": 1,
+    "count": 9
   },
   "ModuleConcatenationPlugin.select relevant modules": {
     "min": 4,
-    "max": 7,
-    "mean": 4.375,
+    "max": 5,
+    "mean": 4.111111111111111,
     "median": 4,
-    "variance": 0.984375,
-    "stdDev": 0.9921567416492215,
-    "confidence": 1.6591911974475693,
-    "low": 3.5454044012762154,
-    "high": 5.204595598723785,
-    "count": 8
+    "variance": 0.09876543209876544,
+    "stdDev": 0.3142696805273545,
+    "confidence": 0.4831372555307194,
+    "low": 3.869542483345751,
+    "high": 4.35267973887647,
+    "count": 9
   },
   "ModuleConcatenationPlugin.sort relevant modules": {
-    "min": 1,
-    "max": 3,
+    "min": 2,
+    "max": 2,
     "mean": 2,
     "median": 2,
-    "variance": 0.25,
-    "stdDev": 0.5,
-    "confidence": 0.8361537687530927,
-    "low": 1.5819231156234537,
-    "high": 2.4180768843765463,
-    "count": 8
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 2,
+    "high": 2,
+    "count": 9
   },
   "ModuleConcatenationPlugin.find modules to concatenate": {
-    "min": 75,
-    "max": 174,
-    "mean": 94,
-    "median": 79.5,
-    "variance": 963.75,
-    "stdDev": 31.044323152550774,
-    "confidence": 51.91565560478841,
-    "low": 68.0421721976058,
-    "high": 119.9578278023942,
-    "count": 8
+    "min": 76,
+    "max": 91,
+    "mean": 80.88888888888889,
+    "median": 79,
+    "variance": 18.320987654320987,
+    "stdDev": 4.280302285390716,
+    "confidence": 6.580251380074003,
+    "low": 77.59876319885188,
+    "high": 84.17901457892589,
+    "count": 9
   },
   "ModuleConcatenationPlugin.sort concat configurations": {
     "min": 0,
@@ -441,7 +441,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "RealContentHashPlugin.hash to asset names": {
     "min": 0,
@@ -453,7 +453,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "RemoveEmptyChunksPlugin.remove empty chunks": {
     "min": 0,
@@ -465,19 +465,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "SourceMapDevToolPlugin.collect source maps": {
-    "min": 7555,
-    "max": 8583,
-    "mean": 7852,
-    "median": 7678,
-    "variance": 138675,
-    "stdDev": 372.3909236273086,
-    "confidence": 622.7521484808385,
-    "low": 7540.623925759581,
-    "high": 8163.376074240419,
-    "count": 8
+    "min": 7652,
+    "max": 7802,
+    "mean": 7701.222222222223,
+    "median": 7701,
+    "variance": 1779.2839506172843,
+    "stdDev": 42.18155936682859,
+    "confidence": 64.84711726660498,
+    "low": 7668.79866358892,
+    "high": 7733.645780855525,
+    "count": 9
   },
   "SourceMapDevToolPlugin.emit source map assets": {
     "min": 0,
@@ -489,19 +489,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "SplitChunksPlugin.prepare module group map": {
     "min": 15,
-    "max": 32,
-    "mean": 18.25,
-    "median": 16.5,
-    "variance": 28.6875,
-    "stdDev": 5.356071321407137,
-    "confidence": 8.956998442209866,
-    "low": 13.771500778895067,
-    "high": 22.728499221104933,
-    "count": 8
+    "max": 18,
+    "mean": 16,
+    "median": 16,
+    "variance": 0.8888888888888888,
+    "stdDev": 0.9428090415820634,
+    "confidence": 1.4494117665921582,
+    "low": 15.27529411670392,
+    "high": 16.724705883296078,
+    "count": 9
   },
   "SplitChunksPlugin.ensure min size fit": {
     "min": 0,
@@ -513,7 +513,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "SplitChunksPlugin.process module group map": {
     "min": 0,
@@ -525,7 +525,7 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "SplitChunksPlugin.ensure max size fit": {
     "min": 0,
@@ -537,19 +537,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "WarnCaseSensitiveModulesPlugin.check case sensitive modules": {
     "min": 5,
-    "max": 10,
-    "mean": 5.625,
+    "max": 5,
+    "mean": 5,
     "median": 5,
-    "variance": 2.734375,
-    "stdDev": 1.653594569415369,
-    "confidence": 2.765318662412616,
-    "low": 4.242340668793692,
-    "high": 7.007659331206308,
-    "count": 8
+    "variance": 0,
+    "stdDev": 0,
+    "confidence": 0,
+    "low": 5,
+    "high": 5,
+    "count": 9
   },
   "buildChunkGraph.prepare entrypoints": {
     "min": 0,
@@ -561,19 +561,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "buildChunkGraph.process queue": {
     "min": 29,
-    "max": 68,
-    "mean": 35.625,
-    "median": 30.5,
-    "variance": 154.234375,
-    "stdDev": 12.4191132936293,
-    "confidence": 20.768576770079537,
-    "low": 25.24071161496023,
-    "high": 46.00928838503977,
-    "count": 8
+    "max": 35,
+    "mean": 30.555555555555557,
+    "median": 30,
+    "variance": 3.802469135802469,
+    "stdDev": 1.9499920860871383,
+    "confidence": 2.997787833677961,
+    "low": 29.056661638716577,
+    "high": 32.05444947239454,
+    "count": 9
   },
   "buildChunkGraph.extend chunkGroup runtime": {
     "min": 0,
@@ -585,19 +585,19 @@
     "confidence": 0,
     "low": 0,
     "high": 0,
-    "count": 8
+    "count": 9
   },
   "exec": {
-    "min": 36821,
-    "max": 37931,
-    "mean": 37586.75,
-    "median": 37764,
-    "variance": 159747.9375,
-    "stdDev": 399.68479768437527,
-    "confidence": 668.39589979421,
-    "low": 37252.552050102895,
-    "high": 37920.947949897105,
-    "count": 8
+    "min": 36804,
+    "max": 37050,
+    "mean": 36917.77777777778,
+    "median": 36886,
+    "variance": 6140.3950617283945,
+    "stdDev": 78.36067292799619,
+    "confidence": 120.46647451464378,
+    "low": 36857.54454052046,
+    "high": 36978.0110150351,
+    "count": 9
   },
   "dist size": {
     "min": 916371782,
@@ -609,6 +609,6 @@
     "confidence": 0,
     "low": 916371782,
     "high": 916371782,
-    "count": 8
+    "count": 9
   }
 }
