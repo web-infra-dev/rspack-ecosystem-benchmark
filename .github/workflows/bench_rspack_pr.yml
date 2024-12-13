@@ -31,9 +31,14 @@ jobs:
             })
             return comment.id
 
+  get-runner-labels:
+    name: Get Runner Labels
+    uses: ./.github/workflows/get-runner-labels.yml
+
   prepare-binding:
     name: Prepare Rspack Binding
-    runs-on: [self-hosted, benchmark]
+    needs: [get-runner-labels]
+    runs-on: ${{ fromJSON(needs.get-runner-labels.outputs.LINUX_RUNNER_LABELS) }}
     steps:
       - uses: actions/checkout@v4
       - name: Init env
