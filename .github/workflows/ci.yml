@@ -21,20 +21,21 @@ jobs:
     name: Get Runner Labels
     uses: ./.github/workflows/get-runner-labels.yml
 
-  prepare-binding:
-    name: Prepare Rspack Binding
-    needs: [get-runner-labels]
-    runs-on: ${{ fromJSON(needs.get-runner-labels.outputs.LINUX_RUNNER_LABELS) }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Init env
-        uses: ./.github/actions/env
-      - uses: ./.github/actions/prepare-rspack-binding
-        with:
-          path: ${{ env.RSPACK_DIR }}
+  # prepare-binding:
+  #   name: Prepare Rspack Binding
+  #   needs: [get-runner-labels]
+  #   runs-on: ${{ fromJSON(needs.get-runner-labels.outputs.LINUX_RUNNER_LABELS) }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Init env
+  #       uses: ./.github/actions/env
+  #     - uses: ./.github/actions/prepare-rspack-binding
+  #       with:
+  #        path: ${{ env.RSPACK_DIR }}
 
   bench:
-    needs: prepare-binding
+    # needs: prepare-binding
+    needs: [get-runner-labels]
     runs-on: [self-hosted, benchmark]
     timeout-minutes: 30
     strategy:
@@ -47,11 +48,16 @@ jobs:
         uses: actions/checkout@v4
       - name: Init env
         uses: ./.github/actions/env
-      - uses: ./.github/actions/build-rspack
+      # - uses: ./.github/actions/build-rspack
+      #   with:
+      #     path: ${{ env.RSPACK_DIR }}
+      # - name: Run benchmark
+      #   run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v3
         with:
-          path: ${{ env.RSPACK_DIR }}
-      - name: Run benchmark
-        run: node bin/cli.js bench --shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+          run: pnpm exec vitest bench
+          token: ${{ secrets.CODSPEED_TOKEN }}
       - id: print-compare-results
         name: Print compare results
         run: |
