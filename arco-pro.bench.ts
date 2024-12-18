@@ -6,7 +6,10 @@ describe("arco pro project", () => {
 	bench("build with development mode", () => new Promise((resolve, reject) => {
 		rspack({
 			...rspackConfig,
-			mode: "development"
+			mode: "production",
+			optimization: {
+				minimize: false,
+			}
 		}, (err, stats) => {
 			if (err) {
 				reject(err);
