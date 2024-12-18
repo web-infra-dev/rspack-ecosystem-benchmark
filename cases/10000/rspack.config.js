@@ -5,6 +5,7 @@ const ReactRefreshPlugin = require("@rspack/plugin-react-refresh");
 const prod = process.env.NODE_ENV === "production";
 /** @type {import("@rspack/cli").Configuration} */
 module.exports = {
+	context: __dirname,
 	resolve: {
 		extensions: [".js", ".jsx"]
 	},

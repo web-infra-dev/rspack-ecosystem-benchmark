@@ -34,9 +34,9 @@ jobs:
   #        path: ${{ env.RSPACK_DIR }}
 
   bench:
-    # needs: prepare-binding
+    # needs: [get-runner-labels, prepare-binding]
     needs: [get-runner-labels]
-    runs-on: [self-hosted, benchmark]
+    runs-on: ${{ fromJSON(needs.get-runner-labels.outputs.LINUX_RUNNER_LABELS) }}
     timeout-minutes: 30
     strategy:
       matrix:
