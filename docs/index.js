@@ -107,7 +107,8 @@ class DataCenter {
 				const [benchmarkName, metric] = tag.split(" + ");
 				if (!this.cache[benchmarkName]) {
 					this.cache[benchmarkName] = await Promise.all(
-						this.index[benchmarkName].map(async date => {
+						// only get the latest 90 days metric for performance reason
+						this.index[benchmarkName].slice(-180).map(async date => {
 							const file = await fetch(
 								`${fetchPrefix}/${date}/${benchmarkName}.json`
 							).then(res => res.json());
