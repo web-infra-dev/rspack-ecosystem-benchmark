@@ -8,3 +8,4 @@ output
 *.cpuprofile
 *.heapprofile
 .DS_Store
+cases/large-dyn-imports/src/**/

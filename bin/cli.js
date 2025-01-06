@@ -7,6 +7,7 @@ import actionsCore from "@actions/core";
 import { run, formatResultTable } from "../lib/index.js";
 import { isGitHubActions, dirExist } from "../lib/utils.js";
 import { compare } from "../lib/compare.js";
+import { generateCodeSplittingCase } from "../lib/gen-code-splitting-case.js";
 
 $.verbose = true;
 
@@ -78,6 +79,9 @@ const config = (await import(configPath)).default;
 const jobs = (_job.length === 0 ? undefined : _job) ?? config.jobs ?? [];
 const rspackDirectory = config.rspackDirectory ?? join(cwd, ".rspack");
 const benchmarkDirectory = config.benchmarkDirectory ?? join(cwd, "output");
+
+// prepare some benchmark case
+await generateCodeSplittingCase();
 
 if (!command || command === "build") {
 	const fetchUrl = `https://github.com/${repository}`;
