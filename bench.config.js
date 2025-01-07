@@ -9,6 +9,8 @@ export default {
 		"arco-pro_production-mode",
 		"arco-pro_production-mode_traverse-chunk-modules",
 		"arco-pro_production-mode_generate-package-json-webpack-plugin",
+		"large-dyn-imports_development-mode",
+		"large-dyn-imports_production-mode",
 		"threejs_development-mode_10x",
 		"threejs_development-mode_10x_hmr",
 		"threejs_production-mode_10x"
