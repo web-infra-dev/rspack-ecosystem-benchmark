@@ -91,6 +91,7 @@ if (!command || command === "build") {
 
 	cd(rspackDirectory);
 
+	await $`git add * || echo "ok"`;
 	await $`git reset --hard`;
 	const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`)
 		.toString()
