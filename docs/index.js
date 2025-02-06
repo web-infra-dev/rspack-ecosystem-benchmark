@@ -2,7 +2,10 @@
 // `stats` is metric
 // `10000_development-mode_hmr + stats` is tag
 
-const fetchPrefix = "https://rspack-ecosystem-benchmark-data.rspack.dev";
+const fetchPrefix = location.host === 'rspack-ecosystem-benchmark.rspack.dev'
+	? "https://rspack-ecosystem-benchmark-data.rspack.dev"
+	: 'https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data';
+
 const formatTime = (value, maxValue) => {
 	if (maxValue > 10000) return `${value / 1000} s`;
 	return `${value} ms`;
@@ -309,7 +312,7 @@ class BenchmarkChart {
 				plugins: {
 					legend: {
 						// ignore click event
-						onClick: function () {}
+						onClick: function () { }
 					},
 					tooltip: {
 						callbacks: {
@@ -329,8 +332,8 @@ class BenchmarkChart {
 									context.dataset.yAxisID === "size"
 										? formatSize(value, value)
 										: context.dataset.yAxisID === "ratio"
-										? formatRatio(value, value)
-										: formatTime(value, value);
+											? formatRatio(value, value)
+											: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
 							}
 						}
