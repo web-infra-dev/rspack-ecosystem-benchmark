@@ -2,8 +2,7 @@
 // `stats` is metric
 // `10000_development-mode_hmr + stats` is tag
 
-const fetchPrefix =
-	"https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
+const fetchPrefix = "https://rspack-ecosystem-benchmark-data.rspack.dev";
 const formatTime = (value, maxValue) => {
 	if (maxValue > 10000) return `${value / 1000} s`;
 	return `${value} ms`;
