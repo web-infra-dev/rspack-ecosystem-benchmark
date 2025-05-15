@@ -239,7 +239,7 @@ class TagCtrl {
 	}
 }
 
-function getNiceMin(min, percent = 0.05) {
+function getNiceMin(min, percent = 0.1) {
 	const adjusted = min - Math.abs(min * percent);
 	const magnitude = Math.pow(10, Math.floor(Math.log10(adjusted)));
 	const step = magnitude / 10;
