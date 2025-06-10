@@ -4,9 +4,9 @@ import { resolve, join } from "path";
 import { fileURLToPath } from "url";
 import { runCommand, dirExist, formatDate } from "../lib/utils.js";
 
-const [, , token] = process.argv;
+const [, , token, toDist] = process.argv;
 const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
-const date = formatDate(+new Date());
+const date = toDist || formatDate(+new Date());
 const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
