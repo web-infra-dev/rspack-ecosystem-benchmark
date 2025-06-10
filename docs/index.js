@@ -2,9 +2,17 @@
 // `stats` is metric
 // `10000_development-mode_hmr + stats` is tag
 
-const fetchPrefix = location.host === 'rspack-ecosystem-benchmark.rspack.dev'
-	? "https://rspack-ecosystem-benchmark-data.rspack.dev"
-	: 'https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data';
+const getFetchPrefix = () => {
+	if (location.host === 'rspack-ecosystem-benchmark.rspack.dev') {
+		return "https://rspack-ecosystem-benchmark-data.rspack.dev";
+	}
+	if (location.host === 'ecosystem-benchmark.rspack.rs') {
+		return "https://ecosystem-benchmark-data.rspack.rs";
+	}
+	return "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
+}
+
+const fetchPrefix = getFetchPrefix();
 
 const formatTime = (value, maxValue) => {
 	if (maxValue > 10000) return `${value / 1000} s`;
@@ -239,6 +247,13 @@ class TagCtrl {
 	}
 }
 
+function getNiceMin(min, percent = 0.1) {
+	const adjusted = min - Math.abs(min * percent);
+	const magnitude = Math.pow(10, Math.floor(Math.log10(adjusted)));
+	const step = magnitude / 10;
+	return Math.floor(adjusted / step) * step;
+}
+
 class BenchmarkChart {
 	constructor(dataCenter) {
 		this.dataCenter = dataCenter;
@@ -354,6 +369,12 @@ class BenchmarkChart {
 		let showSizeAxis = false;
 		let showRatioAxis = false;
 		const datasets = [];
+		const axisValues = {
+			time: [],
+			size: [],
+			ratio: []
+		};
+
 		for (const tag of Object.keys(data)) {
 			const values = data[tag];
 			const axis = getAxisType(tag);
@@ -363,6 +384,7 @@ class BenchmarkChart {
 			datasets.push({
 				label: tag,
 				data: values.map(({ date, value }) => {
+					axisValues[axis].push(value);
 					return {
 						x: date,
 						y: value
@@ -376,6 +398,20 @@ class BenchmarkChart {
 		this.chart.options.scales.time.display = showTimeAxis;
 		this.chart.options.scales.size.display = showSizeAxis;
 		this.chart.options.scales.ratio.display = showRatioAxis;
+
+		if (showTimeAxis && axisValues.time.length) {
+			const min = Math.min(...axisValues.time);
+			this.chart.options.scales.time.min = getNiceMin(min);
+		}
+		if (showSizeAxis && axisValues.size.length) {
+			const min = Math.min(...axisValues.size);
+			this.chart.options.scales.size.min = getNiceMin(min);
+		}
+		if (showRatioAxis && axisValues.ratio.length) {
+			const min = Math.min(...axisValues.ratio);
+			this.chart.options.scales.ratio.min = getNiceMin(min);
+		}
+
 		this.chart.update();
 	}
 

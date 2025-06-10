@@ -166,6 +166,8 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1(file-loader@6.2.0)(webpack@5.90.0)
 
+  cases/large-dyn-imports: {}
+
   cases/threejs: {}
 
 packages:
