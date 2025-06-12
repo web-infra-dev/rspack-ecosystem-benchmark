@@ -5,16 +5,19 @@ import { fileURLToPath } from "url";
 import { runCommand, dirExist, formatDate } from "../lib/utils.js";
 
 const [, , token, sha] = process.argv;
-const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
-const dataTag = sha || formatDate(+new Date());
 const storeByDate = !sha;
+const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
+const dataTag = storeByDate ? formatDate(+new Date()) : sha.slice(0, 8);
+const relativePath = storeByDate
+	? dataTag
+	: join("commits", sha.slice(0, 2), sha.slice(2));
 const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
 const dataDir = resolve(rootDir, ".data");
 const outputDir = resolve(rootDir, "output");
 const rspackDir = process.env.RSPACK_DIR || resolve(rootDir, ".rspack");
-const storeDir = resolve(dataDir, dataTag);
+const storeDir = resolve(dataDir, relativePath);
 
 async function getCommitSHA() {
 	let commitSHA;
@@ -64,7 +67,7 @@ async function appendRspackBuildInfo() {
 	files.delete("");
 
 	if (!(await dirExist(storeDir))) {
-		await mkdir(storeDir);
+		await mkdir(storeDir, { recursive: true });
 	}
 	const outputFiles = await readdir(outputDir);
 	for (const item of outputFiles) {
@@ -91,8 +94,8 @@ async function appendRspackBuildInfo() {
 	await runCommand(
 		"git",
 		storeByDate
-			? ["add", `${dataTag}/*.json`, "index.txt", "build-info.json"]
-			: ["add", `${dataTag}/*.json`]
+			? ["add", `${relativePath}/*.json`, "index.txt", "build-info.json"]
+			: ["add", `${relativePath}/*.json`]
 	);
 	try {
 		await runCommand("git", ["commit", "-m", `"add ${dataTag} results"`]);
