@@ -22,7 +22,7 @@ module.exports = {
 				exclude: [/[\\/]node_modules[\\/]/],
 				loader: "builtin:swc-loader",
 				options: {
-					sourceMaps: true,
+					sourceMap: true,
 					jsc: {
 						parser: {
 							syntax: "typescript"
@@ -39,7 +39,7 @@ module.exports = {
 				loader: "builtin:swc-loader",
 				exclude: [/[\\/]node_modules[\\/]/],
 				options: {
-					sourceMaps: true,
+					sourceMap: true,
 					jsc: {
 						parser: {
 							syntax: "typescript",
