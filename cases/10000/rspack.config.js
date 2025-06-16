@@ -22,7 +22,6 @@ module.exports = {
 				exclude: [/[\\/]node_modules[\\/]/],
 				loader: "builtin:swc-loader",
 				options: {
-					sourceMap: true,
 					jsc: {
 						parser: {
 							syntax: "typescript"
@@ -39,7 +38,6 @@ module.exports = {
 				loader: "builtin:swc-loader",
 				exclude: [/[\\/]node_modules[\\/]/],
 				options: {
-					sourceMap: true,
 					jsc: {
 						parser: {
 							syntax: "typescript",
