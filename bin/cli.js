@@ -108,27 +108,15 @@ if (!command || command === "build") {
 	await $`pnpm --version`;
 	await $`pnpm install --prefer-frozen-lockfile --prefer-offline`;
 
-	let bindingStart = Date.now();
 	if (binding) {
 		await $`pnpm run build:binding:release`;
 	}
-	let bindingEnd = Date.now();
 
-	let jsStart = Date.now();
 	if (js) {
 		await $`pnpm run build:js`;
 	}
-	let jsEnd = Date.now();
 
 	cd(cwd);
-	await mkdir(benchmarkDirectory, { recursive: true });
-
-	let bindingSize = await getBinarySize(rspackDirectory);
-	await writeFile(
-		join(benchmarkDirectory, `rspack-build.json`),
-		JSON.stringify({binding: bindingStart - bindingEnd, js: jsEnd - jsStart, size: bindingSize }, null, 2)
-	);
-
 }
 
 if (!command || command === "bench") {
@@ -148,6 +136,11 @@ if (!command || command === "bench") {
 	);
 
 	await mkdir(benchmarkDirectory, { recursive: true });
+	let bindingSize = await getBinarySize(rspackDirectory);
+	await writeFile(
+		join(benchmarkDirectory, `rspack-build.json`),
+		JSON.stringify({ size: bindingSize }, null, 2)
+	);
 
 	if (shardJobs.length) {
 		console.log(
