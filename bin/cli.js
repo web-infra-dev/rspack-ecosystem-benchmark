@@ -6,6 +6,7 @@ import { $, cd } from "zx";
 import actionsCore from "@actions/core";
 import { run, formatResultTable } from "../lib/index.js";
 import { isGitHubActions, dirExist } from "../lib/utils.js";
+import { getBinarySize } from "../lib/binary-size.js"
 import { compare } from "../lib/compare.js";
 import { generateCodeSplittingCase } from "../lib/gen-code-splitting-case.js";
 
@@ -107,15 +108,27 @@ if (!command || command === "build") {
 	await $`pnpm --version`;
 	await $`pnpm install --prefer-frozen-lockfile --prefer-offline`;
 
+	let bindingStart = Date.now();
 	if (binding) {
 		await $`pnpm run build:binding:release`;
 	}
+	let bindingEnd = Date.now();
 
+	let jsStart = Date.now();
 	if (js) {
 		await $`pnpm run build:js`;
 	}
+	let jsEnd = Date.now();
 
 	cd(cwd);
+	await mkdir(benchmarkDirectory, { recursive: true });
+
+	let bindingSize = await getBinarySize(rspackDirectory);
+	await writeFile(
+		join(benchmarkDirectory, `rspack-build.json`),
+		JSON.stringify({binding: bindingStart - bindingEnd, js: jsEnd - jsStart, size: bindingSize }, null, 2)
+	);
+
 }
 
 if (!command || command === "bench") {
