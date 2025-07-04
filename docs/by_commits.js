@@ -9,6 +9,9 @@ const getFetchPrefix = () => {
 	if (location.host === "ecosystem-benchmark.rspack.rs") {
 		return "https://ecosystem-benchmark-data.rspack.rs";
 	}
+	if (location.host.indexOf(".netlify.app") >= 0) {
+		return "https://rspack-ecosystem-benchmark-data.rspack.dev";
+	}
 	return "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
 };
 
@@ -161,16 +164,14 @@ class DataCenter {
 						  }
 						: {}
 				}
-			).then(
-				res => {
-					if (!res.ok) {
-						showGithubTokenModal();
+			).then(res => {
+				if (!res.ok) {
+					showGithubTokenModal();
 
-						throw new Error("403 Forbidden");
-					}
-					return res.json();
+					throw new Error("403 Forbidden");
 				}
-			);
+				return res.json();
+			});
 
 			this.commits = commits
 				.map(({ sha, html_url, commit: { message, author } }) => ({
