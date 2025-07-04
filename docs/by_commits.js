@@ -143,11 +143,6 @@ class DataCenter {
 		this.buildInfo = {};
 		this.commits = [];
 
-		if (!localStorage.getItem("GITHUB_TOKEN")) {
-			showGithubTokenModal();
-			throw new Error("GitHub Token not provided yet.");
-		}
-
 		this.githubToken = localStorage.getItem("GITHUB_TOKEN");
 	}
 
@@ -156,25 +151,40 @@ class DataCenter {
 		const queryParams = new URLSearchParams(window.location.search);
 		const perPage = parseInt(queryParams.get("per_page") || "50", 10) || 50;
 
-		const commits = await fetch(
-			`https://api.github.com/repos/web-infra-dev/rspack/commits?per_page=${perPage}`,
-			{
-				headers: {
-					Authorization: `Bearer ${this.githubToken}`
+		try {
+			const commits = await fetch(
+				`https://api.github.com/repos/web-infra-dev/rspack/commits?per_page=${perPage}`,
+				{
+					headers: this.githubToken
+						? {
+								Authorization: `Bearer ${this.githubToken}`
+						  }
+						: {}
 				}
-			}
-		).then(res => res.json());
+			).then(
+				res => {
+					if (!res.ok) {
+						showGithubTokenModal();
 
-		this.commits = commits
-			.map(({ sha, html_url, commit: { message, author } }) => ({
-				sha,
-				url: html_url,
-				message,
-				author
-			}))
-			.reverse();
+						throw new Error("403 Forbidden");
+					}
+					return res.json();
+				}
+			);
 
-		this.metrics = metrics;
+			this.commits = commits
+				.map(({ sha, html_url, commit: { message, author } }) => ({
+					sha,
+					url: html_url,
+					message,
+					author
+				}))
+				.reverse();
+
+			this.metrics = metrics;
+		} catch (e) {
+			console.log(e);
+		}
 	}
 
 	async fetchChartData(tags) {
@@ -544,12 +554,13 @@ function showGithubTokenModal() {
 				box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 				font-family: sans-serif;
 			">
-				<h2 style="margin-top: 0;">GitHub Token 需要授权</h2>
+				<h2 style="margin-top: 0;">GitHub API Request Rate Limited</h2>
 				<p style="font-size: 14px; color: #444;">
-					为了从 GitHub 加载 commit 信息，请提供一个 <strong>read-only</strong> GitHub Token。你可以在
-					<a href="https://github.com/settings/tokens" target="_blank">GitHub Settings</a> 创建一个无需权限的 token。
+					We need to fetch Rspack's commit history from GitHub API, please provide a fine-grained personal access token <strong>Read-only<strong> access to Rspack repository.
+					<a href="https://github.com/settings/personal-access-tokens/new" target="_blank"> <br>
+					Go top GitHub Settings</a> create "fine-grained personal access token"
 				</p>
-				<input id="github-token-input" type="password" placeholder="粘贴你的 GitHub Token" style="
+				<input id="github-token-input" type="password" placeholder="Your GitHub Token" style="
 					width: 100%;
 					padding: 8px;
 					font-size: 14px;
@@ -564,7 +575,7 @@ function showGithubTokenModal() {
 						padding: 8px 16px;
 						border-radius: 6px;
 						cursor: pointer;
-					">确认</button>
+					">OK</button>
 				</div>
 			</div>
 		</div>
@@ -579,7 +590,7 @@ function showGithubTokenModal() {
 				localStorage.setItem("GITHUB_TOKEN", token);
 				location.reload();
 			} else {
-				alert("Token 不能为空");
+				alert("Empty Token");
 			}
 		});
 }
