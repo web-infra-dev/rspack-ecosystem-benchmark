@@ -6,6 +6,7 @@
     "@icon-park/react": "^1.4.2",
     "@rspack/plugin-react-refresh": "1.0.0",
     "meow": "^13.2.0",
+    "puppeteer": "^24.11.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-refresh": "^0.14.0",
