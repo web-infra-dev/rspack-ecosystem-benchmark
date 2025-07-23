@@ -2,7 +2,6 @@ export default {
 	jobs: [
 		"10000_development-mode",
 		"10000_development-mode_hmr",
-		"10000_development-mode_hmr_native-watcher",
 		"10000_production-mode",
 		"10000_production-mode_persistent-cold",
 		"10000_production-mode_persistent-hot",
