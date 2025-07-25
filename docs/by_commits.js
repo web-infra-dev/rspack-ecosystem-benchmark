@@ -614,10 +614,15 @@ function showGithubTokenModal() {
 		tagCtrl.add.bind(tagCtrl)
 	);
 
-	let tag = "rspack-build + size";
-	await dataCenter.fetchChartData(["rspack-build + size"]);
+	await dataCenter.fetchChartData([
+		"rspack-build + size",
+		"rspack-build + wasmSize"
+	]);
 	const sizeChart = new BenchmarkChart(dataCenter, "#size-chart");
-	await sizeChart.updateChartData(["rspack-build + size"]);
+	await sizeChart.updateChartData([
+		"rspack-build + size",
+		"rspack-build + wasmSize"
+	]);
 
 	let data = sizeChart.chart.data.datasets[0].data.map(({ y }) => y);
 	let max = Math.max.apply(Math, data);
