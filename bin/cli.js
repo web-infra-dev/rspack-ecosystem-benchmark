@@ -6,7 +6,7 @@ import { $, cd } from "zx";
 import actionsCore from "@actions/core";
 import { run, formatResultTable } from "../lib/index.js";
 import { isGitHubActions, dirExist } from "../lib/utils.js";
-import { getBinarySize } from "../lib/binary-size.js"
+import { getSize } from "../lib/binary-size.js";
 import { compare } from "../lib/compare.js";
 import { generateCodeSplittingCase } from "../lib/gen-code-splitting-case.js";
 
@@ -31,6 +31,10 @@ const cli = meow({
 		binding: {
 			type: "boolean",
 			default: true
+		},
+		wasm: {
+			type: "boolean",
+			default: false
 		},
 		js: {
 			type: "boolean",
@@ -64,6 +68,7 @@ const {
 
 	job: _job,
 	binding,
+	wasm,
 	js,
 
 	shard,
@@ -108,6 +113,13 @@ if (!command || command === "build") {
 	await $`pnpm --version`;
 	await $`pnpm install --prefer-frozen-lockfile --prefer-offline`;
 
+	if (wasm) {
+		await $`pnpm --filter @rspack/binding build:release:wasm`;
+		await $`npm install -g binaryen`;
+		await $`wasm-opt -Oz crates/node_binding/rspack.wasm32-wasi.wasm -o crates/node_binding/rspack.wasm32-wasi.optimized.wasm`;
+		await $`mv crates/node_binding/rspack.wasm32-wasi.optimized.wasm crates/node_binding/rspack.wasm32-wasi.wasm`;
+	}
+
 	if (binding) {
 		await $`pnpm run build:binding:release`;
 	}
@@ -136,10 +148,10 @@ if (!command || command === "bench") {
 	);
 
 	await mkdir(benchmarkDirectory, { recursive: true });
-	let bindingSize = await getBinarySize(rspackDirectory);
+	let size = await getSize(rspackDirectory, wasm);
 	await writeFile(
 		join(benchmarkDirectory, `rspack-build.json`),
-		JSON.stringify({ size: bindingSize }, null, 2)
+		JSON.stringify(size, null, 2)
 	);
 
 	if (shardJobs.length) {
