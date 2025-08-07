@@ -6,6 +6,7 @@ export default {
 		"10000_production-mode_persistent-cold",
 		"10000_production-mode_persistent-hot",
 		"10000_big_production-mode_disable-minimize",
+		"10000_development-mode_noop-loader",
 		"arco-pro_development-mode",
 		"arco-pro_development-mode_hmr",
 		"arco-pro_production-mode",
