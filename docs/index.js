@@ -3,12 +3,6 @@
 // `10000_development-mode_hmr + stats` is tag
 
 const getFetchPrefix = () => {
-	if (location.host === 'rspack-ecosystem-benchmark.rspack.dev') {
-		return "https://rspack-ecosystem-benchmark-data.rspack.dev";
-	}
-	if (location.host === 'ecosystem-benchmark.rspack.rs') {
-		return "https://ecosystem-benchmark-data.rspack.rs";
-	}
 	return "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
 }
 
