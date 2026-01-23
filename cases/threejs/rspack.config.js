@@ -1,4 +1,6 @@
 /** @type {import("@rspack/cli").Configuration} */
-module.exports = {
+const config = {
 	entry: { main: "./src/Three.js" }
 };
+
+export default config;
