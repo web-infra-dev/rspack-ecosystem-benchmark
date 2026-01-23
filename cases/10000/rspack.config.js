@@ -1,10 +1,12 @@
-const path = require("path");
-const rspack = require("@rspack/core");
-const ReactRefreshPlugin = require("@rspack/plugin-react-refresh");
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import rspack from "@rspack/core";
+import ReactRefreshPlugin from "@rspack/plugin-react-refresh";
 
 const prod = process.env.NODE_ENV === "production";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import("@rspack/cli").Configuration} */
-module.exports = {
+const config = {
 	resolve: {
 		extensions: [".js", ".jsx"]
 	},
@@ -70,3 +72,5 @@ module.exports = {
 		}
 	}
 };
+
+export default config;
