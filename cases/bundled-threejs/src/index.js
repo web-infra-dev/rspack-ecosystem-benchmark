@@ -1,3 +1,3 @@
-import * as THREE from "three/build/three.core.js";
+import * as THREE from "three";
 
 console.log(THREE);
