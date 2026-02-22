@@ -67,6 +67,7 @@ The benchmark case is the Rspack project in `cases` folder. It must contain `rsp
 
 - `10000` is a project with 10000 modules
 - `threejs` is a copy of three js
+- `bundled-threejs` imports the `three` package directly to benchmark large bundled-library builds
 
 #### Addon
 

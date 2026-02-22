@@ -32,6 +32,9 @@ importers:
       react-refresh:
         specifier: ^0.14.0
         version: 0.14.0
+      three:
+        specifier: ^0.183.1
+        version: 0.183.1
       undici:
         specifier: ^6.11.0
         version: 6.11.0
@@ -168,6 +171,8 @@ importers:
       url-loader:
         specifier: ^4.1.1
         version: 4.1.1(file-loader@6.2.0)(webpack@5.90.0)
+
+  cases/bundled-threejs: {}
 
   cases/large-dyn-imports: {}
 
@@ -6532,6 +6537,10 @@ packages:
     resolution: {integrity: sha512-3/o9z3X0X0fTupwsYvR03pJ/DjWuqqrfwBgTQzdWDiQSm9KitAyz/9WqsT2JQW7KV2m+bC2ol/zqpW37NHxLaA==}
     dependencies:
       b4a: 1.6.7
+    dev: false
+
+  /three@0.183.1:
+    resolution: {integrity: sha512-Psv6bbd3d/M/01MT2zZ+VmD0Vj2dbWTNhfe4CuSg7w5TuW96M3NOyCVuh9SZQ05CpGmD7NEcJhZw4GVjhCYxfQ==}
     dev: false
 
   /through@2.3.8:
