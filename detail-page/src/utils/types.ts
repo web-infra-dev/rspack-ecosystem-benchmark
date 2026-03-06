@@ -18,8 +18,8 @@ export interface CaseData {
 
 export interface BenchmarkMeta {
   baseDate: string;
+  currentDate: string;
   baseCommitSHA?: string;
-  generatedAt: string;
 }
 
 export interface BenchmarkData {

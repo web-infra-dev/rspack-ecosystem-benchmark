@@ -1,0 +1,39 @@
+name: Deploy Detail Page
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "detail-page/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Init env
+        uses: ./.github/actions/env
+      - name: Build detail page
+        run: |
+          cd detail-page
+          npm install
+          NODE_ENV=production npx rspack build
+      - name: Deploy to data branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin data:data || true
+          git worktree add data-branch data
+          mkdir -p data-branch/detail
+          cp detail-page/dist/index.html data-branch/detail/index.html
+          cp detail-page/dist/bundle.js data-branch/detail/bundle.js
+          cd data-branch
+          git add detail/
+          git commit -m "Update detail page" || true
+          git push origin data || true
+          cd ..
+          git worktree remove data-branch

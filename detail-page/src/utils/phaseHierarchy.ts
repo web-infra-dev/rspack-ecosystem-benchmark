@@ -4,6 +4,7 @@ import type { CaseData, PhaseRow, StatEntry } from "./types";
 const EXCLUDED_KEYS = new Set([
   "stats",
   "exec",
+  "execRebuild",
   "heap memory",
   "rss memory",
   "external memory",
@@ -11,11 +12,14 @@ const EXCLUDED_KEYS = new Set([
   "dist size",
 ]);
 
-// Top-level phase grouping
+// Top-level phase grouping for stats.toJson logging data
 const PHASE_GROUPS: Record<string, { label: string; match: (key: string) => boolean }> = {
   make: {
     label: "make",
-    match: (key) => key.startsWith("Compiler.make") || key.startsWith("Compiler.finish make"),
+    match: (key) =>
+      key.startsWith("Compiler.make") ||
+      key.startsWith("Compiler.finish make") ||
+      key === "trace.make",
   },
   seal: {
     label: "seal",
@@ -30,11 +34,19 @@ const PHASE_GROUPS: Record<string, { label: string; match: (key: string) => bool
       key.startsWith("RemoveEmptyChunksPlugin.") ||
       key.startsWith("EnsureChunkConditionsPlugin.") ||
       key.startsWith("WarnCaseSensitiveModulesPlugin.") ||
-      key.startsWith("buildChunkGraph."),
+      key.startsWith("buildChunkGraph.") ||
+      key === "trace.seal",
   },
   emit: {
     label: "emit",
-    match: (key) => key.startsWith("Compiler.emitAssets") || key.startsWith("Compiler.emit"),
+    match: (key) =>
+      key.startsWith("Compiler.emitAssets") ||
+      key.startsWith("Compiler.emit") ||
+      key === "trace.emit",
+  },
+  tracing: {
+    label: "tracing (RSPACK_PROFILE)",
+    match: (key) => key.startsWith("trace."),
   },
 };
 
@@ -72,17 +84,22 @@ export function buildPhaseTree(caseData: CaseData): PhaseRow[] {
     ...Object.keys(caseData.current),
   ]);
 
-  // Filter to only phase metrics
-  const phaseKeys = [...allKeys].filter((k) => !EXCLUDED_KEYS.has(k));
+  // Filter to only phase/time metrics (exclude memory, size, cache metrics)
+  const phaseKeys = [...allKeys].filter(
+    (k) => !EXCLUDED_KEYS.has(k) && !k.endsWith(" memory") && !k.endsWith(" size") && !k.endsWith(" cache")
+  );
 
   // Group keys into top-level phases
-  const grouped: Record<string, string[]> = { make: [], seal: [], emit: [] };
+  // Order matters: make/seal/emit match first, tracing catches remaining trace.* keys
+  const groupOrder = ["make", "seal", "emit", "tracing"];
+  const grouped: Record<string, string[]> = {};
+  for (const g of groupOrder) grouped[g] = [];
   const ungrouped: string[] = [];
 
   for (const key of phaseKeys) {
     let matched = false;
-    for (const [group, { match }] of Object.entries(PHASE_GROUPS)) {
-      if (match(key)) {
+    for (const group of groupOrder) {
+      if (PHASE_GROUPS[group].match(key)) {
         grouped[group].push(key);
         matched = true;
         break;
@@ -95,8 +112,17 @@ export function buildPhaseTree(caseData: CaseData): PhaseRow[] {
 
   const result: PhaseRow[] = [];
 
+  // Summary keys for each group
+  const summaryKeys: Record<string, string[]> = {
+    make: ["Compiler.make", "trace.make"],
+    seal: ["Compiler.seal compilation", "trace.seal"],
+    emit: ["Compiler.emitAssets", "trace.emit"],
+    tracing: [],
+  };
+
   // Build tree for each group
-  for (const [group, keys] of Object.entries(grouped)) {
+  for (const group of groupOrder) {
+    const keys = grouped[group];
     if (keys.length === 0) continue;
 
     const children: PhaseRow[] = keys
@@ -104,16 +130,22 @@ export function buildPhaseTree(caseData: CaseData): PhaseRow[] {
       .filter((row) => (row.baseMean ?? 0) > 0 || (row.currentMean ?? 0) > 0)
       .sort((a, b) => (b.baseMean ?? 0) - (a.baseMean ?? 0));
 
-    // Compute group totals from the top-level summary keys
-    const summaryKey = group === "make" ? "Compiler.make"
-      : group === "seal" ? "Compiler.seal compilation"
-      : "Compiler.emitAssets";
+    if (children.length === 0) continue;
+
+    // Find the best summary key for group totals
+    const candidates = summaryKeys[group] || [];
+    let baseSummary: StatEntry | undefined;
+    let currentSummary: StatEntry | undefined;
+    for (const sk of candidates) {
+      if (!baseSummary && caseData.base[sk]) baseSummary = caseData.base[sk];
+      if (!currentSummary && caseData.current[sk]) currentSummary = caseData.current[sk];
+    }
 
     const groupRow = buildPhaseRow(
       group,
       PHASE_GROUPS[group].label,
-      caseData.base[summaryKey],
-      caseData.current[summaryKey]
+      baseSummary,
+      currentSummary
     );
 
     groupRow.children = children;

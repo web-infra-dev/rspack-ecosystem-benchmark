@@ -1,18 +1,48 @@
-import { ConfigProvider, Layout, Select, Typography, Space, Card, Statistic, Row, Col, Tag } from "antd";
-import { useMemo, useState } from "react";
+import { ConfigProvider, Layout, Select, Typography, Space, Card, Statistic, Row, Col, Tag, Spin, Alert } from "antd";
+import { useEffect, useMemo, useState } from "react";
 import type { BenchmarkData } from "./utils/types";
 import { PhaseTable } from "./components/PhaseTable";
 import { formatMs } from "./utils/formatting";
 import { getOverallStats } from "./utils/phaseHierarchy";
+import { fetchBenchmarkData, getUrlParams } from "./utils/fetchData";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
 
-interface AppProps {
-  data: BenchmarkData;
+export function App() {
+  const [data, setData] = useState<BenchmarkData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const { base, hash } = getUrlParams();
+
+  useEffect(() => {
+    fetchBenchmarkData(base, hash)
+      .then(setData)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [base, hash]);
+
+  if (loading) {
+    return (
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <Spin size="large" tip="Loading benchmark data..." />
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div style={{ padding: 48 }}>
+        <Alert type="error" message="Failed to load benchmark data" description={error} showIcon />
+      </div>
+    );
+  }
+
+  return <AppContent data={data} />;
 }
 
-export function App({ data }: AppProps) {
+function AppContent({ data }: { data: BenchmarkData }) {
   const caseNames = useMemo(() => Object.keys(data.cases), [data]);
   const [selectedCase, setSelectedCase] = useState(caseNames[0] ?? "");
 
@@ -55,6 +85,9 @@ export function App({ data }: AppProps) {
                   ? ` (${data.meta.baseCommitSHA.slice(0, 7)})`
                   : ""}
               </Tag>
+            )}
+            {data.meta.currentDate && (
+              <Tag color="blue">Current: {data.meta.currentDate}</Tag>
             )}
           </Space>
         </Header>
