@@ -93,6 +93,22 @@ jobs:
           result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"
           echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
+      - name: Generate detail page
+        run: node bin/generate-detail.js --base latest --current current
+      - name: Deploy detail page to data branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin data:data || true
+          git worktree add data-branch data
+          mkdir -p data-branch/detail/pr-${{ inputs.prNumber }}
+          cp output/detail.html data-branch/detail/pr-${{ inputs.prNumber }}/${{ github.run_id }}.html
+          cd data-branch
+          git add .
+          git commit -m "Add detail page for PR #${{ inputs.prNumber }} run ${{ github.run_id }}" || true
+          git push origin data || true
+          cd ..
+          git worktree remove data-branch
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.RSPACK_BOT_ACCESS_TOKEN }}
@@ -106,8 +122,11 @@ jobs:
 
             const url = `${context.serverUrl}//${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             const urlLink = `[Open](${url})`
+            const detailUrl = `https://web-infra-dev.github.io/rspack-ecosystem-benchmark/detail/pr-${{ inputs.prNumber }}/${{ github.run_id }}.html`
+            const detailLink = `[Phase Detail](${detailUrl})`
             const body = `
             📝 Benchmark detail: ${urlLink}
+            📊 Phase-level diff: ${detailLink}
 
             ${result}
             `

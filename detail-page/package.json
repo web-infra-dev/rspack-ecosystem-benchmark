@@ -1,0 +1,22 @@
+{
+  "name": "detail-page",
+  "private": true,
+  "scripts": {
+    "dev": "rspack serve",
+    "build": "rspack build"
+  },
+  "dependencies": {
+    "antd": "^5.24.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@rspack/cli": "^1.2.0",
+    "@rspack/core": "^1.2.0",
+    "@rspack/plugin-react-refresh": "^1.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "react-refresh": "^0.14.0",
+    "typescript": "^5.7.0"
+  }
+}
