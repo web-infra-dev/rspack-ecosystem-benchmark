@@ -44,6 +44,11 @@ module.exports = {
     ],
   },
   plugins: [
+    new rspack.DefinePlugin({
+      RSPACK_BENCHMARK_API_URL: JSON.stringify(
+        process.env.RSPACK_BENCHMARK_API_URL || ""
+      ),
+    }),
     new rspack.HtmlRspackPlugin({
       template: "./index.html",
       inject: "body",

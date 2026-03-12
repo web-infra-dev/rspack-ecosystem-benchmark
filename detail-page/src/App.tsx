@@ -14,14 +14,14 @@ export function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const { base, hash } = getUrlParams();
+  const { base, id, hash } = getUrlParams();
 
   useEffect(() => {
-    fetchBenchmarkData(base, hash)
+    fetchBenchmarkData(base, id, hash)
       .then(setData)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, [base, hash]);
+  }, [base, id, hash]);
 
   if (loading) {
     return (

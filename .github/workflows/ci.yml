@@ -75,15 +75,6 @@ jobs:
           pattern: benchmark-artifacts-*
           path: output
           merge-multiple: true
-      - id: print-results
-        name: Print results
-        run: |
-          result=$(node bin/cli.js compare --base latest --current current)
-          echo "$result"
-          detailPageUrl=$(echo "$result" | grep "^Detail page: " | sed 's/^Detail page: //')
-          diffResult=$(echo "$result" | grep -v "^Detail page: " || true)
-          echo "diff-result=${diffResult//$'\n'/'@@'}" >> $GITHUB_OUTPUT
-          echo "detail-page-url=${detailPageUrl}" >> $GITHUB_OUTPUT
       - id: upload-benchmark
         name: Upload benchmark data to Cloudflare
         env:
@@ -121,6 +112,17 @@ jobs:
             fs.appendFileSync(out, 'benchmark-id=' + json.id + '\n');
           })().catch(err => { console.error(err); process.exit(1); });
           "
+      - id: print-results
+        name: Print results
+        env:
+          BENCHMARK_ID: ${{ steps.upload-benchmark.outputs.benchmark-id }}
+        run: |
+          result=$(node bin/cli.js compare --base latest --current current)
+          echo "$result"
+          detailPageUrl=$(echo "$result" | grep "^Detail page: " | sed 's/^Detail page: //')
+          diffResult=$(echo "$result" | grep -v "^Detail page: " || true)
+          echo "diff-result=${diffResult//$'\n'/'@@'}" >> $GITHUB_OUTPUT
+          echo "detail-page-url=${detailPageUrl}" >> $GITHUB_OUTPUT
       - uses: actions/github-script@v6
         with:
           script: |
@@ -131,7 +133,7 @@ jobs:
             const benchmarkId = `${{ steps.upload-benchmark.outputs.benchmark-id }}`
             const detailPageUrl = benchmarkId
               ? `https://web-infra-dev.github.io/rspack-ecosystem-benchmark/detail?base=latest&id=${benchmarkId}`
-              : `${{ steps.print-results.outputs.detail-page-url }}`
+              : ''
             const detailLine = detailPageUrl
               ? `\n\n📊 [Phase Detail](${detailPageUrl}) — verify detail page works`
               : ''

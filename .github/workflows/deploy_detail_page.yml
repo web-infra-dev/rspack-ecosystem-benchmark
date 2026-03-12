@@ -18,6 +18,8 @@ jobs:
       - name: Init env
         uses: ./.github/actions/env
       - name: Build detail page
+        env:
+          RSPACK_BENCHMARK_API_URL: ${{ secrets.BENCHMARK_API_URL }}
         run: |
           cd detail-page
           npm install
