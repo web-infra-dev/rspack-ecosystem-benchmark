@@ -89,8 +89,7 @@ export function buildPhaseTree(caseData: CaseData): PhaseRow[] {
     (k) => !EXCLUDED_KEYS.has(k) && !k.endsWith(" memory") && !k.endsWith(" size") && !k.endsWith(" cache")
   );
 
-  // Group keys into top-level phases
-  // Order matters: make/seal/emit match first, tracing catches remaining trace.* keys
+  // Group keys into top-level phases: seal, emit, make, tracing (RSPACK_PROFILE) last
   const groupOrder = ["make", "seal", "emit", "tracing"];
   const grouped: Record<string, string[]> = {};
   for (const g of groupOrder) grouped[g] = [];

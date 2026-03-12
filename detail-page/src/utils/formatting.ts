@@ -27,3 +27,9 @@ export function formatDiffPercent(percent: number): string {
   if (percent > 0) return `+${percent.toFixed(1)}%`;
   return `${percent.toFixed(1)}%`;
 }
+
+/** Format signed duration delta for display (e.g. "+120 ms", "-80 ms"). */
+export function formatDiffMs(diffMs: number): string {
+  const sign = diffMs >= 0 ? "+" : "";
+  return `${sign}${formatMs(Math.abs(diffMs))}`;
+}

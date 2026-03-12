@@ -8,6 +8,9 @@ module.exports = {
   mode: isProduction ? "production" : "development",
   devtool: isProduction ? false : "source-map",
   entry: "./src/index.tsx",
+  experiments: {
+    css: true,
+  },
   output: {
     path: path.resolve(__dirname, "../docs/detail"),
     filename: "bundle.js",
