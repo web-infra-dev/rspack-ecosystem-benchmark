@@ -3,10 +3,7 @@ import type { BenchmarkData, CaseData, StatEntry } from "./types";
 const FETCH_PREFIX =
   "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
 
-/** Injected at build time via DefinePlugin; empty if not set. */
-declare const RSPACK_BENCHMARK_API_URL: string;
-const BENCHMARK_API_BASE =
-  typeof RSPACK_BENCHMARK_API_URL !== "undefined" ? RSPACK_BENCHMARK_API_URL : "";
+const BENCHMARK_API_URL = "https://rspack-benchmark-api.rspack.workers.dev";
 
 interface IndexEntry {
   date: string;
@@ -50,10 +47,7 @@ async function fetchBenchmarkResult(date: string, file: string): Promise<Record<
 async function fetchCurrentDataById(
   id: string
 ): Promise<Record<string, Record<string, StatEntry>>> {
-  if (!BENCHMARK_API_BASE) {
-    throw new Error("Benchmark API URL is not configured; cannot fetch by id.");
-  }
-  const res = await fetch(`${BENCHMARK_API_BASE.replace(/\/$/, "")}/benchmark/${id}`);
+  const res = await fetch(`${BENCHMARK_API_URL.replace(/\/$/, "")}/benchmark/${id}`);
   if (!res.ok) throw new Error(`Failed to fetch benchmark ${id}: ${res.status}`);
   const json = await res.json();
   if (json.data == null) throw new Error("Invalid benchmark response: missing data");
