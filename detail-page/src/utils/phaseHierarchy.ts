@@ -50,6 +50,9 @@ const PHASE_GROUPS: Record<string, { label: string; match: (key: string) => bool
   },
 };
 
+// Skip diff for phases with very small data (< 1ms) to avoid noisy percentages
+const MIN_MEAN_MS_FOR_DIFF = 1;
+
 function buildPhaseRow(
   key: string,
   label: string,
@@ -61,7 +64,12 @@ function buildPhaseRow(
   let diffPercent: number | undefined;
   let diffMs: number | undefined;
 
-  if (baseMean != null && currentMean != null && baseMean > 0) {
+  if (
+    baseMean != null &&
+    currentMean != null &&
+    baseMean > 0 &&
+    baseMean >= MIN_MEAN_MS_FOR_DIFF
+  ) {
     diffPercent = ((currentMean - baseMean) / baseMean) * 100;
     diffMs = currentMean - baseMean;
   }
