@@ -137,7 +137,7 @@ jobs:
             const detailLine = detailPageUrl
               ? `\n\n📊 [Phase Detail](${detailPageUrl}) — verify detail page works`
               : ''
-            const body = `## Benchmark (CI)\n\n${urlLink}${detailLine}\n\n\`\`\`\n${result}\n\`\`\``
+            const body = `## Benchmark (CI)\n\n${urlLink}${detailLine}\n\n${result}\n`
             await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
