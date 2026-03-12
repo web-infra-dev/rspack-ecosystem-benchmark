@@ -69,20 +69,6 @@ jobs:
           result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"
           echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
-      - id: encode-data
-        name: Encode benchmark data for detail page
-        run: |
-          encoded=$(node -e "
-            const fs = require('fs');
-            const zlib = require('zlib');
-            const files = fs.readdirSync('output').filter(f => f.endsWith('.json'));
-            const data = {};
-            for (const f of files) {
-              data[f.replace('.json', '')] = JSON.parse(fs.readFileSync('output/' + f, 'utf8'));
-            }
-            process.stdout.write(zlib.gzipSync(JSON.stringify(data)).toString('base64url'));
-          ")
-          echo "encoded=${encoded}" >> $GITHUB_OUTPUT
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.RSPACK_BOT_ACCESS_TOKEN }}
@@ -96,13 +82,8 @@ jobs:
 
             const url = `${context.serverUrl}//${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             const urlLink = `[Open](${url})`
-
-            const encoded = `${{ steps.encode-data.outputs.encoded }}`
-            const detailUrl = `https://web-infra-dev.github.io/rspack-ecosystem-benchmark/detail?base=latest#${encoded}`
-            const detailLink = `[Phase Detail](${detailUrl})`
             const body = `
             📝 Benchmark detail: ${urlLink}
-            📊 Phase-level diff: ${detailLink}
 
             ${result}
             `

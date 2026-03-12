@@ -92,21 +92,47 @@ jobs:
         run: |
           result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"
-          echo "diff-result=${result//$'\n'/'@@'}" >> $GITHUB_OUTPUT
-      - id: encode-data
-        name: Encode benchmark data for detail page
+          detailPageUrl=$(echo "$result" | grep "^Detail page: " | sed 's/^Detail page: //')
+          diffResult=$(echo "$result" | grep -v "^Detail page: " || true)
+          echo "diff-result=${diffResult//$'\n'/'@@'}" >> $GITHUB_OUTPUT
+          echo "detail-page-url=${detailPageUrl}" >> $GITHUB_OUTPUT
+      - id: upload-benchmark
+        name: Upload benchmark data to Cloudflare
+        env:
+          BENCHMARK_API_URL: ${{ secrets.BENCHMARK_API_URL }}
+          BENCHMARK_API_SECRET: ${{ secrets.BENCHMARK_API_SECRET }}
         run: |
-          encoded=$(node -e "
+          node -e "
+          (async () => {
             const fs = require('fs');
-            const zlib = require('zlib');
+            const path = require('path');
+            const out = process.env.GITHUB_OUTPUT;
             const files = fs.readdirSync('output').filter(f => f.endsWith('.json'));
             const data = {};
             for (const f of files) {
-              data[f.replace('.json', '')] = JSON.parse(fs.readFileSync('output/' + f, 'utf8'));
+              const name = f.replace(/\.json$/, '');
+              data[name] = JSON.parse(fs.readFileSync(path.join('output', f), 'utf8'));
             }
-            process.stdout.write(zlib.gzipSync(JSON.stringify(data)).toString('base64url'));
-          ")
-          echo "encoded=${encoded}" >> $GITHUB_OUTPUT
+            const apiUrl = process.env.BENCHMARK_API_URL;
+            if (!apiUrl) {
+              console.log('BENCHMARK_API_URL not set, skipping upload');
+              return;
+            }
+            const headers = { 'Content-Type': 'application/json' };
+            if (process.env.BENCHMARK_API_SECRET) {
+              headers['Authorization'] = 'Bearer ' + process.env.BENCHMARK_API_SECRET;
+            }
+            const r = await fetch(apiUrl.replace(/\/$/, '') + '/benchmark', {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({ data })
+            });
+            const json = await r.json();
+            if (!r.ok) throw new Error(json.error || 'Upload failed: ' + r.status);
+            if (!json.id) throw new Error(JSON.stringify(json));
+            fs.appendFileSync(out, 'benchmark-id=' + json.id + '\n');
+          })().catch(err => { console.error(err); process.exit(1); });
+          "
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.RSPACK_BOT_ACCESS_TOKEN }}
@@ -120,13 +146,13 @@ jobs:
 
             const url = `${context.serverUrl}//${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             const urlLink = `[Open](${url})`
-
-            const encoded = `${{ steps.encode-data.outputs.encoded }}`
-            const detailUrl = `https://web-infra-dev.github.io/rspack-ecosystem-benchmark/detail?base=latest#${encoded}`
-            const detailLink = `[Phase Detail](${detailUrl})`
+            const benchmarkId = `${{ steps.upload-benchmark.outputs.benchmark-id }}`
+            const detailPageUrl = benchmarkId
+              ? `https://web-infra-dev.github.io/rspack-ecosystem-benchmark/detail?base=latest&id=${benchmarkId}`
+              : null
+            const detailLine = detailPageUrl ? `\n📊 Phase-level diff: [Phase Detail](${detailPageUrl})` : ''
             const body = `
-            📝 Benchmark detail: ${urlLink}
-            📊 Phase-level diff: ${detailLink}
+            📝 Benchmark detail: ${urlLink}${detailLine}
 
             ${result}
             `
