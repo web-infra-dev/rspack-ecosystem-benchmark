@@ -5,28 +5,13 @@ import type { CaseData, PhaseRow } from "../utils/types";
 import { buildPhaseTree } from "../utils/phaseHierarchy";
 import { formatMs, formatDiffPercent } from "../utils/formatting";
 import { DiffBadge } from "./DiffBadge";
-import { TimelineBar } from "./TimelineBar";
 
 interface PhaseTableProps {
   caseData: CaseData;
 }
 
-function getMaxValue(rows: PhaseRow[]): number {
-  let max = 0;
-  for (const row of rows) {
-    if (row.baseMean != null && row.baseMean > max) max = row.baseMean;
-    if (row.currentMean != null && row.currentMean > max) max = row.currentMean;
-    if (row.children) {
-      const childMax = getMaxValue(row.children);
-      if (childMax > max) max = childMax;
-    }
-  }
-  return max;
-}
-
 export function PhaseTable({ caseData }: PhaseTableProps) {
   const phaseTree = useMemo(() => buildPhaseTree(caseData), [caseData]);
-  const maxValue = useMemo(() => getMaxValue(phaseTree), [phaseTree]);
 
   const columns: ColumnsType<PhaseRow> = [
     {
@@ -68,17 +53,6 @@ export function PhaseTable({ caseData }: PhaseTableProps) {
       sorter: (a: PhaseRow, b: PhaseRow) =>
         Math.abs(b.diffPercent ?? 0) - Math.abs(a.diffPercent ?? 0),
       render: (_: unknown, record: PhaseRow) => <DiffBadge diffPercent={record.diffPercent} />,
-    },
-    {
-      title: "Timeline",
-      key: "timeline",
-      render: (_: unknown, record: PhaseRow) => (
-        <TimelineBar
-          baseMean={record.baseMean}
-          currentMean={record.currentMean}
-          maxValue={maxValue}
-        />
-      ),
     },
   ];
 
