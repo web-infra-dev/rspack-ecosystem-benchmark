@@ -9,7 +9,7 @@ module.exports = {
   devtool: isProduction ? false : "source-map",
   entry: "./src/index.tsx",
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "../docs/detail"),
     filename: "bundle.js",
     publicPath: isProduction ? "/rspack-ecosystem-benchmark/detail/" : "/",
     clean: true,
