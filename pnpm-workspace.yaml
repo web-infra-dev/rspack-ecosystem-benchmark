@@ -1,3 +1,4 @@
 packages:
   - 'cases/*'
   - 'detail-page'
+  - 'worker-benchmark-api'

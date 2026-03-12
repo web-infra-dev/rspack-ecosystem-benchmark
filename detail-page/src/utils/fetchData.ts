@@ -54,41 +54,11 @@ async function fetchCurrentDataById(
   return json.data;
 }
 
-/**
- * Decompress a base64url-encoded gzip string (deprecated: use ?id= from Cloudflare instead).
- */
-async function decompressFromHash(
-  encoded: string
-): Promise<Record<string, Record<string, StatEntry>>> {
-  const b64 = encoded.replace(/-/g, "+").replace(/_/g, "/");
-  const binaryStr = atob(b64);
-  const bytes = Uint8Array.from(binaryStr, (c) => c.charCodeAt(0));
-
-  const ds = new DecompressionStream("gzip");
-  const writer = ds.writable.getWriter();
-  writer.write(bytes);
-  writer.close();
-
-  const reader = ds.readable.getReader();
-  const chunks: Uint8Array[] = [];
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    chunks.push(value);
-  }
-
-  const json = new TextDecoder().decode(
-    await new Blob(chunks as BlobPart[]).arrayBuffer()
-  );
-  return JSON.parse(json);
-}
-
-export function getUrlParams(): { base: string; id: string | null; hash: string } {
+export function getUrlParams(): { base: string; id: string | null } {
   const params = new URLSearchParams(window.location.search);
   return {
     base: params.get("base") || "latest",
     id: params.get("id"),
-    hash: window.location.hash.slice(1),
   };
 }
 
@@ -112,13 +82,10 @@ async function fetchResultsByDate(
  * Fetch benchmark data.
  * - `base`: date or "latest" (from data branch).
  * - `id`: if set, current data is fetched from Cloudflare GET /benchmark/:id.
- * - `hash`: deprecated; if id is not set and hash is set, current data is decoded from hash (old links).
- * - If neither id nor hash: use ?current=<date> for daily comparison.
  */
 export async function fetchBenchmarkData(
   base: string,
   id: string | null,
-  hash: string
 ): Promise<BenchmarkData> {
   const [index, buildInfo] = await Promise.all([fetchIndex(), fetchBuildInfo()]);
 
@@ -133,13 +100,6 @@ export async function fetchBenchmarkData(
 
   if (id) {
     const currentData = await fetchCurrentDataById(id);
-    currentResults = Object.entries(currentData).map(([name, result]) => ({
-      name,
-      result,
-    }));
-    currentLabel = "PR";
-  } else if (hash) {
-    const currentData = await decompressFromHash(hash);
     currentResults = Object.entries(currentData).map(([name, result]) => ({
       name,
       result,
