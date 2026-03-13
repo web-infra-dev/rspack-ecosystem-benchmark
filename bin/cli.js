@@ -178,5 +178,5 @@ if (!command || command === "bench") {
 }
 
 if (!command || command === "compare") {
-	await compare(base, current, benchmarkDirectory, repository);
+	compare(base, current, benchmarkDirectory, repository);
 }
