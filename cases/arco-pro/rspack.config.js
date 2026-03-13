@@ -338,3 +338,8 @@ const config = {
 };
 
 export default config;
+
+config.plugins = config.plugins || [];
+import BuildPlugin from "../../lib/scenarios/build-plugin.js";
+config.plugins.push(new BuildPlugin());
+config.cache = { type: "persistent" };
