@@ -137,7 +137,7 @@ if (!command || command === "bench") {
 
 	await mkdir(benchmarkDirectory, { recursive: true });
 	let bindingSize = await getBinarySize(rspackDirectory);
-	let ciBindingSize = await getBinarySize(rspackDirectory, "ci");
+	let ciBindingSize = (await getBinarySize(rspackDirectory, "ci")) || bindingSize;
 
 	await writeFile(
 		join(benchmarkDirectory, `rspack-build.json`),
