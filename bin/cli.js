@@ -139,11 +139,6 @@ if (!command || command === "bench") {
 	let bindingSize = await getBinarySize(rspackDirectory);
 	let ciBindingSize = await getBinarySize(rspackDirectory, "ci");
 
-	console.log(
-		"debug",
-		JSON.stringify({ size: ciBindingSize, releaseSize: bindingSize }, null, 2)
-	);
-
 	await writeFile(
 		join(benchmarkDirectory, `rspack-build.json`),
 		JSON.stringify({ size: ciBindingSize, releaseSize: bindingSize }, null, 2)
