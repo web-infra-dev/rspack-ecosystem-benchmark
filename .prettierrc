@@ -1,22 +1,5 @@
 {
-	"printWidth": 80,
-	"useTabs": true,
-	"tabWidth": 2,
-	"trailingComma": "none",
+	"singleQuote": false,
 	"arrowParens": "avoid",
-	"overrides": [
-		{
-			"files": "*.json",
-			"options": {
-				"parser": "json",
-				"useTabs": false
-			}
-		},
-		{
-			"files": "*.ts",
-			"options": {
-				"parser": "typescript"
-			}
-		}
-	]
+	"printWidth": 120
 }

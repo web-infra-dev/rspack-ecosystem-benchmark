@@ -3,3 +3,5 @@ output/**
 cases/**
 pnpm-lock.yaml
 pnpm-workspace.yaml
+.vscode/
+lib/addons/big/react.js

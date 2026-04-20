@@ -8,9 +8,7 @@ const [, , token, sha] = process.argv;
 const storeByDate = !sha;
 const GITHUB_ACTOR = process.env.GITHUB_ACTOR;
 const dataTag = storeByDate ? formatDate(+new Date()) : sha.slice(0, 8);
-const relativePath = storeByDate
-	? dataTag
-	: join("commits", sha.slice(0, 2), sha.slice(2));
+const relativePath = storeByDate ? dataTag : join("commits", sha.slice(0, 2), sha.slice(2));
 const repoUrl = `https://${GITHUB_ACTOR}:${token}@github.com/web-infra-dev/rspack-ecosystem-benchmark.git`;
 
 const rootDir = resolve(fileURLToPath(import.meta.url), "../..");
@@ -24,7 +22,7 @@ async function getCommitSHA() {
 	await runCommand("git", ["rev-parse", "HEAD"], {
 		onData(stdout) {
 			commitSHA = stdout.toString().trim();
-		}
+		},
 	});
 	console.log("Current Commit SHA", commitSHA);
 	return commitSHA;
@@ -33,27 +31,16 @@ async function getCommitSHA() {
 async function appendRspackBuildInfo() {
 	const commitSHA = await getCommitSHA();
 	const buildInfoFile = join(dataDir, "build-info.json");
-	const buildInfo = existsSync(buildInfoFile)
-		? JSON.parse(await readFile(buildInfoFile, "utf-8"))
-		: {};
+	const buildInfo = existsSync(buildInfoFile) ? JSON.parse(await readFile(buildInfoFile, "utf-8")) : {};
 	buildInfo[dataTag] = {
-		commitSHA
+		commitSHA,
 	};
 	await writeFile(buildInfoFile, JSON.stringify(buildInfo, null, 2));
 }
 
 (async () => {
 	if (!(await dirExist(dataDir))) {
-		await runCommand("git", [
-			"clone",
-			"--branch",
-			"data",
-			"--single-branch",
-			"--depth",
-			"1",
-			repoUrl,
-			".data"
-		]);
+		await runCommand("git", ["clone", "--branch", "data", "--single-branch", "--depth", "1", repoUrl, ".data"]);
 	}
 
 	process.chdir(dataDir);
@@ -79,10 +66,7 @@ async function appendRspackBuildInfo() {
 
 	if (storeByDate) {
 		console.log("== update index.txt ==");
-		await writeFile(
-			indexFile,
-			Array.from(files, f => `${f}\n`).join("") + "\n"
-		);
+		await writeFile(indexFile, Array.from(files, f => `${f}\n`).join("") + "\n");
 
 		console.log("== update build-info.json ==");
 		process.chdir(rspackDir);
@@ -93,9 +77,7 @@ async function appendRspackBuildInfo() {
 	console.log("== commit ==");
 	await runCommand(
 		"git",
-		storeByDate
-			? ["add", `${relativePath}/*.json`, "index.txt", "build-info.json"]
-			: ["add", `${relativePath}/*.json`]
+		storeByDate ? ["add", `${relativePath}/*.json`, "index.txt", "build-info.json"] : ["add", `${relativePath}/*.json`]
 	);
 	try {
 		await runCommand("git", ["commit", "-m", `"add ${dataTag} results"`]);
