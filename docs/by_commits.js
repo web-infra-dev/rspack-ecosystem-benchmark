@@ -143,23 +143,37 @@ class DataCenter {
 	// fetch index and latest data
 	async initialize() {
 		const queryParams = new URLSearchParams(window.location.search);
-		const perPage = parseInt(queryParams.get("per_page") || "50", 10) || 50;
+		const total = parseInt(queryParams.get("per_page") || "50", 10) || 50;
+
+		// GitHub commits API caps per_page at 100 — fan out into parallel pages
+		// when the requested total exceeds that, then concat in chronological order.
+		// NOTE: the offset is (page-1)*per_page, so all pages must share the same
+		// per_page (use MAX_PER_PAGE for every page and trim the tail). Mixing
+		// per_page values across pages causes overlap between consecutive pages.
+		const MAX_PER_PAGE = 100;
+		const perPage = Math.min(total, MAX_PER_PAGE);
+		const pageCount = Math.max(1, Math.ceil(total / perPage));
+
+		const headers = this.githubToken ? { Authorization: `Bearer ${this.githubToken}` } : {};
 
 		try {
-			const commits = await fetch(`https://api.github.com/repos/web-infra-dev/rspack/commits?per_page=${perPage}`, {
-				headers: this.githubToken
-					? {
-							Authorization: `Bearer ${this.githubToken}`,
-					  }
-					: {},
-			}).then(res => {
-				if (!res.ok) {
-					showGithubTokenModal();
+			const pages = await Promise.all(
+				Array.from({ length: pageCount }, (_, i) => {
+					const page = i + 1;
+					const url = `https://api.github.com/repos/web-infra-dev/rspack/commits?per_page=${perPage}&page=${page}`;
+					return fetch(url, { headers }).then(res => {
+						if (!res.ok) {
+							showGithubTokenModal();
+							throw new Error(`GitHub API ${res.status}`);
+						}
+						return res.json();
+					});
+				})
+			);
 
-					throw new Error("403 Forbidden");
-				}
-				return res.json();
-			});
+			// Each page is newest→oldest; page 1 is newest. Flatten, trim to `total`,
+			// then reverse so `this.commits` runs oldest→newest (chart x-axis order).
+			const commits = pages.flat().slice(0, total);
 
 			this.commits = commits
 				.map(({ sha, html_url, commit: { message, author } }) => ({
@@ -583,7 +597,7 @@ function initializePerPageInput() {
 	input.value = current;
 
 	const commit = () => {
-		const next = Math.max(1, Math.min(100, parseInt(input.value, 10) || 0));
+		const next = Math.max(1, Math.min(500, parseInt(input.value, 10) || 0));
 		if (!next || next === current) return;
 		const nextParams = new URLSearchParams(window.location.search);
 		nextParams.set("per_page", String(next));
