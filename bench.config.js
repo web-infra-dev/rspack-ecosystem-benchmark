@@ -25,7 +25,7 @@ export default {
 		"threejs_production-mode_10x_persistent-cold",
 		"threejs_production-mode_10x_persistent-hot",
 		"bundled-threejs_development-mode",
-		"bundled-threejs_production-mode"
+		"bundled-threejs_production-mode",
 	],
-	rspackDirectory: process.env.RSPACK_DIR
+	rspackDirectory: process.env.RSPACK_DIR,
 };

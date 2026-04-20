@@ -68,7 +68,7 @@ const allBenchmarkNames = [
 	"threejs_production-mode_10x",
 	"threejs_production-mode_10x_persistent-cold",
 	"threejs_production-mode_10x_persistent-hot",
-	"threejs_production-mode_builtin-swc-loader_10x"
+	"threejs_production-mode_builtin-swc-loader_10x",
 ];
 
 const metrics = [
@@ -121,7 +121,7 @@ const metrics = [
 	"exec",
 	"external memory",
 	"heap memory",
-	"rss memory"
+	"rss memory",
 ];
 
 class DataCenter {
@@ -146,16 +146,13 @@ class DataCenter {
 		const perPage = parseInt(queryParams.get("per_page") || "50", 10) || 50;
 
 		try {
-			const commits = await fetch(
-				`https://api.github.com/repos/web-infra-dev/rspack/commits?per_page=${perPage}`,
-				{
-					headers: this.githubToken
-						? {
-								Authorization: `Bearer ${this.githubToken}`
-						  }
-						: {}
-				}
-			).then(res => {
+			const commits = await fetch(`https://api.github.com/repos/web-infra-dev/rspack/commits?per_page=${perPage}`, {
+				headers: this.githubToken
+					? {
+							Authorization: `Bearer ${this.githubToken}`,
+					  }
+					: {},
+			}).then(res => {
 				if (!res.ok) {
 					showGithubTokenModal();
 
@@ -169,7 +166,7 @@ class DataCenter {
 					sha,
 					url: html_url,
 					message,
-					author
+					author,
 				}))
 				.reverse();
 
@@ -187,17 +184,11 @@ class DataCenter {
 				if (!this.cache[benchmarkName]) {
 					this.cache[benchmarkName] = await Promise.all(
 						this.commits.map(({ sha, author, url, message }) => {
-							let description = `${message.split("\n")[0].trim()} by @${
-								author.name
-							}`;
+							let description = `${message.split("\n")[0].trim()} by @${author.name}`;
 							let date = moment(author.date).format("YYYY-MM-DD");
 							let labelX = `${sha.slice(0, 7)}:${date}`;
 
-							return fetch(
-								`${fetchPrefix}/commits/${sha.slice(0, 2)}/${sha.slice(
-									2
-								)}/${benchmarkName}.json`
-							)
+							return fetch(`${fetchPrefix}/commits/${sha.slice(0, 2)}/${sha.slice(2)}/${benchmarkName}.json`)
 								.then(
 									res => res.json(),
 									() => ({})
@@ -219,7 +210,7 @@ class DataCenter {
 						if (typeof file[metric] === "number") {
 							return {
 								value: file[metric],
-								...rest
+								...rest,
 							};
 						}
 
@@ -228,7 +219,7 @@ class DataCenter {
 						}
 						return {
 							value: file[metric].median,
-							...rest
+							...rest,
 						};
 					})
 					.filter(item => !!item);
@@ -362,7 +353,7 @@ class BenchmarkChart {
 		this.chart = new Chart(document.querySelector(selector), {
 			type: "line",
 			data: {
-				datasets: []
+				datasets: [],
 			},
 			options: {
 				onClick(event, activeElements) {
@@ -379,8 +370,8 @@ class BenchmarkChart {
 				scales: {
 					x: {
 						ticks: {
-							autoSkip: false
-						}
+							autoSkip: false,
+						},
 					},
 					time: {
 						type: "linear",
@@ -390,8 +381,8 @@ class BenchmarkChart {
 						ticks: {
 							callback(value, _, values) {
 								return formatTime(value, values[values.length - 1].value);
-							}
-						}
+							},
+						},
 					},
 					size: {
 						type: "linear",
@@ -401,8 +392,8 @@ class BenchmarkChart {
 						ticks: {
 							callback(value, _, values) {
 								return formatSize(value, values[values.length - 1].value);
-							}
-						}
+							},
+						},
 					},
 					ratio: {
 						type: "linear",
@@ -412,14 +403,14 @@ class BenchmarkChart {
 						ticks: {
 							callback(value, _, values) {
 								return formatRatio(value, values[values.length - 1].value);
-							}
-						}
-					}
+							},
+						},
+					},
 				},
 				plugins: {
 					legend: {
 						// ignore click event
-						onClick: function () {}
+						onClick: function () {},
 					},
 					tooltip: {
 						callbacks: {
@@ -447,15 +438,12 @@ class BenchmarkChart {
 									deltaText = ` (${sign}${delta.toFixed(2)}%)`;
 								}
 
-								return [
-									`${context.dataset.label}: ${text}${deltaText}`,
-									`${context.raw.description}`
-								];
-							}
-						}
-					}
-				}
-			}
+								return [`${context.dataset.label}: ${text}${deltaText}`, `${context.raw.description}`];
+							},
+						},
+					},
+				},
+			},
 		});
 	}
 
@@ -473,7 +461,7 @@ class BenchmarkChart {
 		const axisValues = {
 			time: [],
 			size: [],
-			ratio: []
+			ratio: [],
 		};
 
 		for (const tag of Object.keys(data)) {
@@ -492,11 +480,11 @@ class BenchmarkChart {
 							x: labelX,
 							y: value,
 							url,
-							description
+							description,
 						};
 					}),
 				yAxisID: axis,
-				fill: true
+				fill: true,
 			});
 			// this.chart.data.labels = values.map(v=>v.sha.slice(0,7))
 		}
@@ -574,17 +562,15 @@ function showGithubTokenModal() {
 	`;
 	document.body.appendChild(modal);
 
-	document
-		.getElementById("github-token-submit")
-		.addEventListener("click", () => {
-			const token = document.getElementById("github-token-input").value.trim();
-			if (token) {
-				localStorage.setItem("GITHUB_TOKEN", token);
-				location.reload();
-			} else {
-				alert("Empty Token");
-			}
-		});
+	document.getElementById("github-token-submit").addEventListener("click", () => {
+		const token = document.getElementById("github-token-input").value.trim();
+		if (token) {
+			localStorage.setItem("GITHUB_TOKEN", token);
+			location.reload();
+		} else {
+			alert("Empty Token");
+		}
+	});
 }
 
 (async function () {
@@ -598,12 +584,7 @@ function showGithubTokenModal() {
 		chart.updateChartData(tags);
 	});
 
-	initializeAddAction(
-		allBenchmarkNames,
-		dataCenter.metrics,
-		tagCtrl.has.bind(tagCtrl),
-		tagCtrl.add.bind(tagCtrl)
-	);
+	initializeAddAction(allBenchmarkNames, dataCenter.metrics, tagCtrl.has.bind(tagCtrl), tagCtrl.add.bind(tagCtrl));
 
 	let tag = "rspack-build + size";
 	await dataCenter.fetchChartData(["rspack-build + size"]);

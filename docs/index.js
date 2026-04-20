@@ -4,7 +4,7 @@
 
 const getFetchPrefix = () => {
 	return "https://raw.githubusercontent.com/web-infra-dev/rspack-ecosystem-benchmark/data";
-}
+};
 
 const fetchPrefix = getFetchPrefix();
 
@@ -59,7 +59,7 @@ class DataCenter {
 		const index = {};
 		const [indexFile] = await Promise.all([
 			fetch(`${fetchPrefix}/index.txt`).then(res => res.text()),
-			this.fetchBuildInfo()
+			this.fetchBuildInfo(),
 		]);
 		const lines = indexFile.split("\n").filter(item => !!item);
 		const beginDate = lines[0].split("/")[0];
@@ -77,9 +77,7 @@ class DataCenter {
 		this.index = index;
 
 		// generate metrics struct
-		const latestData = await fetch(`${fetchPrefix}/${lines.pop()}`).then(res =>
-			res.json()
-		);
+		const latestData = await fetch(`${fetchPrefix}/${lines.pop()}`).then(res => res.json());
 		this.metrics = Object.keys(latestData);
 
 		// set date range
@@ -88,19 +86,14 @@ class DataCenter {
 
 	async fetchBuildInfo() {
 		try {
-			this.buildInfo = await fetch(`${fetchPrefix}/build-info.json`).then(
-				res => {
-					if (!res.ok) {
-						throw new Error(`Request failed with status code ${res.status}`);
-					}
-					return res.json();
+			this.buildInfo = await fetch(`${fetchPrefix}/build-info.json`).then(res => {
+				if (!res.ok) {
+					throw new Error(`Request failed with status code ${res.status}`);
 				}
-			);
+				return res.json();
+			});
 		} catch (err) {
-			console.log(
-				"Error occurred while fetching build-info.json: ",
-				err.message
-			);
+			console.log("Error occurred while fetching build-info.json: ", err.message);
 		}
 	}
 
@@ -113,9 +106,7 @@ class DataCenter {
 					this.cache[benchmarkName] = await Promise.all(
 						// only get the latest 90 days metric for performance reason
 						this.index[benchmarkName].slice(-180).map(async date => {
-							const file = await fetch(
-								`${fetchPrefix}/${date}/${benchmarkName}.json`
-							).then(res => res.json());
+							const file = await fetch(`${fetchPrefix}/${date}/${benchmarkName}.json`).then(res => res.json());
 							return { date, file };
 						})
 					);
@@ -128,7 +119,7 @@ class DataCenter {
 						}
 						return {
 							date,
-							value: file[metric].median
+							value: file[metric].median,
 						};
 					})
 					.filter(item => !!item);
@@ -255,7 +246,7 @@ class BenchmarkChart {
 		this.chart = new Chart(document.querySelector(".chart-container canvas"), {
 			type: "line",
 			data: {
-				datasets: []
+				datasets: [],
 			},
 			options: {
 				onClick(event, activeElements) {
@@ -266,23 +257,20 @@ class BenchmarkChart {
 					const { x } = this.data.datasets[datasetIndex].data[index];
 					const commitSHA = buildInfo[x] ? buildInfo[x].commitSHA : null;
 					if (commitSHA) {
-						window.open(
-							`https://github.com/web-infra-dev/rspack/commit/${commitSHA}`,
-							"_blank"
-						);
+						window.open(`https://github.com/web-infra-dev/rspack/commit/${commitSHA}`, "_blank");
 					}
 				},
 				scales: {
 					x: {
 						type: "time",
 						time: {
-							unit: "day"
+							unit: "day",
 						},
 						ticks: {
 							callback(v) {
 								return moment(v).format("YYYY-MM-DD");
-							}
-						}
+							},
+						},
 					},
 					time: {
 						type: "linear",
@@ -292,8 +280,8 @@ class BenchmarkChart {
 						ticks: {
 							callback(value, _, values) {
 								return formatTime(value, values[values.length - 1].value);
-							}
-						}
+							},
+						},
 					},
 					size: {
 						type: "linear",
@@ -303,8 +291,8 @@ class BenchmarkChart {
 						ticks: {
 							callback(value, _, values) {
 								return formatSize(value, values[values.length - 1].value);
-							}
-						}
+							},
+						},
 					},
 					ratio: {
 						type: "linear",
@@ -314,24 +302,21 @@ class BenchmarkChart {
 						ticks: {
 							callback(value, _, values) {
 								return formatRatio(value, values[values.length - 1].value);
-							}
-						}
-					}
+							},
+						},
+					},
 				},
 				plugins: {
 					legend: {
 						// ignore click event
-						onClick: function () { }
+						onClick: function () {},
 					},
 					tooltip: {
 						callbacks: {
 							title(context) {
 								const date = context[0].raw.x;
 								if (buildInfo[date] && buildInfo[date].commitSHA) {
-									return [
-										date,
-										`commit sha: ${buildInfo[date].commitSHA.slice(0, 7)}`
-									];
+									return [date, `commit sha: ${buildInfo[date].commitSHA.slice(0, 7)}`];
 								}
 								return date;
 							},
@@ -341,14 +326,14 @@ class BenchmarkChart {
 									context.dataset.yAxisID === "size"
 										? formatSize(value, value)
 										: context.dataset.yAxisID === "ratio"
-											? formatRatio(value, value)
-											: formatTime(value, value);
+										? formatRatio(value, value)
+										: formatTime(value, value);
 								return `${context.dataset.label}: ${text}`;
-							}
-						}
-					}
-				}
-			}
+							},
+						},
+					},
+				},
+			},
 		});
 	}
 
@@ -366,7 +351,7 @@ class BenchmarkChart {
 		const axisValues = {
 			time: [],
 			size: [],
-			ratio: []
+			ratio: [],
 		};
 
 		for (const tag of Object.keys(data)) {
@@ -381,11 +366,11 @@ class BenchmarkChart {
 					axisValues[axis].push(value);
 					return {
 						x: date,
-						y: value
+						y: value,
 					};
 				}),
 				yAxisID: axis,
-				fill: true
+				fill: true,
 			});
 		}
 		this.chart.data.datasets = datasets;
@@ -434,10 +419,7 @@ function initializeSlider(onChange) {
 		debounceChange(l1, l2);
 	};
 	const updateActiveLinePos = function () {
-		const [l1, l2] = [
-			parseInt(markDom1.style.left),
-			parseInt(markDom2.style.left)
-		].sort((a, b) => a - b);
+		const [l1, l2] = [parseInt(markDom1.style.left), parseInt(markDom2.style.left)].sort((a, b) => a - b);
 		activeLineDom.style.left = l1 + "%";
 		activeLineDom.style.width = l2 - l1 + "%";
 		debounceChange(l1, l2);
@@ -447,9 +429,7 @@ function initializeSlider(onChange) {
 	let baseLeft = 0;
 	let baseX = 0;
 	const handleMouseMove = function (e) {
-		const diff = Math.floor(
-			((e.clientX - baseX) * 100) / container.clientWidth + 0.5
-		);
+		const diff = Math.floor(((e.clientX - baseX) * 100) / container.clientWidth + 0.5);
 		const nextLeft = Math.min(Math.max(0, diff + baseLeft), 100);
 		const currentLeft = parseInt(movingDom.style.left);
 		if (currentLeft === nextLeft) {

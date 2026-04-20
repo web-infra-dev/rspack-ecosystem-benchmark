@@ -18,42 +18,42 @@ const cli = meow({
 		// Rspack repository name.
 		repository: {
 			type: "string",
-			default: "web-infra-dev/rspack"
+			default: "web-infra-dev/rspack",
 		},
 		// The branch, tag or SHA to checkout. When checking out the repository that
 		// triggered a workflow, this defaults to the reference or SHA for that event.
 		// Otherwise, uses the default branch.
 		ref: {
 			type: "string",
-			default: "main"
+			default: "main",
 		},
 
 		binding: {
 			type: "boolean",
-			default: true
+			default: true,
 		},
 		js: {
 			type: "boolean",
-			default: true
+			default: true,
 		},
 		job: {
 			type: "string",
-			isMultiple: true
+			isMultiple: true,
 		},
 		shard: {
 			type: "string",
-			default: "1/1"
+			default: "1/1",
 		},
 
 		base: {
 			type: "string",
-			default: "latest"
+			default: "latest",
 		},
 		current: {
 			type: "string",
-			default: "current"
-		}
-	}
+			default: "current",
+		},
+	},
 });
 
 const command = cli.input.at(0);
@@ -69,7 +69,7 @@ const {
 	shard,
 
 	base,
-	current
+	current,
 } = cli.flags;
 
 const cwd = process.cwd();
@@ -94,9 +94,7 @@ if (!command || command === "build") {
 
 	await $`git add * || echo "ok"`;
 	await $`git reset --hard`;
-	const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`)
-		.toString()
-		.trim();
+	const currentBranch = (await $`git rev-parse --abbrev-ref HEAD`).toString().trim();
 	await $`git fetch ${fetchUrl} ${ref} --prune`;
 	await $`git checkout -b ${Date.now()} FETCH_HEAD`;
 	if (currentBranch) {
@@ -130,10 +128,7 @@ if (!command || command === "bench") {
 	const [currentIndex, totalShards] = shardPair;
 
 	const shardSize = Math.ceil(jobs.length / totalShards);
-	const shardJobs = jobs.slice(
-		shardSize * (currentIndex - 1),
-		shardSize * currentIndex
-	);
+	const shardJobs = jobs.slice(shardSize * (currentIndex - 1), shardSize * currentIndex);
 
 	await mkdir(benchmarkDirectory, { recursive: true });
 	let bindingSize = await getBinarySize(rspackDirectory);
@@ -145,12 +140,7 @@ if (!command || command === "bench") {
 	);
 
 	if (shardJobs.length) {
-		console.log(
-			[
-				`Running jobs for shard ${currentIndex}/${totalShards}:`,
-				...shardJobs
-			].join("\n  * ")
-		);
+		console.log([`Running jobs for shard ${currentIndex}/${totalShards}:`, ...shardJobs].join("\n  * "));
 
 		for (const job of shardJobs) {
 			const start = Date.now();
@@ -169,10 +159,7 @@ if (!command || command === "bench") {
 				console.log(`Cost for \`${job}\`: ${cost} s`);
 			}
 
-			await writeFile(
-				join(benchmarkDirectory, `${job}.json`),
-				JSON.stringify(result, null, 2)
-			);
+			await writeFile(join(benchmarkDirectory, `${job}.json`), JSON.stringify(result, null, 2));
 		}
 	} else {
 		console.log(`No jobs to run for shard ${currentIndex}/${totalShards}.`);
