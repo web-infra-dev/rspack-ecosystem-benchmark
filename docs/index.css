@@ -10,6 +10,7 @@ body {
 }
 
 .action-container,
+.per-page-container,
 .tag-container {
 	line-height: 32px;
 	margin-bottom: 6px;
@@ -31,7 +32,8 @@ body {
 .action-container select:focus {
 	outline: none;
 }
-.action-container .add {
+.action-container .add,
+.per-page-container .per-page-apply {
 	display: inline-block;
 	color: #fff;
 	background-color: #1677ff;
@@ -46,6 +48,23 @@ body {
 	pointer-events: none;
 	background-color: rgba(0, 0, 0, 0.04);
 	color: rgba(0, 0, 0, 0.25);
+}
+
+.per-page-container .per-page-input {
+	width: 80px;
+	height: 30px;
+	border: 1px solid #d9d9d9;
+	border-radius: 6px;
+	padding: 0 12px;
+	box-sizing: border-box;
+	transition: 0.2s;
+}
+.per-page-container .per-page-input:hover {
+	border-color: #4096ff;
+}
+.per-page-container .per-page-input:focus {
+	outline: none;
+	border-color: #4096ff;
 }
 
 .tag {
@@ -91,6 +110,14 @@ body {
 
 .chart-container {
 	min-height: 600px;
+}
+
+.size-toggle-container {
+	margin-bottom: 6px;
+}
+.size-toggle-container .tag {
+	cursor: pointer;
+	user-select: none;
 }
 
 .slider-container {

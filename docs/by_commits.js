@@ -32,7 +32,7 @@ const debounce = (fn, t) => {
 	};
 };
 const getAxisType = tag => {
-	if (tag === "rspack-build") return "size";
+	if (tag === "rspack-build" || tag.startsWith("rspack-build +")) return "size";
 
 	if (tag.endsWith(" size") || tag.endsWith(" memory")) {
 		return "size";
@@ -573,7 +573,32 @@ function showGithubTokenModal() {
 	});
 }
 
+function initializePerPageInput() {
+	const input = document.querySelector(".per-page-input");
+	const apply = document.querySelector(".per-page-apply");
+	if (!input || !apply) return;
+
+	const params = new URLSearchParams(window.location.search);
+	const current = parseInt(params.get("per_page") || "50", 10) || 50;
+	input.value = current;
+
+	const commit = () => {
+		const next = Math.max(1, Math.min(100, parseInt(input.value, 10) || 0));
+		if (!next || next === current) return;
+		const nextParams = new URLSearchParams(window.location.search);
+		nextParams.set("per_page", String(next));
+		window.location.search = nextParams.toString();
+	};
+
+	apply.addEventListener("click", commit);
+	input.addEventListener("keydown", e => {
+		if (e.key === "Enter") commit();
+	});
+}
+
 (async function () {
+	initializePerPageInput();
+
 	const dataCenter = new DataCenter();
 	await dataCenter.initialize();
 
@@ -586,16 +611,35 @@ function showGithubTokenModal() {
 
 	initializeAddAction(allBenchmarkNames, dataCenter.metrics, tagCtrl.has.bind(tagCtrl), tagCtrl.add.bind(tagCtrl));
 
-	let tag = "rspack-build + size";
-	await dataCenter.fetchChartData(["rspack-build + size"]);
+	const sizeTags = ["rspack-build + size", "rspack-build + releaseSize"];
+	await dataCenter.fetchChartData(sizeTags);
 	const sizeChart = new BenchmarkChart(dataCenter, "#size-chart");
-	await sizeChart.updateChartData(["rspack-build + size"]);
+	await sizeChart.updateChartData(sizeTags);
 
-	let data = sizeChart.chart.data.datasets[0].data.map(({ y }) => y);
-	let max = Math.max.apply(Math, data);
-	let min = Math.min.apply(Math, data);
+	const fitSizeAxis = () => {
+		const visibleYs = sizeChart.chart.data.datasets.flatMap((ds, idx) =>
+			sizeChart.chart.isDatasetVisible(idx) ? ds.data.map(({ y }) => y) : []
+		);
+		if (!visibleYs.length) return;
+		const min = Math.min(...visibleYs);
+		const max = Math.max(...visibleYs);
+		sizeChart.chart.options.scales.size.min = min * 0.999;
+		sizeChart.chart.options.scales.size.max = max * 1.001;
+		sizeChart.chart.update();
+	};
 
-	sizeChart.chart.options.scales.size.min = min * 0.999;
-	sizeChart.chart.options.scales.size.max = max * 1.001;
-	sizeChart.chart.update();
+	fitSizeAxis();
+
+	document.querySelectorAll(".size-toggle-container .tag").forEach(btn => {
+		const metric = btn.dataset.metric;
+		const tag = `rspack-build + ${metric}`;
+		btn.addEventListener("click", () => {
+			const idx = sizeChart.chart.data.datasets.findIndex(ds => ds.label === tag);
+			if (idx < 0) return;
+			const visible = !sizeChart.chart.isDatasetVisible(idx);
+			sizeChart.chart.setDatasetVisibility(idx, visible);
+			btn.classList.toggle("active", visible);
+			fitSizeAxis();
+		});
+	});
 })();

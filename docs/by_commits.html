@@ -6,6 +6,11 @@
 	</head>
 	<body>
 		<h1>Rspack/benchmark</h1>
+		<div class="per-page-container">
+			Commits to fetch:
+			<input class="per-page-input" type="number" min="1" max="100" step="1" />
+			<span class="per-page-apply">Apply</span>
+		</div>
 		<div class="action-container">
 			Add tag by benchmark name and metric:
 			<select class="benchmark-name">
@@ -23,6 +28,10 @@
 		</div>
 
 		<h1>Binary Size</h1>
+		<div class="size-toggle-container">
+			<label class="tag active" data-metric="size"><span class="name">ci size</span></label>
+			<label class="tag active" data-metric="releaseSize"><span class="name">release size</span></label>
+		</div>
 		<div class="chart-container">
 			<canvas id="size-chart"></canvas>
 		</div>

@@ -17,10 +17,12 @@
   "packageManager": "pnpm@8.14.3",
   "scripts": {
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "docs:preview": "serve docs"
   },
   "devDependencies": {
     "generate-package-json-webpack-plugin": "^2.6.0",
-    "prettier": "^2.6.2"
+    "prettier": "^2.6.2",
+    "serve": "^14.2.6"
   }
 }
