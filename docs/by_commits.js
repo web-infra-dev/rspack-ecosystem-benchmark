@@ -611,6 +611,10 @@ function initializePerPageInput() {
 }
 
 (async function () {
+	// This IIFE is the entry point for by_commits.html. Skip it on pages that
+	// reuse this script only for its shared helpers/classes (e.g. all_benchmarks.html).
+	if (!document.querySelector("#perf-chart")) return;
+
 	initializePerPageInput();
 
 	const dataCenter = new DataCenter();

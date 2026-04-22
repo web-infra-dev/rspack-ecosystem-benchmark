@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Rspack benchmark — All Benchmarks</title>
+		<link href="./index.css" rel="stylesheet" />
+	</head>
+	<body class="wide">
+		<h1>Rspack/benchmark — All Benchmarks</h1>
+		<div class="nav-links">
+			<a href="./index.html">By Date</a>
+			<a href="./by_commits.html">By Commits</a>
+			<a href="./all_benchmarks.html">All Benchmarks</a>
+		</div>
+		<div class="per-page-container">
+			Commits to fetch:
+			<input class="per-page-input" type="number" min="1" max="500" step="1" />
+			<span class="per-page-apply">Apply</span>
+			<span class="grid-status" style="margin-left: 12px; color: #666; font-size: 13px"></span>
+		</div>
+		<div class="metric-legend">
+			<span class="legend-item legend-time">time</span>
+			<span class="legend-item legend-size">size / memory</span>
+			<span class="legend-item legend-ratio">ratio</span>
+		</div>
+
+		<nav class="benchmark-toc" id="benchmark-toc"></nav>
+		<div id="benchmark-sections"></div>
+
+		<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.1/dist/chartjs-adapter-moment.min.js"></script>
+		<script src="by_commits.js"></script>
+		<script src="all_benchmarks.js"></script>
+	</body>
+</html>
