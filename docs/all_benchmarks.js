@@ -232,7 +232,5 @@
 		}
 	}
 
-	setStatus(
-		`Rendered ${rendered} charts across ${groups.length - emptyGroups} groups.`
-	);
+	setStatus(`Rendered ${rendered} charts across ${groups.length - emptyGroups} groups.`);
 })();
