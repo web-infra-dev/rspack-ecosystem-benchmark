@@ -86,6 +86,7 @@ const metrics = [
 	"Compilation.hashing: hash runtime chunks",
 	"Compilation.hashing: process full hash chunks",
 	"Compilation.module code generation cache",
+	"SwcJsMinimizerRspackPlugin.minimize persistent cache",
 	"Compilation.module ids",
 	"Compilation.optimize",
 	"Compilation.optimize code generation",
