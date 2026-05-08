@@ -32,7 +32,7 @@ const debounce = (fn, t) => {
 	};
 };
 const getAxisType = tag => {
-	if (tag.endsWith(" size") || tag.endsWith(" memory")) {
+	if (tag.endsWith(" size") || tag.endsWith(" memory") || tag.endsWith("Size")) {
 		return "size";
 	} else if (tag.endsWith(" cache")) {
 		return "ratio";
@@ -114,13 +114,11 @@ class DataCenter {
 
 				res[tag] = this.cache[benchmarkName]
 					.map(({ date, file }) => {
-						if (file[metric]?.median === undefined) {
-							return null;
-						}
-						return {
-							date,
-							value: file[metric].median,
-						};
+						const m = file[metric];
+						if (m === undefined) return null;
+						const value = typeof m === "number" ? m : m.median;
+						if (value === undefined) return null;
+						return { date, value };
 					})
 					.filter(item => !!item);
 			})
@@ -240,10 +238,10 @@ function getNiceMin(min, percent = 0.1) {
 }
 
 class BenchmarkChart {
-	constructor(dataCenter) {
+	constructor(dataCenter, canvasEl) {
 		this.dataCenter = dataCenter;
 		const buildInfo = dataCenter.buildInfo;
-		this.chart = new Chart(document.querySelector(".chart-container canvas"), {
+		this.chart = new Chart(canvasEl || document.querySelector(".chart-container canvas"), {
 			type: "line",
 			data: {
 				datasets: [],
@@ -404,8 +402,8 @@ class BenchmarkChart {
 	}
 }
 
-function initializeSlider(onChange) {
-	const container = document.querySelector(".slider");
+function initializeSlider(onChange, sliderEl) {
+	const container = sliderEl || document.querySelector(".slider");
 	const marks = container.querySelectorAll(".mark");
 	const markDom1 = marks[0];
 	const markDom2 = marks[1];
@@ -479,4 +477,15 @@ function initializeSlider(onChange) {
 	initializeSlider((min, max) => {
 		chart.updateChartAxis(min, max);
 	});
+
+	if (dataCenter.index["rspack-build"]) {
+		const binarySizeCanvas = document.querySelector(".binary-size-chart-container canvas");
+		const binarySizeSlider = document.querySelector(".binary-size-slider-container .slider");
+		const binarySizeChart = new BenchmarkChart(dataCenter, binarySizeCanvas);
+		const binarySizeTags = ["rspack-build + size"];
+		binarySizeChart.updateChartData(binarySizeTags);
+		initializeSlider((min, max) => {
+			binarySizeChart.updateChartAxis(min, max);
+		}, binarySizeSlider);
+	}
 })();
