@@ -9,8 +9,8 @@ const getFetchPrefix = () => {
 const fetchPrefix = getFetchPrefix();
 
 const formatTime = (value, maxValue) => {
-	if (maxValue > 10000) return `${value / 1000} s`;
-	return `${value} ms`;
+	if (maxValue > 10000) return `${(value / 1000).toFixed(3)} s`;
+	return `${value.toFixed(3)} ms`;
 };
 
 const formatSize = (value, maxValue) => {
