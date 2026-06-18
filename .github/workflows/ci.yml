@@ -17,7 +17,7 @@ jobs:
     needs: [get-runner-labels]
     runs-on: ${{ fromJSON(needs.get-runner-labels.outputs.LINUX_RUNNER_LABELS) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Init env
         uses: ./.github/actions/env
       - uses: ./.github/actions/prepare-rspack-binding
@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - name: Init env
         uses: ./.github/actions/env
       - uses: ./.github/actions/build-rspack
