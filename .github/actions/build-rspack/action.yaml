@@ -43,7 +43,7 @@ runs:
         --ref ${{ inputs.ref }}
         --binding false
         --js true
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
       with:
         name: binding-linux-x64-gnu
         path: ${{ inputs.path }}/crates/node_binding
