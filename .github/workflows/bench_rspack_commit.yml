@@ -65,6 +65,8 @@ jobs:
           merge-multiple: true
       - id: print-results
         name: Print results
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"

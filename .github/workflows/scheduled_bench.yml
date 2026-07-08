@@ -27,6 +27,8 @@ jobs:
         run: node bin/cli.js bench
       - id: print-compare-results
         name: Print compare results
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           result=$(node bin/cli.js compare --base latest --current current)
           echo "$result"
