@@ -37,7 +37,7 @@ const config = {
 	target: "web",
 	experiments: {
 		asyncWebAssembly: true,
-		css: true
+		css: false
 	},
 	output: {
 		path: path.join(__dirname, "dist"),
@@ -45,20 +45,13 @@ const config = {
 		chunkFilename: "static/js/async/[name].[contenthash:8].js",
 		publicPath: "/",
 		hashFunction: "xxhash64",
-		webassemblyModuleFilename: "static/wasm/[hash].module.wasm",
-		cssFilename: "static/css/[name].[contenthash:8].css",
-		cssChunkFilename: "static/css/async/[name].[contenthash:8].css"
+		webassemblyModuleFilename: "static/wasm/[hash].module.wasm"
 	},
 	resolve: {
 		extensions: [".ts", ".tsx", ".js", ".jsx", ".mjs", ".json"],
 		tsConfig: path.join(__dirname, "tsconfig.json")
 	},
 	module: {
-		parser: {
-			"css/module": {
-				namedExports: false
-			}
-		},
 		rules: [
 			{
 				test: /\.(?:png|jpg|jpeg|pjpeg|pjp|gif|bmp|webp|ico|apng|avif|tif|tiff|jfif)$/i,
@@ -116,55 +109,43 @@ const config = {
 			},
 			{
 				test: /\.css$/,
-				oneOf: [
+				type: "javascript/auto",
+				sideEffects: true,
+				use: [
+					rspack.CssExtractRspackPlugin.loader,
 					{
-						sideEffects: true,
-						use: [POSTCSS_LOADER],
-						resolve: { preferRelative: true },
-						test: /\.module\.\w+$/i,
-						type: "css/module"
+						loader: "css-loader",
+						options: {
+							importLoaders: 1,
+							modules: { auto: true, namedExport: false, exportLocalsConvention: "as-is" }
+						}
 					},
-					{
-						sideEffects: true,
-						use: [POSTCSS_LOADER],
-						resolve: { preferRelative: true },
-						type: "css"
-					}
-				]
+					POSTCSS_LOADER
+				],
+				resolve: { preferRelative: true }
 			},
 			{
 				test: /\.less$/,
-				oneOf: [
+				type: "javascript/auto",
+				sideEffects: true,
+				use: [
+					rspack.CssExtractRspackPlugin.loader,
 					{
-						sideEffects: true,
-						use: [
-							POSTCSS_LOADER,
-							{
-								loader: "less-loader",
-								options: {
-									lessOptions: { javascriptEnabled: true }
-								}
-							}
-						],
-						resolve: { preferRelative: true },
-						test: /\.module\.\w+$/i,
-						type: "css/module"
+						loader: "css-loader",
+						options: {
+							importLoaders: 2,
+							modules: { auto: true, namedExport: false, exportLocalsConvention: "as-is" }
+						}
 					},
+					POSTCSS_LOADER,
 					{
-						sideEffects: true,
-						use: [
-							POSTCSS_LOADER,
-							{
-								loader: "less-loader",
-								options: {
-									lessOptions: { javascriptEnabled: true }
-								}
-							}
-						],
-						resolve: { preferRelative: true },
-						type: "css"
+						loader: "less-loader",
+						options: {
+							lessOptions: { javascriptEnabled: true }
+						}
 					}
-				]
+				],
+				resolve: { preferRelative: true }
 			},
 			{
 				test: /\.(j|t)s(x)?$/,
@@ -324,6 +305,10 @@ const config = {
 		index: path.join(__dirname, "src/index.tsx")
 	},
 	plugins: [
+		new rspack.CssExtractRspackPlugin({
+			filename: "static/css/[name].[contenthash:8].css",
+			chunkFilename: "static/css/async/[name].[contenthash:8].css"
+		}),
 		new rspack.HtmlRspackPlugin({
 			template: path.resolve(__dirname, "./index.html")
 		}),
