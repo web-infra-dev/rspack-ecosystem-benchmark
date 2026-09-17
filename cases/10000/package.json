@@ -1,3 +1,6 @@
 {
-  "name": "10000"
+  "name": "10000",
+  "devDependencies": {
+    "css-loader": "^7.1.2"
+  }
 }

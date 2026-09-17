@@ -52,7 +52,11 @@ importers:
         specifier: ^14.2.6
         version: 14.2.6
 
-  cases/10000: {}
+  cases/10000:
+    devDependencies:
+      css-loader:
+        specifier: ^7.1.2
+        version: 7.1.5(webpack@5.90.0)
 
   cases/arco-pro:
     dependencies:
