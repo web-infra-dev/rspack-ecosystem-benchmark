@@ -11,6 +11,14 @@ const BROWSERS_LIST = [
 	"ios_saf >= 10"
 ];
 
+const CSS_LOADER = {
+	loader: "css-loader",
+	options: {
+		importLoaders: 1,
+		modules: { auto: true, namedExport: false, exportLocalsConvention: "as-is" }
+	}
+};
+
 const POSTCSS_LOADER = {
 	loader: "postcss-loader",
 	options: {
@@ -111,17 +119,7 @@ const config = {
 				test: /\.css$/,
 				type: "javascript/auto",
 				sideEffects: true,
-				use: [
-					rspack.CssExtractRspackPlugin.loader,
-					{
-						loader: "css-loader",
-						options: {
-							importLoaders: 1,
-							modules: { auto: true, namedExport: false, exportLocalsConvention: "as-is" }
-						}
-					},
-					POSTCSS_LOADER
-				],
+				use: [rspack.CssExtractRspackPlugin.loader, CSS_LOADER, POSTCSS_LOADER],
 				resolve: { preferRelative: true }
 			},
 			{
@@ -131,11 +129,8 @@ const config = {
 				use: [
 					rspack.CssExtractRspackPlugin.loader,
 					{
-						loader: "css-loader",
-						options: {
-							importLoaders: 2,
-							modules: { auto: true, namedExport: false, exportLocalsConvention: "as-is" }
-						}
+						...CSS_LOADER,
+						options: { ...CSS_LOADER.options, importLoaders: 2 }
 					},
 					POSTCSS_LOADER,
 					{
